@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { query, queryOne, execute } from '@/lib/db';
-import { signToken } from '@/lib/auth';
+import { createSession, cookieOptions } from '@/lib/auth';
 import { sendOtpEmail } from '@/lib/email';
 
 function generateOtp() {
@@ -14,7 +14,6 @@ export async function POST(req: NextRequest) {
 
     if (!email) return NextResponse.json({ error: 'Email required.' }, { status: 400 });
 
-    // ── Step 1: send OTP ─────────────────────────────────────────────────────
     if (step === 'request' || !step) {
       const user = await queryOne<{ id: number; name: string; status: string }>(
         "SELECT id, name, status FROM users WHERE email = $1 AND status = 'active'",
@@ -40,7 +39,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: true, message: 'OTP sent to your email.' });
     }
 
-    // ── Step 2: verify OTP ───────────────────────────────────────────────────
     if (step === 'verify') {
       if (!otp) return NextResponse.json({ error: 'OTP required.' }, { status: 400 });
 
@@ -65,13 +63,10 @@ export async function POST(req: NextRequest) {
 
       await execute('UPDATE users SET last_login = NOW() WHERE id = $1', [user.id]);
 
-      const token = await signToken({ id: user.id, email: user.email, name: user.name, isAdmin: user.is_admin });
+      const token = await createSession({ id: user.id, email: user.email, name: user.name, isAdmin: user.is_admin });
 
       const res = NextResponse.json({ success: true, user: { id: user.id, name: user.name, email: user.email, isAdmin: user.is_admin } });
-      res.cookies.set('pm_session', token, {
-        httpOnly: true, secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax', maxAge: 60 * 60 * 24 * 30, path: '/'
-      });
+      res.cookies.set(cookieOptions.name, token, cookieOptions);
       return res;
     }
 
