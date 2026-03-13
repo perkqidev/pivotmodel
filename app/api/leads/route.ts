@@ -1,13 +1,7 @@
-/**
- * app/api/leads/route.ts
- * Save and retrieve consulting leads.
- */
-
 import { NextRequest, NextResponse } from 'next/server';
-import { getDb } from '@/lib/db';
+import { query, queryOne, execute } from '@/lib/db';
 import { getSessionFromRequest } from '@/lib/auth';
 
-// POST — submit a consulting inquiry
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -19,58 +13,45 @@ export async function POST(req: NextRequest) {
       howHeard, extraNotes, source,
     } = body;
 
-    if (!name || !email || !company) {
+    if (!name || !email || !company)
       return NextResponse.json({ error: 'Name, email and company are required.' }, { status: 400 });
-    }
 
-    const db = getDb();
-    const result = db.prepare(`
-      INSERT INTO leads (
+    const row = await queryOne<{ id: number }>(
+      `INSERT INTO leads (
         name, email, company, role, industry, linkedin,
         team_size, offshore_model, maturity_level, current_operation,
         challenges, expectations, service,
         preferred_contact, timezone, availability, timeline,
         how_heard, extra_notes, source
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `).run(
-      name, email, company, role || null, industry || null, linkedin || null,
-      teamSize || null, offshoreModel || null, maturityLevel || null, currentOperation || null,
-      challenges || null, expectations || null, service || null,
-      preferredContact || null, timezone || null, availability || null, timeline || null,
-      howHeard || null, extraNotes || null, source || 'website',
+      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)
+      RETURNING id`,
+      [
+        name, email, company, role || null, industry || null, linkedin || null,
+        teamSize || null, offshoreModel || null, maturityLevel || null, currentOperation || null,
+        challenges || null, expectations || null, service || null,
+        preferredContact || null, timezone || null, availability || null, timeline || null,
+        howHeard || null, extraNotes || null, source || 'website',
+      ]
     );
-
-    return NextResponse.json({ success: true, id: result.lastInsertRowid });
+    return NextResponse.json({ success: true, id: row?.id });
   } catch (err) {
     console.error('/api/leads POST error:', err);
     return NextResponse.json({ error: 'Server error.' }, { status: 500 });
   }
 }
 
-// GET — list leads (admin only)
 export async function GET(req: NextRequest) {
   const session = await getSessionFromRequest(req);
-  if (!session?.isAdmin) {
-    return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 });
-  }
-
-  const db = getDb();
-  const leads = db.prepare('SELECT * FROM leads ORDER BY submitted_at DESC').all();
+  if (!session?.isAdmin) return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 });
+  const leads = await query('SELECT * FROM leads ORDER BY submitted_at DESC');
   return NextResponse.json({ leads });
 }
 
-// PATCH — update lead status (admin only)
 export async function PATCH(req: NextRequest) {
   const session = await getSessionFromRequest(req);
-  if (!session?.isAdmin) {
-    return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 });
-  }
-
-  const body = await req.json();
-  const { id, status } = body;
+  if (!session?.isAdmin) return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 });
+  const { id, status } = await req.json();
   if (!id || !status) return NextResponse.json({ error: 'id and status required.' }, { status: 400 });
-
-  const db = getDb();
-  db.prepare('UPDATE leads SET status = ? WHERE id = ?').run(status, id);
+  await execute('UPDATE leads SET status = $1 WHERE id = $2', [status, id]);
   return NextResponse.json({ success: true });
 }

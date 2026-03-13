@@ -1,115 +1,87 @@
-/**
- * app/api/auth/register/route.ts
- * Step 1: Collect registration details and send OTP.
- * Step 2: Verify OTP and create the account.
- */
-
 import { NextRequest, NextResponse } from 'next/server';
-import { getDb } from '@/lib/db';
-import { isFreeEmail, generateOtp } from '@/lib/auth';
+import { queryOne, execute } from '@/lib/db';
+import { signToken } from '@/lib/auth';
 import { sendOtpEmail } from '@/lib/email';
 
-const OTP_EXPIRY = parseInt(process.env.OTP_EXPIRY_MINUTES || '10');
+function generateOtp() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
 
-// POST /api/auth/register — initiate registration, send OTP
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { action } = body;
+    const { step, email, name, company, role, industry, team_size, linkedin, otp } = body;
 
-    if (action === 'send_otp') {
-      const { name, email, company, role, industry, teamSize, linkedin } = body;
+    if (!email) return NextResponse.json({ error: 'Email required.' }, { status: 400 });
 
-      if (!name || !email || !company || !role) {
-        return NextResponse.json({ error: 'Name, email, company and role are required.' }, { status: 400 });
+    // ── Step 1: send OTP ─────────────────────────────────────────────────────
+    if (step === 'request' || !step) {
+      if (!name) return NextResponse.json({ error: 'Name required.' }, { status: 400 });
+
+      const existing = await queryOne('SELECT id FROM users WHERE email = $1', [email.toLowerCase()]);
+      if (existing) return NextResponse.json({ error: 'An account with that email already exists.' }, { status: 409 });
+
+      const code = generateOtp();
+      const expires = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+
+      await execute('DELETE FROM otp_codes WHERE email = $1 AND purpose = $2', [email.toLowerCase(), 'register']);
+      await execute(
+        'INSERT INTO otp_codes (email, code, purpose, expires_at) VALUES ($1, $2, $3, $4)',
+        [email.toLowerCase(), code, 'register', expires]
+      );
+
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`[DEV] Registration OTP for ${email}: ${code}`);
+      } else {
+        await sendOtpEmail(email, code, name);
       }
 
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        return NextResponse.json({ error: 'Please enter a valid email address.' }, { status: 400 });
-      }
-
-      const corpEmailOnly = getDb().prepare("SELECT value FROM settings WHERE key = 'corp_email_only'").get() as { value: string } | undefined;
-      if (corpEmailOnly?.value === 'true' && isFreeEmail(email)) {
-        return NextResponse.json({ error: 'Please use your corporate email address (Gmail, Outlook etc. are not accepted).' }, { status: 400 });
-      }
-
-      const db = getDb();
-      const existing = db.prepare('SELECT id FROM users WHERE email = ?').get(email.toLowerCase());
-      if (existing) {
-        return NextResponse.json({ error: 'An account with this email already exists. Please log in instead.' }, { status: 409 });
-      }
-
-      // Generate and store OTP
-      const otp = generateOtp();
-      const expiresAt = new Date(Date.now() + OTP_EXPIRY * 60 * 1000).toISOString();
-
-      db.prepare('DELETE FROM otp_codes WHERE email = ? AND purpose = ?').run(email.toLowerCase(), 'register');
-      db.prepare(`
-        INSERT INTO otp_codes (email, code, purpose, expires_at)
-        VALUES (?, ?, 'register', ?)
-      `).run(email.toLowerCase(), otp, expiresAt);
-
-      // Store pending registration data temporarily in OTP table notes
-      // (we re-collect it on verify, no need to store separately)
-
-      // Send OTP
-      try {
-        await sendOtpEmail(email, otp, name);
-      } catch (emailErr) {
-        console.error('Email send failed:', emailErr);
-        // In dev mode, log the OTP to console
-        if (process.env.NODE_ENV === 'development') {
-          console.log(`[DEV] OTP for ${email}: ${otp}`);
-          return NextResponse.json({ success: true, dev_otp: otp });
-        }
-        return NextResponse.json({ error: 'Failed to send verification email. Please try again.' }, { status: 500 });
-      }
-
-      return NextResponse.json({ success: true });
+      return NextResponse.json({ success: true, message: 'Verification code sent to your email.' });
     }
 
-    if (action === 'verify_otp') {
-      const { name, email, company, role, industry, teamSize, linkedin, otp } = body;
+    // ── Step 2: verify OTP & create user ────────────────────────────────────
+    if (step === 'verify') {
+      if (!otp || !name) return NextResponse.json({ error: 'OTP and name required.' }, { status: 400 });
 
-      if (!email || !otp) {
-        return NextResponse.json({ error: 'Email and OTP are required.' }, { status: 400 });
+      const record = await queryOne<{ id: number; code: string; expires_at: string; used: boolean }>(
+        `SELECT id, code, expires_at, used FROM otp_codes
+         WHERE email = $1 AND purpose = 'register' AND used = FALSE
+         ORDER BY created_at DESC LIMIT 1`,
+        [email.toLowerCase()]
+      );
+
+      if (!record || record.used || new Date(record.expires_at) < new Date() || record.code !== otp) {
+        return NextResponse.json({ error: 'Invalid or expired verification code.' }, { status: 401 });
       }
 
-      const db = getDb();
-      const record = db.prepare(`
-        SELECT * FROM otp_codes
-        WHERE email = ? AND purpose = 'register' AND used = 0
-        ORDER BY created_at DESC LIMIT 1
-      `).get(email.toLowerCase()) as { id: number; code: string; expires_at: string } | undefined;
+      await execute('UPDATE otp_codes SET used = TRUE WHERE id = $1', [record.id]);
 
-      if (!record) {
-        return NextResponse.json({ error: 'No verification code found. Please request a new one.' }, { status: 400 });
-      }
+      // Check again for race condition
+      const existing = await queryOne('SELECT id FROM users WHERE email = $1', [email.toLowerCase()]);
+      if (existing) return NextResponse.json({ error: 'Account already exists.' }, { status: 409 });
 
-      if (new Date(record.expires_at) < new Date()) {
-        return NextResponse.json({ error: 'Verification code has expired. Please request a new one.' }, { status: 400 });
-      }
+      const newUser = await queryOne<{ id: number; name: string; email: string; is_admin: boolean }>(
+        `INSERT INTO users (name, email, company, role, industry, team_size, linkedin)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)
+         RETURNING id, name, email, is_admin`,
+        [name, email.toLowerCase(), company || null, role || null, industry || null, team_size || null, linkedin || null]
+      );
 
-      if (record.code !== otp.trim()) {
-        return NextResponse.json({ error: 'Incorrect code. Please try again.' }, { status: 400 });
-      }
+      if (!newUser) return NextResponse.json({ error: 'Failed to create account.' }, { status: 500 });
 
-      // Mark OTP as used
-      db.prepare('UPDATE otp_codes SET used = 1 WHERE id = ?').run(record.id);
+      const token = await signToken({ id: newUser.id, email: newUser.email, name: newUser.name, isAdmin: newUser.is_admin });
 
-      // Create user
-      const result = db.prepare(`
-        INSERT INTO users (name, email, company, role, industry, team_size, linkedin)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-      `).run(name, email.toLowerCase(), company, role, industry || null, teamSize || null, linkedin || null);
-
-      return NextResponse.json({ success: true, userId: result.lastInsertRowid });
+      const res = NextResponse.json({ success: true, user: { id: newUser.id, name: newUser.name, email: newUser.email, isAdmin: newUser.is_admin } });
+      res.cookies.set('pm_session', token, {
+        httpOnly: true, secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax', maxAge: 60 * 60 * 24 * 30, path: '/'
+      });
+      return res;
     }
 
-    return NextResponse.json({ error: 'Unknown action.' }, { status: 400 });
-
+    return NextResponse.json({ error: 'Invalid step.' }, { status: 400 });
   } catch (err) {
-    console.error('/api/auth/register error:', err);
-    return NextResponse.json({ error: 'Server error. Please try again.' }, { status: 500 });
+    console.error('[register]', err);
+    return NextResponse.json({ error: 'Server error.' }, { status: 500 });
   }
 }
