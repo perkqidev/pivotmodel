@@ -80,8 +80,9 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ error: 'Invalid step.' }, { status: 400 });
-  } catch (err) {
-    console.error('[register]', err);
-    return NextResponse.json({ error: 'Server error.' }, { status: 500 });
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error('[register]', msg, err);
+    return NextResponse.json({ error: `Server error: ${msg}` }, { status: 500 });
   }
 }
