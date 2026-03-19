@@ -18,9 +18,9 @@ export default function CommunityPage() {
 
   useEffect(() => {
     fetch('/api/auth/login').then(r => r.json()).then(d => {
-      setUser(d.user);
+      setUser(d.user || null);
       setLoading(false);
-    });
+    }).catch(() => setLoading(false));
   }, []);
 
   if (loading) return (
@@ -56,7 +56,7 @@ export default function CommunityPage() {
 // ── Sidebar ──────────────────────────────────────────────────────────────
 function Sidebar({ panel, setPanel, user, setUser }: { panel: string; setPanel: (p: string) => void; user: User; setUser: (u: User | null) => void }) {
   async function logout() {
-    await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'logout' }) });
+    await fetch('/api/auth/login', { method: 'DELETE' });
     setUser(null);
   }
   const item = (id: string, icon: string, label: string) => (
@@ -153,7 +153,8 @@ function RegisterForm({ onLogin }: { onLogin: (u: User) => void }) {
 
   async function sendOtp() {
     setErr(''); setLoading(true);
-    const res = await fetch('/api/auth/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'send_otp', ...f }) });
+    const { teamSize, ...rest } = f;
+    const res = await fetch('/api/auth/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ step: 'request', ...rest, team_size: teamSize }) });
     const d = await res.json();
     setLoading(false);
     if (!res.ok) { setErr(d.error); return; }
@@ -165,18 +166,12 @@ function RegisterForm({ onLogin }: { onLogin: (u: User) => void }) {
   async function verify() {
     setErr(''); setLoading(true);
     const code = otp.join('');
-    const res = await fetch('/api/auth/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'verify_otp', ...f, otp: code }) });
+    const { teamSize, ...rest } = f;
+    const res = await fetch('/api/auth/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ step: 'verify', ...rest, team_size: teamSize, otp: code }) });
     const d = await res.json();
     setLoading(false);
     if (!res.ok) { setErr(d.error); return; }
-    // Auto-login after registration
-    const lr = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'send_otp', email: f.email }) });
-    const ld = await lr.json();
-    if (ld.dev_otp) {
-      const vr = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'verify_otp', email: f.email, otp: ld.dev_otp }) });
-      const vd = await vr.json();
-      if (vd.user) { onLogin(vd.user); return; }
-    }
+    if (d.user) { onLogin(d.user); return; }
     setOk('Account created! Please log in.');
   }
 
@@ -260,7 +255,7 @@ function LoginForm({ onLogin }: { onLogin: (u: User) => void }) {
 
   async function sendOtp() {
     setErr(''); setLoading(true);
-    const res = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'send_otp', email }) });
+    const res = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ step: 'request', email }) });
     const d = await res.json();
     setLoading(false);
     if (!res.ok) { setErr(d.error); return; }
@@ -270,7 +265,7 @@ function LoginForm({ onLogin }: { onLogin: (u: User) => void }) {
 
   async function verify() {
     setErr(''); setLoading(true);
-    const res = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'verify_otp', email, otp: otp.join('') }) });
+    const res = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ step: 'verify', email, otp: otp.join('') }) });
     const d = await res.json();
     setLoading(false);
     if (!res.ok) { setErr(d.error); return; }
