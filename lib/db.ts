@@ -173,6 +173,61 @@ export async function initSchema() {
       value      TEXT,
       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     );
+
+    -- ── Talent Management ─────────────────────────────────────────────────
+
+    -- Skill Requirements Profiles (one per product/assessment)
+    CREATE TABLE IF NOT EXISTS skill_profiles (
+      id         SERIAL PRIMARY KEY,
+      user_id    INTEGER NOT NULL REFERENCES users(id),
+      name       TEXT NOT NULL DEFAULT 'New Profile',
+      context    JSONB NOT NULL DEFAULT '{}',
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+
+    -- Skill requirement rows (editable grid)
+    CREATE TABLE IF NOT EXISTS skill_req_rows (
+      id               SERIAL PRIMARY KEY,
+      profile_id       INTEGER NOT NULL REFERENCES skill_profiles(id) ON DELETE CASCADE,
+      section          TEXT NOT NULL,
+      skill            TEXT NOT NULL DEFAULT 'New Skill',
+      why_matters      TEXT,
+      importance       TEXT NOT NULL DEFAULT 'Standard',
+      min_level        INTEGER NOT NULL DEFAULT 5,
+      ideal_level      INTEGER NOT NULL DEFAULT 8,
+      depth            TEXT NOT NULL DEFAULT 'D',
+      engineers_needed INTEGER,
+      seniority        TEXT,
+      notes            TEXT,
+      sort_order       INTEGER NOT NULL DEFAULT 0
+    );
+
+    -- Engineering Talent Maps (one per engineer assessment)
+    CREATE TABLE IF NOT EXISTS talent_maps (
+      id         SERIAL PRIMARY KEY,
+      user_id    INTEGER NOT NULL REFERENCES users(id),
+      name       TEXT NOT NULL DEFAULT 'New Assessment',
+      profile    JSONB NOT NULL DEFAULT '{}',
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+
+    -- Talent map rows (technical, mindset, ai, knowledge tabs)
+    CREATE TABLE IF NOT EXISTS talent_map_rows (
+      id           SERIAL PRIMARY KEY,
+      map_id       INTEGER NOT NULL REFERENCES talent_maps(id) ON DELETE CASCADE,
+      sheet        TEXT NOT NULL,
+      section      TEXT NOT NULL,
+      item         TEXT NOT NULL,
+      description  TEXT,
+      self_score   INTEGER,
+      mgr_score    INTEGER,
+      target_score INTEGER,
+      status_text  TEXT,
+      notes        TEXT,
+      sort_order   INTEGER NOT NULL DEFAULT 0
+    );
   `);
   await seedDefaults(pool);
 }

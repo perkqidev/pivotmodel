@@ -4,6 +4,8 @@ import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import ConsultModal from '@/components/ConsultModal';
 import EMBSpreadsheet from '@/components/EMBSpreadsheet';
+import SkillRequirementsSpreadsheet from '@/components/SkillRequirementsSpreadsheet';
+import TalentMapSpreadsheet from '@/components/TalentMapSpreadsheet';
 
 interface User { id: number; name: string; email: string; isAdmin: boolean }
 interface BlogPost { id: number; title: string; category: string; excerpt: string; emoji: string; read_time: number; published_at: string; status: string }
@@ -37,6 +39,8 @@ export default function CommunityPage() {
         <main className="comm-main">
           {panel === 'home' && <HomePanel user={user} setPanel={setPanel} />}
           {panel === 'emb' && <EMBPanel user={user} />}
+          {panel === 'skillreq' && <SkillReqPanel user={user} />}
+          {panel === 'talentmap' && <TalentMapPanel user={user} />}
           {panel === 'materials' && <MaterialsPanel />}
           {panel === 'blog' && <BlogPanel />}
           {panel === 'whitepapers' && <WhitepapersPanel />}
@@ -79,6 +83,8 @@ function Sidebar({ panel, setPanel, user, setUser }: { panel: string; setPanel: 
       {item('whitepapers', '📄', 'Whitepapers')}
       <div className="s-label">Tools</div>
       {item('emb', '📊', 'EMB Assessment')}
+      {item('skillreq', '🎯', 'Skill Requirements')}
+      {item('talentmap', '👤', 'Talent Map')}
       {item('materials', '📋', 'Materials')}
       <div className="s-label">Consulting</div>
       {item('consulting', '🎯', 'Book a Session')}
@@ -327,6 +333,8 @@ function HomePanel({ user, setPanel }: { user: User; setPanel: (p: string) => vo
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 14, marginBottom: 28 }}>
         {[
           { icon: '📊', title: 'EMB Assessment', desc: 'Assess your team\'s maturity across the four pivots', panel: 'emb' },
+          { icon: '🎯', title: 'Skill Requirements', desc: 'Define technical skills your product team needs before hiring', panel: 'skillreq' },
+          { icon: '👤', title: 'Talent Map', desc: 'Assess and develop engineering talent across all dimensions', panel: 'talentmap' },
           { icon: '📝', title: 'Blog', desc: 'Latest thinking from the author', panel: 'blog' },
           { icon: '📄', title: 'Whitepapers', desc: 'Frameworks and research to download', panel: 'whitepapers' },
           { icon: '📋', title: 'Materials', desc: 'Templates, playbooks, and guides', panel: 'materials' },
@@ -354,6 +362,28 @@ function EMBPanel({ user }: { user: User }) {
       <div className="p-title">📊 EMB Assessment</div>
       <div className="p-sub">Engineering Maturity Benchmark — assess your offshore team across all four pivots</div>
       <EMBSpreadsheet userId={user.id} />
+    </div>
+  );
+}
+
+// ── Skill Requirements Panel ───────────────────────────────────────────────
+function SkillReqPanel({ user }: { user: User }) {
+  return (
+    <div>
+      <div className="p-title">🎯 Skill Requirements</div>
+      <div className="p-sub">Define the technical skills your product engineering team needs — before hiring or restructuring</div>
+      <SkillRequirementsSpreadsheet userId={user.id} />
+    </div>
+  );
+}
+
+// ── Talent Map Panel ───────────────────────────────────────────────────────
+function TalentMapPanel({ user }: { user: User }) {
+  return (
+    <div>
+      <div className="p-title">👤 Engineering Talent Map</div>
+      <div className="p-sub">Assess, track and develop engineering talent — technical skills, product mindset, AI readiness, and knowledge management</div>
+      <TalentMapSpreadsheet userId={user.id} />
     </div>
   );
 }

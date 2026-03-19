@@ -6,24 +6,21 @@ import ConsultingSection from '@/components/ConsultingSection';
 import Footer from '@/components/Footer';
 import ConsultModal from '@/components/ConsultModal';
 
+// Fetch recent blog posts and whitepapers from DB (server-side)
 async function getInsights() {
   try {
     const posts = await query<{
       id: number; title: string; category: string; excerpt: string;
       emoji: string; read_time: number; published_at: string;
-    }>(`
-      SELECT id, title, category, excerpt, emoji, read_time, published_at
-      FROM blog_posts WHERE status = 'published'
-      ORDER BY published_at DESC LIMIT 3
-    `);
+    }>(`SELECT id, title, category, excerpt, emoji, read_time, published_at
+        FROM blog_posts WHERE status = 'published'
+        ORDER BY published_at DESC LIMIT 3`);
 
     const papers = await query<{
       id: number; title: string; category: string;
       icon: string; pages: number; access: string;
-    }>(`
-      SELECT id, title, category, icon, pages, access
-      FROM whitepapers ORDER BY created_at DESC LIMIT 4
-    `);
+    }>(`SELECT id, title, category, icon, pages, access
+        FROM whitepapers ORDER BY created_at DESC LIMIT 4`);
 
     return { posts, papers };
   } catch {
@@ -47,8 +44,10 @@ export default async function HomePage() {
 
       <HeroSection />
 
+      {/* Stats Band */}
       <StatsBand />
 
+      {/* About */}
       <section className="about" id="about">
         <div className="section-inner">
           <div className="about-text">
@@ -90,6 +89,7 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* AI Age */}
       <section className="ai-age" id="ai-age">
         <div className="section-inner">
           <div className="ai-age-inner">
@@ -129,6 +129,7 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Four Pivots */}
       <section className="pivots" id="concepts">
         <div className="section-inner">
           <div className="section-label reveal" style={{ textAlign: 'center' }}>The Framework</div>
@@ -156,6 +157,7 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Maturity */}
       <section className="maturity">
         <div className="section-inner">
           <div className="maturity-left reveal">
@@ -185,6 +187,7 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Materials */}
       <section className="materials-preview" id="materials">
         <div className="section-inner">
           <div className="section-label reveal" style={{ textAlign: 'center' }}>Community + Materials</div>
@@ -197,8 +200,8 @@ export default async function HomePage() {
               { icon: '📋', title: 'EMB Schema Templates', body: 'Custom Engineering Maturity Benchmark worksheets — ready to adapt for your organisation.' },
               { icon: '📊', title: 'KRA & Performance Frameworks', body: 'Role-by-role Key Result Areas aligned to the Four Pivots, with scoring rubrics.' },
               { icon: '🗺️', title: 'Offshore Setup Playbooks', body: 'Captive unit vs third-party decision trees, engagement format guides, and onboarding frameworks.' },
-              { icon: '🧪', title: 'Self-Assessment Tools', body: "Quick-score your team's maturity across all Four Pivots in under 20 minutes." },
-              { icon: '🎯', title: 'AI Impact Guides', body: "Practical guides to navigating the three phases of AI's impact on engineering talent." },
+              { icon: '🧪', title: 'Self-Assessment Tools', body: 'Quick-score your team\'s maturity across all Four Pivots in under 20 minutes.' },
+              { icon: '🎯', title: 'AI Impact Guides', body: 'Practical guides to navigating the three phases of AI\'s impact on engineering talent.' },
               { icon: '📄', title: 'Whitepapers & Research', body: 'In-depth frameworks and research on offshore engineering excellence.' },
             ].map(m => (
               <div className="material-item reveal" key={m.title}>
@@ -216,6 +219,7 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Author */}
       <section className="author" id="author">
         <div className="section-inner author-inner">
           <div className="author-portrait reveal">
@@ -236,6 +240,7 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Final CTA */}
       <section className="final-cta">
         <div className="noise-overlay" />
         <div className="section-inner" style={{ textAlign: 'center', position: 'relative', zIndex: 2 }}>
@@ -248,6 +253,7 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Insights — Blog & Whitepapers */}
       <section className="insights-band" id="insights">
         <div className="section-inner">
           <div className="insights-grid">
@@ -291,10 +297,12 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Consulting */}
       <ConsultingSection />
 
       <Footer />
 
+      {/* Consulting inquiry modal (client component) */}
       <ConsultModal source="landing_page" />
     </>
   );

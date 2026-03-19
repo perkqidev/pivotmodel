@@ -207,7 +207,7 @@ export default function EMBSpreadsheet({ userId }: { userId: number }) {
   // ── Add custom pivot section ──────────────────────────────────────────────
   async function addPivotSection() {
     if (!newPivotName.trim() || !current) return;
-    const existingNums = [...new Set(rows.map(r => r.pivot_num))];
+    const existingNums = Array.from(new Set<number>(rows.map(r => r.pivot_num)));
     const nextNum = Math.max(...existingNums, 4) + 1;
     const d = await fetch('/api/emb', {
       method: 'PATCH',
@@ -247,7 +247,7 @@ export default function EMBSpreadsheet({ userId }: { userId: number }) {
   }
 
   // ── Derived stats ─────────────────────────────────────────────────────────
-  const pivotNums = [...new Set(rows.map(r => r.pivot_num))].sort((a, b) => a - b);
+  const pivotNums = Array.from(new Set<number>(rows.map(r => r.pivot_num))).sort((a, b) => a - b);
   const byPivot: Record<number, EMBRow[]> = {};
   rows.forEach(r => { if (!byPivot[r.pivot_num]) byPivot[r.pivot_num] = []; byPivot[r.pivot_num].push(r); });
   const overallLevel = !rows.length ? '—' : rows.filter(r => r.current_level === 'L3').length / rows.length > 0.6 ? 'L3' : (rows.filter(r => r.current_level === 'L2').length + rows.filter(r => r.current_level === 'L3').length) / rows.length > 0.6 ? 'L2' : 'L1';

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { queryOne, execute } from '@/lib/db';
-import { createSession, cookieOptions } from '@/lib/auth';
+import { createSession as signToken } from '@/lib/auth';
 import { sendOtpEmail } from '@/lib/email';
 
 function generateOtp() {
@@ -14,6 +14,7 @@ export async function POST(req: NextRequest) {
 
     if (!email) return NextResponse.json({ error: 'Email required.' }, { status: 400 });
 
+    // ── Step 1: send OTP ─────────────────────────────────────────────────────
     if (step === 'request' || !step) {
       if (!name) return NextResponse.json({ error: 'Name required.' }, { status: 400 });
 
@@ -38,6 +39,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: true, message: 'Verification code sent to your email.' });
     }
 
+    // ── Step 2: verify OTP & create user ────────────────────────────────────
     if (step === 'verify') {
       if (!otp || !name) return NextResponse.json({ error: 'OTP and name required.' }, { status: 400 });
 
@@ -54,6 +56,7 @@ export async function POST(req: NextRequest) {
 
       await execute('UPDATE otp_codes SET used = TRUE WHERE id = $1', [record.id]);
 
+      // Check again for race condition
       const existing = await queryOne('SELECT id FROM users WHERE email = $1', [email.toLowerCase()]);
       if (existing) return NextResponse.json({ error: 'Account already exists.' }, { status: 409 });
 
@@ -66,10 +69,13 @@ export async function POST(req: NextRequest) {
 
       if (!newUser) return NextResponse.json({ error: 'Failed to create account.' }, { status: 500 });
 
-      const token = await createSession({ id: newUser.id, email: newUser.email, name: newUser.name, isAdmin: newUser.is_admin });
+      const token = await signToken({ id: newUser.id, email: newUser.email, name: newUser.name, isAdmin: newUser.is_admin });
 
       const res = NextResponse.json({ success: true, user: { id: newUser.id, name: newUser.name, email: newUser.email, isAdmin: newUser.is_admin } });
-      res.cookies.set(cookieOptions.name, token, cookieOptions);
+      res.cookies.set('pm_session', token, {
+        httpOnly: true, secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax', maxAge: 60 * 60 * 24 * 30, path: '/'
+      });
       return res;
     }
 
