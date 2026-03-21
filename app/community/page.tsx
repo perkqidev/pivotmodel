@@ -175,16 +175,19 @@ function RegisterForm({ onLogin }: { onLogin: (u: User) => void }) {
     setOk('Account created! Please log in.');
   }
 
-  const handleOtpKey = (i: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-    const val = (e.target as HTMLInputElement).value;
+  const handleOtpChange = (i: number, val: string) => {
     if (/^\d$/.test(val)) {
       const next = [...otp]; next[i] = val; setOtp(next);
       if (i < 5) (document.querySelectorAll('.otp-digit')[i + 1] as HTMLInputElement)?.focus();
-    } else if (e.key === 'Backspace') {
+    } else if (val === '') {
       const next = [...otp]; next[i] = ''; setOtp(next);
-      if (i > 0) (document.querySelectorAll('.otp-digit')[i - 1] as HTMLInputElement)?.focus();
     }
-    e.preventDefault();
+  };
+  const handleOtpKeyDown = (i: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Backspace' && !otp[i] && i > 0) {
+      const next = [...otp]; next[i - 1] = ''; setOtp(next);
+      (document.querySelectorAll('.otp-digit')[i - 1] as HTMLInputElement)?.focus();
+    }
   };
 
   if (step === 'otp') return (
@@ -197,7 +200,7 @@ function RegisterForm({ onLogin }: { onLogin: (u: User) => void }) {
       {devOtp && <div style={{ padding: 10, background: 'rgba(126,232,162,.07)', border: '1px dashed rgba(126,232,162,.3)', borderRadius: 6, fontSize: 12, color: 'var(--green)', textAlign: 'left', marginBottom: 16 }}><strong style={{ display: 'block', marginBottom: 3, opacity: .7, textTransform: 'uppercase', letterSpacing: '.08em' }}>Dev mode — OTP:</strong>{devOtp}</div>}
       <div className="otp-inputs">
         {otp.map((v, i) => (
-          <input key={i} className="otp-digit" maxLength={1} value={v} onKeyDown={e => handleOtpKey(i, e)} readOnly onChange={() => {}} />
+          <input key={i} className="otp-digit" maxLength={1} value={v} onChange={e => handleOtpChange(i, e.target.value)} onKeyDown={e => handleOtpKeyDown(i, e)} />
         ))}
       </div>
       {err && <div className="alert alert-err">{err}</div>}
@@ -272,16 +275,19 @@ function LoginForm({ onLogin }: { onLogin: (u: User) => void }) {
     onLogin(d.user);
   }
 
-  const handleOtpKey = (i: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-    const val = (e.target as HTMLInputElement).value;
+  const handleOtpChange = (i: number, val: string) => {
     if (/^\d$/.test(val)) {
       const next = [...otp]; next[i] = val; setOtp(next);
       if (i < 5) (document.querySelectorAll('.otp-digit')[i + 1] as HTMLInputElement)?.focus();
-    } else if (e.key === 'Backspace') {
+    } else if (val === '') {
       const next = [...otp]; next[i] = ''; setOtp(next);
-      if (i > 0) (document.querySelectorAll('.otp-digit')[i - 1] as HTMLInputElement)?.focus();
     }
-    e.preventDefault();
+  };
+  const handleOtpKeyDown = (i: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Backspace' && !otp[i] && i > 0) {
+      const next = [...otp]; next[i - 1] = ''; setOtp(next);
+      (document.querySelectorAll('.otp-digit')[i - 1] as HTMLInputElement)?.focus();
+    }
   };
 
   if (step === 'otp') return (
@@ -292,7 +298,7 @@ function LoginForm({ onLogin }: { onLogin: (u: User) => void }) {
       {devOtp && <div style={{ padding: 10, background: 'rgba(126,232,162,.07)', border: '1px dashed rgba(126,232,162,.3)', borderRadius: 6, fontSize: 12, color: 'var(--green)', marginBottom: 16 }}><strong style={{ display: 'block', marginBottom: 3, opacity: .7, textTransform: 'uppercase', letterSpacing: '.08em' }}>Dev mode — OTP:</strong>{devOtp}</div>}
       <div className="otp-inputs">
         {otp.map((v, i) => (
-          <input key={i} className="otp-digit" maxLength={1} value={v} onKeyDown={e => handleOtpKey(i, e)} readOnly onChange={() => {}} />
+          <input key={i} className="otp-digit" maxLength={1} value={v} onChange={e => handleOtpChange(i, e.target.value)} onKeyDown={e => handleOtpKeyDown(i, e)} />
         ))}
       </div>
       {err && <div className="alert alert-err">{err}</div>}
