@@ -126,7 +126,7 @@ function AssessmentsPanel({ user }: any) {
     <div>
       <div style={{ display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24 }}>
         <h2 style={{ color:'var(--fg)',margin:0 }}>Assessments</h2>
-        <button onClick={()=>setShowNew(o=>!o)} style={{ background:'var(--gold)',border:'none',borderRadius:8,padding:'10px 20px',color:'#000',fontWeight:700,cursor:'pointer' }}>+ New Assessment</button>
+        <button onClick={()=>setShowNew(o=>!o)} style={{ background:'var(--gold)',border:'none',borderRadius:8,padding:'10px 20px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer' }}>+ New Assessment</button>
       </div>
       {showNew && (
         <div style={{ background:'var(--surface)',border:'1px solid var(--border)',borderRadius:16,padding:24,marginBottom:24 }}>
@@ -140,7 +140,7 @@ function AssessmentsPanel({ user }: any) {
             ))}
           </div>
           <div style={{ display:'flex',gap:8 }}>
-            <button onClick={createAssessment} disabled={creating||!form.team_name.trim()} style={{ background:'var(--gold)',border:'none',borderRadius:8,padding:'10px 24px',color:'#000',fontWeight:700,cursor:'pointer',opacity:creating?0.7:1 }}>{creating?'Creating…':'Create Assessment'}</button>
+            <button onClick={createAssessment} disabled={creating||!form.team_name.trim()} style={{ background:'var(--gold)',border:'none',borderRadius:8,padding:'10px 24px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',opacity:creating?0.7:1 }}>{creating?'Creating…':'Create Assessment'}</button>
             <button onClick={()=>setShowNew(false)} style={{ background:'none',border:'1px solid var(--border)',borderRadius:8,padding:'10px 24px',color:'var(--muted)',cursor:'pointer' }}>Cancel</button>
           </div>
         </div>
@@ -166,7 +166,7 @@ function AssessmentList({ title, assessments, onDuplicate }: { title:string; ass
             </div>
             <div style={{ display:'flex',gap:8 }}>
               <button onClick={()=>onDuplicate(a.id)} style={{ background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'8px 14px',color:'var(--muted)',fontSize:12,cursor:'pointer' }}>Duplicate</button>
-              <a href={`/assessment/${a.id}`} style={{ background:'var(--gold)',borderRadius:8,padding:'8px 16px',color:'#000',fontWeight:700,fontSize:13,textDecoration:'none',display:'inline-block' }}>Open →</a>
+              <a href={`/assessment/${a.id}`} style={{ background:'var(--gold)',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,fontSize:13,textDecoration:'none',display:'inline-block' }}>Open →</a>
             </div>
           </div>
         ))}
@@ -214,7 +214,7 @@ function WhitepapersPanel() {
             <div style={{ fontWeight:700,color:'var(--fg)',marginBottom:4 }}>{p.title}</div>
             <div style={{ color:'var(--muted)',fontSize:13,marginBottom:8 }}>{p.description}</div>
             <div style={{ fontSize:12,color:'var(--muted)' }}>{p.pages} pages · {p.access}</div>
-            {p.file_url && <a href={p.file_url} target="_blank" style={{ display:'inline-block',marginTop:12,background:'var(--gold)',borderRadius:8,padding:'6px 14px',color:'#000',fontWeight:700,fontSize:12,textDecoration:'none' }}>Download</a>}
+            {p.file_url && <a href={p.file_url} target="_blank" style={{ display:'inline-block',marginTop:12,background:'var(--gold)',borderRadius:8,padding:'6px 14px',color:'var(--gold-btn-text)',fontWeight:700,fontSize:12,textDecoration:'none' }}>Download</a>}
           </div>
         ))}
       </div>
@@ -296,7 +296,7 @@ function AuthScreen({ onLogin }: { onLogin:(u:any)=>void }) {
               <input type="email" value={form.email} onChange={e=>setForm(p=>({...p,email:e.target.value}))} style={{ width:'100%',background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'10px 14px',color:'var(--fg)',fontSize:14,outline:'none',boxSizing:'border-box' }} />
             </div>
             {error && <div style={{ color:'#ef4444',fontSize:13,marginBottom:12 }}>{error}</div>}
-            <button onClick={handleSubmit} disabled={loading} style={{ width:'100%',background:'var(--gold)',border:'none',borderRadius:10,padding:'12px',color:'#000',fontWeight:700,fontSize:15,cursor:'pointer',marginBottom:16,opacity:loading?0.7:1 }}>{loading?'Sending…':'Send verification code'}</button>
+            <button onClick={handleSubmit} disabled={loading} style={{ width:'100%',background:'var(--gold)',border:'none',borderRadius:10,padding:'12px',color:'var(--gold-btn-text)',fontWeight:700,fontSize:15,cursor:'pointer',marginBottom:16,opacity:loading?0.7:1 }}>{loading?'Sending…':'Send verification code'}</button>
             <div style={{ textAlign:'center',fontSize:13,color:'var(--muted)' }}>
               {mode==='login' ? <>No account? <button onClick={()=>{setMode('register');setError('');}} style={{ background:'none',border:'none',color:'var(--gold)',cursor:'pointer',fontWeight:600,fontSize:13 }}>Register</button></> : <>Have an account? <button onClick={()=>{setMode('login');setError('');}} style={{ background:'none',border:'none',color:'var(--gold)',cursor:'pointer',fontWeight:600,fontSize:13 }}>Sign in</button></>}
             </div>
@@ -307,7 +307,7 @@ function AuthScreen({ onLogin }: { onLogin:(u:any)=>void }) {
             <p style={{ color:'var(--muted)',fontSize:14,textAlign:'center',marginBottom:24 }}>Enter the 6-digit code sent to <strong style={{ color:'var(--fg)' }}>{form.email}</strong></p>
             <input value={otp} onChange={e=>setOtp(e.target.value)} maxLength={6} placeholder="000000" style={{ width:'100%',background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'14px',color:'var(--fg)',fontSize:24,textAlign:'center',letterSpacing:'0.3em',outline:'none',boxSizing:'border-box',marginBottom:16 }} />
             {error && <div style={{ color:'#ef4444',fontSize:13,marginBottom:12,textAlign:'center' }}>{error}</div>}
-            <button onClick={handleOtp} disabled={loading||otp.length!==6} style={{ width:'100%',background:'var(--gold)',border:'none',borderRadius:10,padding:'12px',color:'#000',fontWeight:700,fontSize:15,cursor:'pointer',opacity:loading||otp.length!==6?0.7:1 }}>{loading?'Verifying…':'Verify & Sign in'}</button>
+            <button onClick={handleOtp} disabled={loading||otp.length!==6} style={{ width:'100%',background:'var(--gold)',border:'none',borderRadius:10,padding:'12px',color:'var(--gold-btn-text)',fontWeight:700,fontSize:15,cursor:'pointer',opacity:loading||otp.length!==6?0.7:1 }}>{loading?'Verifying…':'Verify & Sign in'}</button>
             <button onClick={()=>{setStep('form');setOtp('');setError('');}} style={{ width:'100%',background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:13,marginTop:12 }}>← Back</button>
           </>
         )}

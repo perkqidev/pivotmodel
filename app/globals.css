@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -23,7 +23,7 @@
   --border-2:rgba(255,255,255,0.13);
   --font-display:'Playfair Display',Georgia,serif;
   --font-body:   'Lora',Georgia,serif;
-  --font-ui:     'DM Sans',system-ui,sans-serif;
+  --font-ui:     'Inter',system-ui,sans-serif;
   --section-pad: clamp(64px,8vw,120px);
   --hover-bg: rgba(255,255,255,0.04);
 }
@@ -607,6 +607,7 @@ input,select,textarea{font-family:inherit}
 :root {
   --surface: #12152A;
   --card:    #0A0C17;
+  --gold-btn-text: #000;
   --fg:      #F5F0E8;
 }
 
@@ -631,6 +632,7 @@ input,select,textarea{font-family:inherit}
   --card:   #ffffff;
   --fg:     #0f172a;
   --hover-bg:rgba(0,0,0,0.04);
+  --gold-btn-text: #fff;
 }
 
 /* Light – Nav */
@@ -678,7 +680,14 @@ input,select,textarea{font-family:inherit}
 }
 .theme-toggle:hover{border-color:var(--gold);color:var(--gold)}
 
-/* ── Assessment mobile responsive ────────────────────────────────── */
+/* ── Assessment layout helpers ────────────────────────────────────── */
+.module-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:24px;gap:12px;
+}
+.scroll-table{margin-bottom:4px}
+.grid-stack{display:grid;gap:24px}
+
 .assess-menu-btn{
   display:none;position:fixed;bottom:20px;left:20px;z-index:150;
   width:48px;height:48px;border-radius:50%;
@@ -689,6 +698,7 @@ input,select,textarea{font-family:inherit}
 .assess-menu-btn:hover{transform:scale(1.05)}
 .assess-overlay{display:none}
 
+/* ── Assessment mobile responsive ────────────────────────────────── */
 @media(max-width:768px){
   .assess-menu-btn{display:flex;align-items:center;justify-content:center}
   .assess-sidebar{
@@ -705,9 +715,34 @@ input,select,textarea{font-family:inherit}
   .assess-header{padding:12px 16px!important}
   .assess-header>div:last-child{flex-wrap:wrap}
   .assess-header button{font-size:11px!important;padding:5px 10px!important}
+
+  /* Module headers stack on mobile */
+  .module-header{flex-direction:column;align-items:stretch}
+  .module-header>div:first-child h2{font-size:18px!important}
+  .module-header>div:last-child,
+  .module-header>button:last-child{align-self:flex-start}
+
+  /* Scroll tables — override inline overflow:hidden on mobile */
+  .scroll-table{overflow-x:auto!important;-webkit-overflow-scrolling:touch}
+  .scroll-table>div{min-width:700px}
+
+  /* Stack 2-col grids on mobile */
+  .grid-stack{grid-template-columns:1fr!important}
+
+  /* Better form inputs for touch */
+  .assess-main input,
+  .assess-main select,
+  .assess-main textarea{
+    font-size:16px!important;min-height:40px;
+  }
+  .assess-main input[type="number"]{min-height:36px;width:50px!important}
+  .assess-main input[type="range"]{min-height:auto}
+
+  /* General spacing */
   .emb-summary{grid-template-columns:1fr 1fr}
 }
 @media(max-width:480px){
-  .assess-main{padding:12px!important}
+  .assess-main{padding:10px!important}
   .emb-summary{grid-template-columns:1fr}
+  .grid-stack{gap:16px!important}
 }

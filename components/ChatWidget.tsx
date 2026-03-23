@@ -83,7 +83,7 @@ export default function ChatWidget() {
           </div>
           <div style={{ padding:12,borderTop:'1px solid var(--border)',display:'flex',gap:8 }}>
             <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key==='Enter'&&!e.shiftKey&&send()} placeholder="Ask about the book…" style={{ flex:1,background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'8px 12px',color:'var(--fg)',fontSize:13,outline:'none' }} />
-            <button onClick={send} disabled={loading||!input.trim()} style={{ background:'var(--gold)',border:'none',borderRadius:8,padding:'8px 16px',color:'#000',fontWeight:700,fontSize:13,cursor:'pointer',opacity:loading||!input.trim()?0.5:1 }}>Send</button>
+            <button onClick={send} disabled={loading||!input.trim()} style={{ background:'var(--gold)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,fontSize:13,cursor:'pointer',opacity:loading||!input.trim()?0.5:1 }}>Send</button>
           </div>
         </div>
       )}

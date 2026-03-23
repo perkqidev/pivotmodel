@@ -114,7 +114,7 @@ function BlogTab() {
             <option value="draft">Draft</option><option value="published">Published</option>
           </select>
         </div>
-        <button onClick={save} style={{background:'#C9A84C',border:'none',borderRadius:8,padding:'12px 24px',color:'#000',fontWeight:700,cursor:'pointer',fontSize:14}}>Save Post</button>
+        <button onClick={save} style={{background:'#C9A84C',border:'none',borderRadius:8,padding:'12px 24px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:14}}>Save Post</button>
       </div>
     </div>
   );
@@ -122,7 +122,7 @@ function BlogTab() {
     <div>
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24}}>
         <h2 style={{margin:0,color:'#F5F0E8'}}>Blog Posts ({posts.length})</h2>
-        <button onClick={()=>setEditing({title:'',category:'',excerpt:'',body:'',emoji:'📝',read_time:4,status:'draft'})} style={{background:'#C9A84C',border:'none',borderRadius:8,padding:'10px 20px',color:'#000',fontWeight:700,cursor:'pointer'}}>+ New Post</button>
+        <button onClick={()=>setEditing({title:'',category:'',excerpt:'',body:'',emoji:'📝',read_time:4,status:'draft'})} style={{background:'#C9A84C',border:'none',borderRadius:8,padding:'10px 20px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer'}}>+ New Post</button>
       </div>
       <div style={{display:'grid',gap:12}}>
         {posts.map(p=>(
@@ -170,7 +170,7 @@ function WhitepapersTab() {
             <option value="public">Public</option><option value="members">Members only</option>
           </select>
         </div>
-        <button onClick={save} style={{background:'#C9A84C',border:'none',borderRadius:8,padding:'12px 24px',color:'#000',fontWeight:700,cursor:'pointer',fontSize:14}}>Save</button>
+        <button onClick={save} style={{background:'#C9A84C',border:'none',borderRadius:8,padding:'12px 24px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:14}}>Save</button>
       </div>
     </div>
   );
@@ -178,7 +178,7 @@ function WhitepapersTab() {
     <div>
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24}}>
         <h2 style={{margin:0,color:'#F5F0E8'}}>Whitepapers</h2>
-        <button onClick={()=>setEditing({title:'',category:'',description:'',icon:'📄',pages:1,access:'members',file_url:''})} style={{background:'#C9A84C',border:'none',borderRadius:8,padding:'10px 20px',color:'#000',fontWeight:700,cursor:'pointer'}}>+ Add Whitepaper</button>
+        <button onClick={()=>setEditing({title:'',category:'',description:'',icon:'📄',pages:1,access:'members',file_url:''})} style={{background:'#C9A84C',border:'none',borderRadius:8,padding:'10px 20px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer'}}>+ Add Whitepaper</button>
       </div>
       <div style={{display:'grid',gap:12}}>
         {papers.map(p=>(
@@ -238,7 +238,7 @@ function ChatConfigTab() {
           </div>
           <div style={{fontSize:11,color:'#6B7280',marginTop:8}}>Limits are enforced server-side using rolling time windows. Changes take effect immediately without a redeploy.</div>
         </div>
-        <button onClick={save} disabled={saving} style={{background:'#C9A84C',border:'none',borderRadius:8,padding:'12px 24px',color:'#000',fontWeight:700,cursor:'pointer',fontSize:14,opacity:saving?0.7:1}}>
+        <button onClick={save} disabled={saving} style={{background:'#C9A84C',border:'none',borderRadius:8,padding:'12px 24px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:14,opacity:saving?0.7:1}}>
           {saving?'Saving…':saved?'✓ Saved':'Save Configuration'}
         </button>
       </div>
