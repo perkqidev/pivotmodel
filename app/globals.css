@@ -698,6 +698,13 @@ input,select,textarea{font-family:inherit}
 .assess-menu-btn:hover{transform:scale(1.05)}
 .assess-overlay{display:none}
 
+/* ── Assessment desktop safeguard ────────────────────────────────── */
+@media(min-width:769px){
+  .assess-sidebar{position:static!important;transform:none!important;box-shadow:none!important}
+  .assess-menu-btn{display:none!important}
+  .assess-overlay{display:none!important}
+}
+
 /* ── Assessment mobile responsive ────────────────────────────────── */
 @media(max-width:768px){
   .assess-menu-btn{display:flex;align-items:center;justify-content:center}
