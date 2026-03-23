@@ -1,15 +1,12 @@
 'use client';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import ConsultModal from '@/components/ConsultModal';
-import EMBSpreadsheet from '@/components/EMBSpreadsheet';
-import SkillRequirementsSpreadsheet from '@/components/SkillRequirementsSpreadsheet';
-import TalentMapSpreadsheet from '@/components/TalentMapSpreadsheet';
+import ChatWidget from '@/components/ChatWidget';
 
 interface User { id: number; name: string; email: string; isAdmin: boolean }
-interface BlogPost { id: number; title: string; category: string; excerpt: string; emoji: string; read_time: number; published_at: string; status: string }
-interface Whitepaper { id: number; title: string; category: string; description: string; icon: string; pages: number; access: string }
+interface Assessment { id: number; team_name: string; industry: string; assessment_date: string; updated_at: string; owner_name: string }
 
 export default function CommunityPage() {
   const [user, setUser] = useState<User | null>(null);
@@ -17,559 +14,303 @@ export default function CommunityPage() {
   const [panel, setPanel] = useState('home');
 
   useEffect(() => {
-    fetch('/api/auth/login').then(r => r.json()).then(d => {
-      setUser(d.user || null);
-      setLoading(false);
-    }).catch(() => setLoading(false));
+    fetch('/api/auth/me').then(r => r.json()).then(d => { setUser(d.user); setLoading(false); }).catch(() => setLoading(false));
   }, []);
 
-  if (loading) return (
-    <div style={{ minHeight: '100vh', background: 'var(--ink)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ color: 'var(--muted)' }}>Loading…</div>
-    </div>
-  );
-
+  if (loading) return <div style={{ minHeight:'100vh',background:'var(--ink)',display:'flex',alignItems:'center',justifyContent:'center' }}><div style={{ color:'var(--muted)' }}>Loading…</div></div>;
   if (!user) return <AuthScreen onLogin={setUser} />;
 
   return (
     <>
       <Nav />
-      <div className="comm-layout">
+      <div style={{ display:'grid',gridTemplateColumns:'220px 1fr',minHeight:'calc(100vh - 64px)',marginTop:64 }}>
         <Sidebar panel={panel} setPanel={setPanel} user={user} setUser={setUser} />
-        <main className="comm-main">
-          {panel === 'home' && <HomePanel user={user} setPanel={setPanel} />}
-          {panel === 'emb' && <EMBPanel user={user} />}
-          {panel === 'skillreq' && <SkillReqPanel user={user} />}
-          {panel === 'talentmap' && <TalentMapPanel user={user} />}
-          {panel === 'materials' && <MaterialsPanel />}
-          {panel === 'blog' && <BlogPanel />}
-          {panel === 'whitepapers' && <WhitepapersPanel />}
-          {panel === 'consulting' && <ConsultingPanel />}
-          {panel === 'account' && <AccountPanel user={user} setUser={setUser} />}
+        <main style={{ background:'var(--ink)',overflowY:'auto' }}>
+          <div style={{ padding:32, maxWidth:1200, margin:'0 auto' }}>
+            {panel==='home' && <HomePanel user={user} setPanel={setPanel} />}
+            {panel==='assessments' && <AssessmentsPanel user={user} />}
+            {panel==='materials' && <MaterialsPanel />}
+            {panel==='blog' && <BlogPanel />}
+            {panel==='whitepapers' && <WhitepapersPanel />}
+            {panel==='consulting' && <ConsultingPanel />}
+            {panel==='account' && <AccountPanel user={user} setUser={setUser} />}
+          </div>
         </main>
       </div>
-      <ConsultModal source="community" />
+      <ChatWidget />
     </>
   );
 }
 
-// ── Sidebar ──────────────────────────────────────────────────────────────
-function Sidebar({ panel, setPanel, user, setUser }: { panel: string; setPanel: (p: string) => void; user: User; setUser: (u: User | null) => void }) {
-  async function logout() {
-    await fetch('/api/auth/login', { method: 'DELETE' });
-    setUser(null);
-  }
-  const item = (id: string, icon: string, label: string) => (
-    <button key={id} className={`s-item${panel === id ? ' active' : ''}`} onClick={() => setPanel(id)}>
-      <span className="s-icon">{icon}</span> {label}
-    </button>
-  );
-  return (
-    <aside className="sidebar">
-      <div style={{ padding: '12px 16px 8px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'var(--ink-3)', border: '1px solid var(--gold-d)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, color: 'var(--gold)', flexShrink: 0 }}>
-            {user.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
-          </div>
-          <div>
-            <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--cream)' }}>{user.name}</div>
-            <div style={{ fontSize: 11, color: 'var(--muted)' }}>Member</div>
-          </div>
-        </div>
-      </div>
-      <div className="s-label">Community</div>
-      {item('home', '🏠', 'Home')}
-      {item('blog', '📝', 'Blog')}
-      {item('whitepapers', '📄', 'Whitepapers')}
-      <div className="s-label">Tools</div>
-      {item('emb', '📊', 'EMB Assessment')}
-      {item('skillreq', '🎯', 'Skill Requirements')}
-      {item('talentmap', '👤', 'Talent Map')}
-      {item('materials', '📋', 'Materials')}
-      <div className="s-label">Consulting</div>
-      {item('consulting', '🎯', 'Book a Session')}
-      <div className="s-label">Account</div>
-      {item('account', '👤', 'My Profile')}
-      {user.isAdmin && item('admin', '⚙️', 'Admin Panel')}
-      <button className="s-item" onClick={logout} style={{ marginTop: 8 }}>
-        <span className="s-icon">🚪</span> Sign Out
-      </button>
-    </aside>
-  );
-}
-
-// ── Auth Screen ───────────────────────────────────────────────────────────
-function AuthScreen({ onLogin }: { onLogin: (u: User) => void }) {
-  const [tab, setTab] = useState<'login' | 'register'>('login');
-  return (
-    <>
-      <Nav />
-      <div style={{ paddingTop: 64, minHeight: '100vh', background: 'var(--ink)' }}>
-        <div className="auth-wrap">
-          <div className="auth-left">
-            <div className="auth-hl">The community for<br /><em>engineering leaders</em><br />who build offshore excellence.</div>
-            <div className="auth-perks">
-              {['Access all EMB frameworks and templates', 'Book consulting sessions with the author', 'Download whitepapers and playbooks', 'Track your team\'s maturity with the EMB spreadsheet'].map(p => (
-                <div className="perk" key={p}>
-                  <div className="perk-dot">◆</div>
-                  <span>{p}</span>
-                </div>
-              ))}
-            </div>
-            <div style={{ marginTop: 24, padding: 13, background: 'rgba(232,139,126,.07)', border: '1px solid rgba(232,139,126,.2)', borderRadius: 6, fontSize: 12, color: 'var(--muted)', maxWidth: 400 }}>
-              This community is for engineering professionals. Corporate email addresses required.
-            </div>
-          </div>
-          <div className="auth-right">
-            <div className="auth-card">
-              <div className="auth-tabs">
-                <button className={`auth-tab${tab === 'register' ? ' active' : ''}`} onClick={() => setTab('register')}>Join Free</button>
-                <button className={`auth-tab${tab === 'login' ? ' active' : ''}`} onClick={() => setTab('login')}>Sign In</button>
-              </div>
-              <div className="auth-body">
-                {tab === 'register' ? <RegisterForm onLogin={onLogin} /> : <LoginForm onLogin={onLogin} />}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <Footer />
-    </>
-  );
-}
-
-// ── Register Form ─────────────────────────────────────────────────────────
-function RegisterForm({ onLogin }: { onLogin: (u: User) => void }) {
-  const [step, setStep] = useState<'details' | 'otp'>('details');
-  const [err, setErr] = useState('');
-  const [ok, setOk] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [otp, setOtp] = useState(['', '', '', '', '', '']);
-  const [devOtp, setDevOtp] = useState('');
-  const [f, setF] = useState({ name: '', email: '', company: '', role: '', industry: '', teamSize: '', linkedin: '' });
-
-  const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
-    setF(prev => ({ ...prev, [k]: e.target.value }));
-
-  async function sendOtp() {
-    setErr(''); setLoading(true);
-    const { teamSize, ...rest } = f;
-    const res = await fetch('/api/auth/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ step: 'request', ...rest, team_size: teamSize }) });
-    const d = await res.json();
-    setLoading(false);
-    if (!res.ok) { setErr(d.error); return; }
-    if (d.dev_otp) setDevOtp(d.dev_otp);
-    setStep('otp');
-    setOk('Verification code sent to ' + f.email);
-  }
-
-  async function verify() {
-    setErr(''); setLoading(true);
-    const code = otp.join('');
-    const { teamSize, ...rest } = f;
-    const res = await fetch('/api/auth/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ step: 'verify', ...rest, team_size: teamSize, otp: code }) });
-    const d = await res.json();
-    setLoading(false);
-    if (!res.ok) { setErr(d.error); return; }
-    if (d.user) { onLogin(d.user); return; }
-    setOk('Account created! Please log in.');
-  }
-
-  const handleOtpChange = (i: number, val: string) => {
-    if (/^\d$/.test(val)) {
-      const next = [...otp]; next[i] = val; setOtp(next);
-      if (i < 5) (document.querySelectorAll('.otp-digit')[i + 1] as HTMLInputElement)?.focus();
-    } else if (val === '') {
-      const next = [...otp]; next[i] = ''; setOtp(next);
-    }
-  };
-  const handleOtpKeyDown = (i: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Backspace' && !otp[i] && i > 0) {
-      const next = [...otp]; next[i - 1] = ''; setOtp(next);
-      (document.querySelectorAll('.otp-digit')[i - 1] as HTMLInputElement)?.focus();
-    }
-  };
-
-  if (step === 'otp') return (
-    <div style={{ textAlign: 'center', padding: '8px 0' }}>
-      <div style={{ fontSize: 40, marginBottom: 12 }}>📧</div>
-      <div style={{ fontSize: 17, fontWeight: 700, color: 'var(--cream)', marginBottom: 6 }}>Check your email</div>
-      <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.6, marginBottom: 20 }}>
-        We sent a 6-digit code to <strong>{f.email}</strong>
-      </div>
-      {devOtp && <div style={{ padding: 10, background: 'rgba(126,232,162,.07)', border: '1px dashed rgba(126,232,162,.3)', borderRadius: 6, fontSize: 12, color: 'var(--green)', textAlign: 'left', marginBottom: 16 }}><strong style={{ display: 'block', marginBottom: 3, opacity: .7, textTransform: 'uppercase', letterSpacing: '.08em' }}>Dev mode — OTP:</strong>{devOtp}</div>}
-      <div className="otp-inputs">
-        {otp.map((v, i) => (
-          <input key={i} className="otp-digit" maxLength={1} value={v} onChange={e => handleOtpChange(i, e.target.value)} onKeyDown={e => handleOtpKeyDown(i, e)} />
-        ))}
-      </div>
-      {err && <div className="alert alert-err">{err}</div>}
-      {ok && <div className="alert alert-ok">{ok}</div>}
-      <button className="btn btn-primary" style={{ width: '100%' }} onClick={verify} disabled={loading || otp.join('').length < 6}>
-        {loading ? 'Verifying…' : 'Verify & Create Account'}
-      </button>
-      <div style={{ marginTop: 12 }}>
-        <button style={{ background: 'none', border: 'none', color: 'var(--gold)', fontSize: 13, cursor: 'pointer' }} onClick={() => setStep('details')}>← Back</button>
-      </div>
-    </div>
-  );
-
-  return (
-    <>
-      {err && <div className="alert alert-err">{err}</div>}
-      <div className="field-row">
-        <div className="field"><label className="lbl">Full Name <span className="req">*</span></label><input className="inp" value={f.name} onChange={set('name')} placeholder="Your full name" /></div>
-        <div className="field"><label className="lbl">Email <span className="req">*</span></label><input className="inp" type="email" value={f.email} onChange={set('email')} placeholder="Corporate email" /></div>
-      </div>
-      <div className="field-row">
-        <div className="field"><label className="lbl">Company <span className="req">*</span></label><input className="inp" value={f.company} onChange={set('company')} placeholder="Your company" /></div>
-        <div className="field"><label className="lbl">Role <span className="req">*</span></label><input className="inp" value={f.role} onChange={set('role')} placeholder="e.g. CTO, VP Engineering" /></div>
-      </div>
-      <div className="field-row">
-        <div className="field"><label className="lbl">Industry</label>
-          <select className="inp" value={f.industry} onChange={set('industry')}>
-            <option value="">Select…</option>
-            {['Software / SaaS','Fintech','Healthtech','E-commerce','Enterprise Software','Consulting','Other'].map(o => <option key={o}>{o}</option>)}
-          </select>
-        </div>
-        <div className="field"><label className="lbl">Team Size</label>
-          <select className="inp" value={f.teamSize} onChange={set('teamSize')}>
-            <option value="">Select…</option>
-            {['1–10','11–50','51–200','200+'].map(o => <option key={o}>{o}</option>)}
-          </select>
-        </div>
-      </div>
-      <div className="field"><label className="lbl">LinkedIn (optional)</label><input className="inp" value={f.linkedin} onChange={set('linkedin')} placeholder="linkedin.com/in/…" /></div>
-      <button className="btn btn-primary" style={{ width: '100%', marginTop: 4 }} onClick={sendOtp} disabled={loading}>
-        {loading ? 'Sending code…' : 'Send Verification Code →'}
-      </button>
-    </>
-  );
-}
-
-// ── Login Form ────────────────────────────────────────────────────────────
-function LoginForm({ onLogin }: { onLogin: (u: User) => void }) {
-  const [step, setStep] = useState<'email' | 'otp'>('email');
-  const [email, setEmail] = useState('');
-  const [otp, setOtp] = useState(['', '', '', '', '', '']);
-  const [err, setErr] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [devOtp, setDevOtp] = useState('');
-
-  async function sendOtp() {
-    setErr(''); setLoading(true);
-    const res = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ step: 'request', email }) });
-    const d = await res.json();
-    setLoading(false);
-    if (!res.ok) { setErr(d.error); return; }
-    if (d.dev_otp) setDevOtp(d.dev_otp);
-    setStep('otp');
-  }
-
-  async function verify() {
-    setErr(''); setLoading(true);
-    const res = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ step: 'verify', email, otp: otp.join('') }) });
-    const d = await res.json();
-    setLoading(false);
-    if (!res.ok) { setErr(d.error); return; }
-    onLogin(d.user);
-  }
-
-  const handleOtpChange = (i: number, val: string) => {
-    if (/^\d$/.test(val)) {
-      const next = [...otp]; next[i] = val; setOtp(next);
-      if (i < 5) (document.querySelectorAll('.otp-digit')[i + 1] as HTMLInputElement)?.focus();
-    } else if (val === '') {
-      const next = [...otp]; next[i] = ''; setOtp(next);
-    }
-  };
-  const handleOtpKeyDown = (i: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Backspace' && !otp[i] && i > 0) {
-      const next = [...otp]; next[i - 1] = ''; setOtp(next);
-      (document.querySelectorAll('.otp-digit')[i - 1] as HTMLInputElement)?.focus();
-    }
-  };
-
-  if (step === 'otp') return (
-    <div style={{ textAlign: 'center', padding: '8px 0' }}>
-      <div style={{ fontSize: 40, marginBottom: 12 }}>📧</div>
-      <div style={{ fontSize: 17, fontWeight: 700, color: 'var(--cream)', marginBottom: 6 }}>Check your inbox</div>
-      <div style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 20 }}>Enter the 6-digit code sent to <strong>{email}</strong></div>
-      {devOtp && <div style={{ padding: 10, background: 'rgba(126,232,162,.07)', border: '1px dashed rgba(126,232,162,.3)', borderRadius: 6, fontSize: 12, color: 'var(--green)', marginBottom: 16 }}><strong style={{ display: 'block', marginBottom: 3, opacity: .7, textTransform: 'uppercase', letterSpacing: '.08em' }}>Dev mode — OTP:</strong>{devOtp}</div>}
-      <div className="otp-inputs">
-        {otp.map((v, i) => (
-          <input key={i} className="otp-digit" maxLength={1} value={v} onChange={e => handleOtpChange(i, e.target.value)} onKeyDown={e => handleOtpKeyDown(i, e)} />
-        ))}
-      </div>
-      {err && <div className="alert alert-err">{err}</div>}
-      <button className="btn btn-primary" style={{ width: '100%' }} onClick={verify} disabled={loading || otp.join('').length < 6}>
-        {loading ? 'Signing in…' : 'Sign In'}
-      </button>
-      <div style={{ marginTop: 12 }}>
-        <button style={{ background: 'none', border: 'none', color: 'var(--gold)', fontSize: 13, cursor: 'pointer' }} onClick={() => setStep('email')}>← Use different email</button>
-      </div>
-    </div>
-  );
-
-  return (
-    <>
-      {err && <div className="alert alert-err">{err}</div>}
-      <div className="field"><label className="lbl">Email Address</label>
-        <input className="inp" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Your registered email" onKeyDown={e => e.key === 'Enter' && sendOtp()} />
-        <div className="hint">We&apos;ll send a one-time code to this address</div>
-      </div>
-      <button className="btn btn-primary" style={{ width: '100%', marginTop: 4 }} onClick={sendOtp} disabled={loading || !email}>
-        {loading ? 'Sending code…' : 'Send Sign-In Code →'}
-      </button>
-    </>
-  );
-}
-
-// ── Home Panel ────────────────────────────────────────────────────────────
-function HomePanel({ user, setPanel }: { user: User; setPanel: (p: string) => void }) {
-  return (
-    <div>
-      <div className="p-title">Welcome back, {user.name.split(' ')[0]}.</div>
-      <div className="p-sub">Here&apos;s your community hub.</div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 14, marginBottom: 28 }}>
-        {[
-          { icon: '📊', title: 'EMB Assessment', desc: 'Assess your team\'s maturity across the four pivots', panel: 'emb' },
-          { icon: '🎯', title: 'Skill Requirements', desc: 'Define technical skills your product team needs before hiring', panel: 'skillreq' },
-          { icon: '👤', title: 'Talent Map', desc: 'Assess and develop engineering talent across all dimensions', panel: 'talentmap' },
-          { icon: '📝', title: 'Blog', desc: 'Latest thinking from the author', panel: 'blog' },
-          { icon: '📄', title: 'Whitepapers', desc: 'Frameworks and research to download', panel: 'whitepapers' },
-          { icon: '📋', title: 'Materials', desc: 'Templates, playbooks, and guides', panel: 'materials' },
-          { icon: '🎯', title: 'Book Consulting', desc: 'Work directly with the author', panel: 'consulting' },
-          { icon: '👤', title: 'My Profile', desc: 'Manage your account details', panel: 'account' },
-        ].map(c => (
-          <div key={c.panel} className="card" style={{ cursor: 'pointer', transition: 'border-color .2s' }}
-            onClick={() => setPanel(c.panel)}
-            onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--gold-d)')}
-            onMouseLeave={e => (e.currentTarget.style.borderColor = '')}>
-            <div style={{ fontSize: 24, marginBottom: 10 }}>{c.icon}</div>
-            <div style={{ fontWeight: 700, color: 'var(--cream)', marginBottom: 4 }}>{c.title}</div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>{c.desc}</div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ── EMB Panel ─────────────────────────────────────────────────────────────
-function EMBPanel({ user }: { user: User }) {
-  return (
-    <div>
-      <div className="p-title">📊 EMB Assessment</div>
-      <div className="p-sub">Engineering Maturity Benchmark — assess your offshore team across all four pivots</div>
-      <EMBSpreadsheet userId={user.id} />
-    </div>
-  );
-}
-
-// ── Skill Requirements Panel ───────────────────────────────────────────────
-function SkillReqPanel({ user }: { user: User }) {
-  return (
-    <div>
-      <div className="p-title">🎯 Skill Requirements</div>
-      <div className="p-sub">Define the technical skills your product engineering team needs — before hiring or restructuring</div>
-      <SkillRequirementsSpreadsheet userId={user.id} />
-    </div>
-  );
-}
-
-// ── Talent Map Panel ───────────────────────────────────────────────────────
-function TalentMapPanel({ user }: { user: User }) {
-  return (
-    <div>
-      <div className="p-title">👤 Engineering Talent Map</div>
-      <div className="p-sub">Assess, track and develop engineering talent — technical skills, product mindset, AI readiness, and knowledge management</div>
-      <TalentMapSpreadsheet userId={user.id} />
-    </div>
-  );
-}
-
-// ── Materials Panel ───────────────────────────────────────────────────────
-function MaterialsPanel() {
+function Sidebar({ panel, setPanel, user, setUser }: any) {
+  async function logout() { await fetch('/api/auth/login', { method:'DELETE' }); setUser(null); }
   const items = [
-    { icon: '📋', title: 'EMB Schema Templates', desc: 'Custom Engineering Maturity Benchmark worksheets — ready to adapt for your organisation.' },
-    { icon: '📊', title: 'KRA & Performance Frameworks', desc: 'Role-by-role Key Result Areas aligned to the Four Pivots, with scoring rubrics.' },
-    { icon: '🗺️', title: 'Offshore Setup Playbooks', desc: 'Captive unit vs third-party decision trees, engagement format guides, and onboarding frameworks.' },
-    { icon: '🧪', title: 'Self-Assessment Tools', desc: 'Quick-score your team\'s maturity across all Four Pivots in under 20 minutes.' },
-    { icon: '🎯', title: 'AI Impact Guides', desc: 'Practical guides to navigating the three phases of AI\'s impact on engineering talent.' },
+    { id:'home', label:'🏠 Home', },
+    { id:'assessments', label:'📋 Assessments', },
+    { id:'materials', label:'📚 Materials', },
+    { id:'blog', label:'✍️ Blog', },
+    { id:'whitepapers', label:'📄 Whitepapers', },
+    { id:'consulting', label:'💼 Consulting', },
+    { id:'account', label:'⚙️ Account', },
   ];
   return (
-    <div>
-      <div className="p-title">📋 Materials</div>
-      <div className="p-sub">Frameworks, templates, and playbooks for engineering leaders</div>
-      <div className="materials-grid">
-        {items.map(m => (
-          <div className="material-item" key={m.title} style={{ cursor: 'pointer' }}>
-            <div className="material-icon">{m.icon}</div>
-            <h4>{m.title}</h4>
-            <p>{m.desc}</p>
-            <div className="material-lock" style={{ color: 'var(--gold)' }}>📬 Contact us to access</div>
-          </div>
-        ))}
+    <div style={{ background:'var(--surface)',borderRight:'1px solid var(--border)',padding:'24px 0',display:'flex',flexDirection:'column',gap:2 }}>
+      <div style={{ padding:'0 20px 20px',borderBottom:'1px solid var(--border)',marginBottom:8 }}>
+        <div style={{ fontSize:12,color:'var(--muted)',marginBottom:4 }}>Signed in as</div>
+        <div style={{ fontWeight:700,color:'var(--fg)',fontSize:14 }}>{user.name}</div>
+        <div style={{ fontSize:12,color:'var(--muted)' }}>{user.email}</div>
+        {user.isAdmin && <div style={{ fontSize:11,color:'var(--gold)',marginTop:4,fontWeight:700 }}>ADMIN</div>}
       </div>
-    </div>
-  );
-}
-
-// ── Blog Panel ────────────────────────────────────────────────────────────
-function BlogPanel() {
-  const [posts, setPosts] = useState<BlogPost[]>([]);
-  useEffect(() => {
-    fetch('/api/blog').then(r => r.json()).then(d => setPosts(d.posts || []));
-  }, []);
-  const timeAgo = (iso: string) => {
-    const d = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
-    if (d < 86400) return 'today';
-    if (d < 30 * 86400) return `${Math.floor(d / 86400)}d ago`;
-    return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-  };
-  return (
-    <div>
-      <div className="p-title">📝 Blog</div>
-      <div className="p-sub">Latest thinking from the author</div>
-      {posts.length === 0 && <div style={{ color: 'var(--muted)', fontSize: 13 }}>No posts yet.</div>}
-      {posts.map(p => (
-        <div className="card" key={p.id}>
-          <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-            <div style={{ fontSize: 28, flexShrink: 0 }}>{p.emoji}</div>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 4 }}>{p.category}</div>
-              <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--cream)', marginBottom: 6 }}>{p.title}</div>
-              <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.6, marginBottom: 8 }}>{p.excerpt}</div>
-              <div style={{ fontSize: 12, color: 'var(--muted-2)' }}>{timeAgo(p.published_at)} · {p.read_time} min read</div>
-            </div>
-          </div>
-        </div>
+      {items.map(item => (
+        <button key={item.id} onClick={() => setPanel(item.id)} style={{ textAlign:'left',padding:'10px 20px',background:panel===item.id?'rgba(201,168,76,0.1)':'none',border:'none',borderLeft:panel===item.id?'3px solid var(--gold)':'3px solid transparent',color:panel===item.id?'var(--gold)':'var(--muted)',fontSize:13,cursor:'pointer',fontWeight:panel===item.id?600:400 }}>
+          {item.label}
+        </button>
       ))}
-    </div>
-  );
-}
-
-// ── Whitepapers Panel ─────────────────────────────────────────────────────
-function WhitepapersPanel() {
-  const [papers, setPapers] = useState<Whitepaper[]>([]);
-  useEffect(() => {
-    fetch('/api/whitepapers').then(r => r.json()).then(d => setPapers(d.whitepapers || []));
-  }, []);
-  return (
-    <div>
-      <div className="p-title">📄 Whitepapers</div>
-      <div className="p-sub">Research and frameworks to download</div>
-      {papers.map(p => (
-        <div className="card" key={p.id} style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <div style={{ fontSize: 28, flexShrink: 0 }}>{p.icon}</div>
-          <div style={{ flex: 1 }}>
-            <div style={{ fontWeight: 700, color: 'var(--cream)', marginBottom: 3 }}>{p.title}</div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 4 }}>{p.category} · {p.pages} pages</div>
-            {p.description && <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>{p.description}</div>}
-          </div>
-          <div>
-            <span className={`badge ${p.access === 'public' ? 'b-green' : 'b-gold'}`}>{p.access === 'public' ? 'Free' : 'Members'}</span>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// ── Consulting Panel ──────────────────────────────────────────────────────
-function ConsultingPanel() {
-  return (
-    <div>
-      <div className="p-title">🎯 Book a Consulting Session</div>
-      <div className="p-sub">Work directly with the author on your offshore engineering challenges</div>
-      <div style={{ background: 'linear-gradient(135deg,rgba(201,168,76,.06),rgba(122,170,197,.04))', border: '1px solid var(--gold-d)', borderRadius: 8, padding: 28, marginBottom: 22 }}>
-        <div style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 700, color: 'var(--cream)', marginBottom: 12 }}>25+ years. 50+ teams transformed.</div>
-        <p style={{ color: 'var(--muted)', fontSize: 14, lineHeight: 1.7 }}>
-          From early-stage offshore setup to L3 strategic partnerships — hands-on advisory for engineering leaders at startups to Fortune 500.
-        </p>
-      </div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 22 }}>
-        {[
-          { icon: '🔍', name: 'EMB Assessment', desc: 'Deep-dive maturity audit of your offshore engineering team' },
-          { icon: '🗺️', name: 'Pivot Roadmap', desc: 'Custom 90-day plan to reach the next maturity level' },
-          { icon: '🤖', name: 'AI Readiness Review', desc: 'Evaluate Phase 2 & Phase 3 AI readiness across your team' },
-          { icon: '🏗️', name: 'Offshore Team Setup', desc: 'End-to-end guidance on captive vs. third-party models' },
-        ].map(s => (
-          <div key={s.name} style={{ background: 'var(--ink-3)', border: '1px solid var(--border)', borderRadius: 6, padding: 16 }}>
-            <div style={{ fontSize: 20, marginBottom: 7 }}>{s.icon}</div>
-            <div style={{ fontWeight: 700, color: 'var(--cream)', marginBottom: 4, fontSize: 13 }}>{s.name}</div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>{s.desc}</div>
-          </div>
-        ))}
-      </div>
-      <button className="btn btn-primary btn-large" style={{ width: '100%' }}
-        onClick={() => { const el = document.getElementById('consultModalOverlay'); if (el) el.style.display = 'flex'; }}>
-        🎯 Submit a Consulting Inquiry →
+      {user.isAdmin && (
+        <a href="/admin" style={{ textAlign:'left',padding:'10px 20px',background:'none',border:'none',borderLeft:'3px solid transparent',color:'var(--muted)',fontSize:13,cursor:'pointer',textDecoration:'none',display:'block',marginTop:8,borderTop:'1px solid var(--border)',paddingTop:16 }}>
+          🔧 Admin Panel
+        </a>
+      )}
+      <button onClick={logout} style={{ textAlign:'left',padding:'10px 20px',background:'none',border:'none',borderLeft:'3px solid transparent',color:'#ef4444',fontSize:13,cursor:'pointer',marginTop:'auto' }}>
+        ← Sign out
       </button>
     </div>
   );
 }
 
-// ── Account Panel ─────────────────────────────────────────────────────────
-function AccountPanel({ user, setUser }: { user: User; setUser: (u: User | null) => void }) {
-  const [f, setF] = useState({ name: user.name, company: '', role: '', industry: '', teamSize: '', linkedin: '', bio: '' });
-  const [ok, setOk] = useState('');
-  const [err, setErr] = useState('');
+function HomePanel({ user, setPanel }: any) {
+  return (
+    <div>
+      <div style={{ marginBottom:32 }}>
+        <h1 style={{ color:'var(--fg)',marginBottom:8 }}>Welcome back, {user.name.split(' ')[0]} 👋</h1>
+        <p style={{ color:'var(--muted)',fontSize:15 }}>The Pivot Model community — assessments, tools, and insights for engineering leaders.</p>
+      </div>
+      <div style={{ display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:16,marginBottom:32 }}>
+        {[{ icon:'📋',title:'Assessments',desc:'Evaluate your team across 7 modules',action:()=>setPanel('assessments') },{ icon:'📚',title:'Materials',desc:'Frameworks and tools',action:()=>setPanel('materials') },{ icon:'💼',title:'Consulting',desc:'Work with The Pivot Model team',action:()=>setPanel('consulting') }].map(c=>(
+          <button key={c.title} onClick={c.action} style={{ background:'var(--surface)',border:'1px solid var(--border)',borderRadius:16,padding:24,cursor:'pointer',textAlign:'left',transition:'border-color 0.2s' }}>
+            <div style={{ fontSize:32,marginBottom:12 }}>{c.icon}</div>
+            <div style={{ fontWeight:700,color:'var(--fg)',fontSize:16,marginBottom:4 }}>{c.title}</div>
+            <div style={{ color:'var(--muted)',fontSize:13 }}>{c.desc}</div>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
 
-  useEffect(() => {
-    fetch('/api/members?me=1').then(r => r.json()).then(d => {
-      if (d.user) setF({ name: d.user.name || '', company: d.user.company || '', role: d.user.role || '', industry: d.user.industry || '', teamSize: d.user.team_size || '', linkedin: d.user.linkedin || '', bio: d.user.bio || '' });
-    });
-  }, []);
+function AssessmentsPanel({ user }: any) {
+  const [owned, setOwned] = useState<Assessment[]>([]);
+  const [shared, setShared] = useState<Assessment[]>([]);
+  const [showNew, setShowNew] = useState(false);
+  const [form, setForm] = useState({ team_name:'', industry:'', assessment_date:new Date().toISOString().slice(0,10) });
+  const [creating, setCreating] = useState(false);
 
-  const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
-    setF(prev => ({ ...prev, [k]: e.target.value }));
+  useEffect(() => { fetch('/api/assessments').then(r=>r.json()).then(d=>{ setOwned(d.owned||[]); setShared(d.shared||[]); }); }, []);
 
-  async function save() {
-    setErr(''); setOk('');
-    const res = await fetch('/api/members', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'update_profile', ...f }) });
-    if (res.ok) setOk('Profile updated successfully.');
-    else { const d = await res.json(); setErr(d.error || 'Update failed.'); }
+  async function createAssessment() {
+    if (!form.team_name.trim()) return;
+    setCreating(true);
+    const res = await fetch('/api/assessments', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(form) });
+    const d = await res.json();
+    if (d.id) window.location.href = `/assessment/${d.id}`;
+    setCreating(false);
+  }
+
+  async function duplicate(assessmentId: number) {
+    const res = await fetch('/api/assessments', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ action:'duplicate', assessment_id:assessmentId }) });
+    const d = await res.json();
+    if (d.id) { fetch('/api/assessments').then(r=>r.json()).then(d=>{ setOwned(d.owned||[]); setShared(d.shared||[]); }); }
   }
 
   return (
     <div>
-      <div className="p-title">👤 My Profile</div>
-      <div className="p-sub">Update your account details</div>
-      {ok && <div className="alert alert-ok">{ok}</div>}
-      {err && <div className="alert alert-err">{err}</div>}
-      <div className="card">
-        <div style={{ marginBottom: 16, padding: '0 0 16px', borderBottom: '1px solid var(--border)' }}>
-          <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 4 }}>Email address (cannot be changed)</div>
-          <div style={{ fontWeight: 600, color: 'var(--cream)' }}>{user.email}</div>
-        </div>
-        <div className="field-row">
-          <div className="field"><label className="lbl">Full Name</label><input className="inp" value={f.name} onChange={set('name')} /></div>
-          <div className="field"><label className="lbl">Company</label><input className="inp" value={f.company} onChange={set('company')} /></div>
-        </div>
-        <div className="field-row">
-          <div className="field"><label className="lbl">Role / Title</label><input className="inp" value={f.role} onChange={set('role')} /></div>
-          <div className="field"><label className="lbl">Industry</label>
-            <select className="inp" value={f.industry} onChange={set('industry')}>
-              <option value="">Select…</option>
-              {['Software / SaaS','Fintech','Healthtech','E-commerce','Enterprise Software','Consulting','Other'].map(o => <option key={o}>{o}</option>)}
-            </select>
+      <div style={{ display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24 }}>
+        <h2 style={{ color:'var(--fg)',margin:0 }}>Assessments</h2>
+        <button onClick={()=>setShowNew(o=>!o)} style={{ background:'var(--gold)',border:'none',borderRadius:8,padding:'10px 20px',color:'#000',fontWeight:700,cursor:'pointer' }}>+ New Assessment</button>
+      </div>
+      {showNew && (
+        <div style={{ background:'var(--surface)',border:'1px solid var(--border)',borderRadius:16,padding:24,marginBottom:24 }}>
+          <h3 style={{ color:'var(--fg)',marginTop:0,marginBottom:16 }}>New Assessment</h3>
+          <div style={{ display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:16,marginBottom:16 }}>
+            {[['Team name','team_name','text','e.g. Platform Engineering'],['Industry','industry','text','e.g. FinTech'],['Date','assessment_date','date','']].map(([label,field,type,ph])=>(
+              <div key={field as string}>
+                <div style={{ fontSize:12,color:'var(--muted)',marginBottom:6,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.05em' }}>{label as string}</div>
+                <input type={type as string} value={(form as any)[field as string]} onChange={e=>setForm(p=>({...p,[field as string]:e.target.value}))} placeholder={ph as string} style={{ width:'100%',background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'10px 14px',color:'var(--fg)',fontSize:14,outline:'none',boxSizing:'border-box' }} />
+              </div>
+            ))}
+          </div>
+          <div style={{ display:'flex',gap:8 }}>
+            <button onClick={createAssessment} disabled={creating||!form.team_name.trim()} style={{ background:'var(--gold)',border:'none',borderRadius:8,padding:'10px 24px',color:'#000',fontWeight:700,cursor:'pointer',opacity:creating?0.7:1 }}>{creating?'Creating…':'Create Assessment'}</button>
+            <button onClick={()=>setShowNew(false)} style={{ background:'none',border:'1px solid var(--border)',borderRadius:8,padding:'10px 24px',color:'var(--muted)',cursor:'pointer' }}>Cancel</button>
           </div>
         </div>
-        <div className="field-row">
-          <div className="field"><label className="lbl">Team Size</label>
-            <select className="inp" value={f.teamSize} onChange={set('teamSize')}>
-              <option value="">Select…</option>
-              {['1–10','11–50','51–200','200+'].map(o => <option key={o}>{o}</option>)}
-            </select>
+      )}
+      <AssessmentList title="My Assessments" assessments={owned} onDuplicate={duplicate} />
+      {shared.length > 0 && <AssessmentList title="Shared with me" assessments={shared} onDuplicate={duplicate} />}
+      {owned.length===0&&shared.length===0&&!showNew && <div style={{ textAlign:'center',padding:64,color:'var(--muted)' }}>No assessments yet. Create your first one above.</div>}
+    </div>
+  );
+}
+
+function AssessmentList({ title, assessments, onDuplicate }: { title:string; assessments:Assessment[]; onDuplicate:(id:number)=>void }) {
+  if (!assessments.length) return null;
+  return (
+    <div style={{ marginBottom:32 }}>
+      <div style={{ fontWeight:600,color:'var(--muted)',fontSize:12,textTransform:'uppercase',letterSpacing:'0.05em',marginBottom:12 }}>{title}</div>
+      <div style={{ display:'grid',gap:12 }}>
+        {assessments.map(a=>(
+          <div key={a.id} style={{ background:'var(--surface)',border:'1px solid var(--border)',borderRadius:12,padding:'16px 20px',display:'flex',alignItems:'center',justifyContent:'space-between' }}>
+            <div>
+              <div style={{ fontWeight:700,color:'var(--fg)',fontSize:16 }}>{a.team_name}</div>
+              <div style={{ color:'var(--muted)',fontSize:12,marginTop:2 }}>{a.industry||'—'} · {a.assessment_date?.slice(0,10)||'No date'} · Updated {new Date(a.updated_at).toLocaleDateString()}</div>
+            </div>
+            <div style={{ display:'flex',gap:8 }}>
+              <button onClick={()=>onDuplicate(a.id)} style={{ background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'8px 14px',color:'var(--muted)',fontSize:12,cursor:'pointer' }}>Duplicate</button>
+              <a href={`/assessment/${a.id}`} style={{ background:'var(--gold)',borderRadius:8,padding:'8px 16px',color:'#000',fontWeight:700,fontSize:13,textDecoration:'none',display:'inline-block' }}>Open →</a>
+            </div>
           </div>
-          <div className="field"><label className="lbl">LinkedIn</label><input className="inp" value={f.linkedin} onChange={set('linkedin')} placeholder="linkedin.com/in/…" /></div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MaterialsPanel() {
+  return <div style={{ color:'var(--fg)' }}><h2>Materials</h2><p style={{ color:'var(--muted)' }}>Access frameworks, templates, and reference materials.</p></div>;
+}
+function BlogPanel() {
+  const [posts, setPosts] = useState<any[]>([]);
+  useEffect(()=>{ fetch('/api/blog').then(r=>r.json()).then(d=>setPosts(d.posts||[])); },[]);
+  return (
+    <div>
+      <h2 style={{ color:'var(--fg)',marginBottom:24 }}>Insights</h2>
+      <div style={{ display:'grid',gap:16 }}>
+        {posts.map(p=>(
+          <div key={p.id} style={{ background:'var(--surface)',border:'1px solid var(--border)',borderRadius:12,padding:20 }}>
+            <div style={{ display:'flex',gap:12,alignItems:'start' }}>
+              <div style={{ fontSize:32 }}>{p.emoji}</div>
+              <div>
+                <div style={{ fontWeight:700,color:'var(--fg)',fontSize:16,marginBottom:4 }}>{p.title}</div>
+                <div style={{ color:'var(--muted)',fontSize:13,marginBottom:8 }}>{p.excerpt}</div>
+                <div style={{ fontSize:12,color:'var(--muted)' }}>{p.category} · {p.read_time} min read</div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+function WhitepapersPanel() {
+  const [papers, setPapers] = useState<any[]>([]);
+  useEffect(()=>{ fetch('/api/whitepapers').then(r=>r.json()).then(d=>setPapers(d.whitepapers||[])).catch(()=>{}); },[]);
+  return (
+    <div>
+      <h2 style={{ color:'var(--fg)',marginBottom:24 }}>Whitepapers</h2>
+      <div style={{ display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:16 }}>
+        {papers.map(p=>(
+          <div key={p.id} style={{ background:'var(--surface)',border:'1px solid var(--border)',borderRadius:12,padding:20 }}>
+            <div style={{ fontSize:28,marginBottom:8 }}>{p.icon}</div>
+            <div style={{ fontWeight:700,color:'var(--fg)',marginBottom:4 }}>{p.title}</div>
+            <div style={{ color:'var(--muted)',fontSize:13,marginBottom:8 }}>{p.description}</div>
+            <div style={{ fontSize:12,color:'var(--muted)' }}>{p.pages} pages · {p.access}</div>
+            {p.file_url && <a href={p.file_url} target="_blank" style={{ display:'inline-block',marginTop:12,background:'var(--gold)',borderRadius:8,padding:'6px 14px',color:'#000',fontWeight:700,fontSize:12,textDecoration:'none' }}>Download</a>}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+function ConsultingPanel() {
+  return <div style={{ color:'var(--fg)' }}><h2>Consulting</h2><p style={{ color:'var(--muted)' }}>Get expert support for your offshore engineering transformation.</p></div>;
+}
+function AccountPanel({ user, setUser }: any) {
+  async function logout() { await fetch('/api/auth/login', { method:'DELETE' }); setUser(null); }
+  return (
+    <div>
+      <h2 style={{ color:'var(--fg)',marginBottom:24 }}>Account</h2>
+      <div style={{ background:'var(--surface)',border:'1px solid var(--border)',borderRadius:12,padding:24,maxWidth:400 }}>
+        <div style={{ marginBottom:16 }}><div style={{ fontSize:12,color:'var(--muted)',marginBottom:4 }}>Name</div><div style={{ color:'var(--fg)',fontWeight:600 }}>{user.name}</div></div>
+        <div style={{ marginBottom:16 }}><div style={{ fontSize:12,color:'var(--muted)',marginBottom:4 }}>Email</div><div style={{ color:'var(--fg)' }}>{user.email}</div></div>
+        {user.linkedin && <div style={{ marginBottom:16 }}><div style={{ fontSize:12,color:'var(--muted)',marginBottom:4 }}>LinkedIn</div><a href={user.linkedin} target="_blank" style={{ color:'var(--gold)',fontSize:13 }}>{user.linkedin}</a></div>}
+        <button onClick={logout} style={{ background:'none',border:'1px solid #ef4444',borderRadius:8,padding:'10px 20px',color:'#ef4444',cursor:'pointer',fontWeight:600 }}>Sign out</button>
+      </div>
+    </div>
+  );
+}
+
+function AuthScreen({ onLogin }: { onLogin:(u:any)=>void }) {
+  const [mode, setMode] = useState<'login'|'register'>('login');
+  const [step, setStep] = useState<'form'|'otp'>('form');
+  const [form, setForm] = useState({ name:'',email:'',company:'',role:'',industry:'',team_size:'',linkedin:'' });
+  const [otp, setOtp] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit() {
+    setError(''); setLoading(true);
+    const endpoint = mode==='login' ? '/api/auth/login' : '/api/auth/register';
+    const body = mode==='login' ? { email:form.email, step:'request' } : { ...form, step:'request' };
+    const res = await fetch(endpoint, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+    const d = await res.json();
+    if (!res.ok) setError(d.error||'Error'); else setStep('otp');
+    setLoading(false);
+  }
+
+  async function handleOtp() {
+    setError(''); setLoading(true);
+    const endpoint = mode==='login' ? '/api/auth/login' : '/api/auth/register';
+    const body = mode==='login' ? { email:form.email, otp, step:'verify' } : { ...form, otp, step:'verify' };
+    const res = await fetch(endpoint, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+    const d = await res.json();
+    if (!res.ok) setError(d.error||'Error'); else onLogin(d.user);
+    setLoading(false);
+  }
+
+  return (
+    <div style={{ minHeight:'100vh',background:'var(--ink)',display:'flex',alignItems:'center',justifyContent:'center',padding:24 }}>
+      <div style={{ width:'100%',maxWidth:440,background:'var(--surface)',border:'1px solid var(--border)',borderRadius:20,padding:40 }}>
+        <div style={{ textAlign:'center',marginBottom:32 }}>
+          <div style={{ fontSize:13,fontWeight:700,letterSpacing:'0.1em',color:'var(--gold)',marginBottom:8 }}>THE PIVOT MODEL</div>
+          <h2 style={{ color:'var(--fg)',margin:0 }}>{step==='otp'?'Enter verification code':mode==='login'?'Sign in':'Join the community'}</h2>
         </div>
-        <div className="field"><label className="lbl">Bio (optional)</label>
-          <textarea className="inp" value={f.bio} onChange={set('bio')} rows={3} style={{ resize: 'vertical' }} placeholder="A sentence about you and your engineering background" />
-        </div>
-        <button className="btn btn-primary" onClick={save}>Save Changes</button>
+        {step==='form' && (
+          <>
+            {mode==='register' && (
+              <>
+                {[['Full name','name','text'],['Company','company','text'],['Role','role','text'],['Industry','industry','text'],['Team size','team_size','text']].map(([label,field,type])=>(
+                  <div key={field} style={{ marginBottom:12 }}>
+                    <div style={{ fontSize:12,color:'var(--muted)',marginBottom:4,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.05em' }}>{label}</div>
+                    <input type={type} value={(form as any)[field]} onChange={e=>setForm(p=>({...p,[field]:e.target.value}))} style={{ width:'100%',background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'10px 14px',color:'var(--fg)',fontSize:14,outline:'none',boxSizing:'border-box' }} />
+                  </div>
+                ))}
+                <div style={{ marginBottom:12 }}>
+                  <div style={{ fontSize:12,color:'var(--muted)',marginBottom:4,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.05em' }}>LinkedIn URL *</div>
+                  <input type="text" value={form.linkedin} onChange={e=>setForm(p=>({...p,linkedin:e.target.value}))} placeholder="https://linkedin.com/in/yourprofile" style={{ width:'100%',background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'10px 14px',color:'var(--fg)',fontSize:14,outline:'none',boxSizing:'border-box' }} />
+                  <div style={{ fontSize:11,color:'var(--muted)',marginTop:4 }}>Required. Used instead of corporate email verification.</div>
+                </div>
+              </>
+            )}
+            <div style={{ marginBottom:16 }}>
+              <div style={{ fontSize:12,color:'var(--muted)',marginBottom:4,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.05em' }}>Email address</div>
+              <input type="email" value={form.email} onChange={e=>setForm(p=>({...p,email:e.target.value}))} style={{ width:'100%',background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'10px 14px',color:'var(--fg)',fontSize:14,outline:'none',boxSizing:'border-box' }} />
+            </div>
+            {error && <div style={{ color:'#ef4444',fontSize:13,marginBottom:12 }}>{error}</div>}
+            <button onClick={handleSubmit} disabled={loading} style={{ width:'100%',background:'var(--gold)',border:'none',borderRadius:10,padding:'12px',color:'#000',fontWeight:700,fontSize:15,cursor:'pointer',marginBottom:16,opacity:loading?0.7:1 }}>{loading?'Sending…':'Send verification code'}</button>
+            <div style={{ textAlign:'center',fontSize:13,color:'var(--muted)' }}>
+              {mode==='login' ? <>No account? <button onClick={()=>{setMode('register');setError('');}} style={{ background:'none',border:'none',color:'var(--gold)',cursor:'pointer',fontWeight:600,fontSize:13 }}>Register</button></> : <>Have an account? <button onClick={()=>{setMode('login');setError('');}} style={{ background:'none',border:'none',color:'var(--gold)',cursor:'pointer',fontWeight:600,fontSize:13 }}>Sign in</button></>}
+            </div>
+          </>
+        )}
+        {step==='otp' && (
+          <>
+            <p style={{ color:'var(--muted)',fontSize:14,textAlign:'center',marginBottom:24 }}>Enter the 6-digit code sent to <strong style={{ color:'var(--fg)' }}>{form.email}</strong></p>
+            <input value={otp} onChange={e=>setOtp(e.target.value)} maxLength={6} placeholder="000000" style={{ width:'100%',background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'14px',color:'var(--fg)',fontSize:24,textAlign:'center',letterSpacing:'0.3em',outline:'none',boxSizing:'border-box',marginBottom:16 }} />
+            {error && <div style={{ color:'#ef4444',fontSize:13,marginBottom:12,textAlign:'center' }}>{error}</div>}
+            <button onClick={handleOtp} disabled={loading||otp.length!==6} style={{ width:'100%',background:'var(--gold)',border:'none',borderRadius:10,padding:'12px',color:'#000',fontWeight:700,fontSize:15,cursor:'pointer',opacity:loading||otp.length!==6?0.7:1 }}>{loading?'Verifying…':'Verify & Sign in'}</button>
+            <button onClick={()=>{setStep('form');setOtp('');setError('');}} style={{ width:'100%',background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:13,marginTop:12 }}>← Back</button>
+          </>
+        )}
       </div>
     </div>
   );

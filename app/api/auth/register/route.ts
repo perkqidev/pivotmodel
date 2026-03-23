@@ -17,6 +17,7 @@ export async function POST(req: NextRequest) {
     // ── Step 1: send OTP ─────────────────────────────────────────────────────
     if (step === 'request' || !step) {
       if (!name) return NextResponse.json({ error: 'Name required.' }, { status: 400 });
+      if (!linkedin || !linkedin.trim()) return NextResponse.json({ error: 'LinkedIn profile URL is required to join the community.' }, { status: 400 });
 
       const existing = await queryOne('SELECT id FROM users WHERE email = $1', [email.toLowerCase()]);
       if (existing) return NextResponse.json({ error: 'An account with that email already exists.' }, { status: 409 });
@@ -80,9 +81,8 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ error: 'Invalid step.' }, { status: 400 });
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err);
-    console.error('[register]', msg, err);
-    return NextResponse.json({ error: `Server error: ${msg}` }, { status: 500 });
+  } catch (err) {
+    console.error('[register]', err);
+    return NextResponse.json({ error: 'Server error.' }, { status: 500 });
   }
 }

@@ -7,23 +7,6 @@ function generateOtp() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
-export async function GET(req: NextRequest) {
-  try {
-    const { getSessionFromRequest } = await import('@/lib/auth');
-    const user = await getSessionFromRequest(req);
-    if (!user) return NextResponse.json({ user: null });
-    return NextResponse.json({ user: { id: user.id, name: user.name, email: user.email, isAdmin: user.isAdmin } });
-  } catch {
-    return NextResponse.json({ user: null });
-  }
-}
-
-export async function DELETE() {
-  const res = NextResponse.json({ success: true });
-  res.cookies.set('pm_session', '', { httpOnly: true, maxAge: 0, path: '/' });
-  return res;
-}
-
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -93,9 +76,14 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ error: 'Invalid step.' }, { status: 400 });
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err);
-    console.error('[login]', msg, err);
-    return NextResponse.json({ error: `Server error: ${msg}` }, { status: 500 });
+  } catch (err) {
+    console.error('[login]', err);
+    return NextResponse.json({ error: 'Server error.' }, { status: 500 });
   }
+}
+
+export async function DELETE() {
+  const res = NextResponse.json({ success: true });
+  res.cookies.set('pm_session', '', { httpOnly: true, maxAge: 0, path: '/' });
+  return res;
 }

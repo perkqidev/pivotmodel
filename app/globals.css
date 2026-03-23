@@ -72,6 +72,44 @@ input,select,textarea{font-family:inherit}
   transition:background .2s!important;
 }
 .nav-cta:hover{background:#e4c97b!important}
+
+/* ── Nav user button & dropdown ─────────────────────────── */
+.nav-user-wrap{position:relative}
+.nav-user-btn{
+  display:flex;align-items:center;gap:7px;
+  background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);
+  border-radius:20px;padding:5px 12px 5px 6px;cursor:pointer;
+  transition:background .2s,border-color .2s;
+}
+.nav-user-btn:hover{background:rgba(201,168,76,.22);border-color:rgba(201,168,76,.5)}
+.nav-user-avatar{
+  width:26px;height:26px;border-radius:50%;
+  background:var(--gold);color:var(--ink);
+  font-size:12px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.nav-user-name{color:var(--cream);font-size:13px;font-weight:600}
+.nav-user-chevron{color:var(--muted);font-size:9px}
+.nav-dropdown{
+  position:absolute;top:calc(100% + 10px);right:0;
+  background:#14172a;border:1px solid var(--border);
+  border-radius:8px;min-width:210px;
+  box-shadow:0 16px 40px rgba(0,0,0,.5);
+  z-index:200;overflow:hidden;
+}
+.nav-dropdown-header{padding:14px 16px 10px;border-bottom:1px solid var(--border)}
+.nav-dd-name{color:var(--cream);font-weight:700;font-size:14px;margin-bottom:2px}
+.nav-dd-email{color:var(--muted);font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav-dd-item{
+  display:block;width:100%;text-align:left;
+  padding:11px 16px;font-size:13px;color:var(--muted);
+  background:none;border:none;cursor:pointer;
+  text-decoration:none;transition:background .15s,color .15s;
+}
+.nav-dd-item:hover{background:rgba(255,255,255,.05);color:var(--cream)}
+.nav-dd-divider{height:1px;background:var(--border);margin:4px 0}
+.nav-dd-logout{color:#e88b7e!important}
+.nav-dd-logout:hover{background:rgba(232,139,126,.08)!important}
 .hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;padding:4px}
 .hamburger span{display:block;width:22px;height:2px;background:var(--muted);transition:.2s}
 .mobile-menu{
@@ -562,4 +600,11 @@ input,select,textarea{font-family:inherit}
   .section-inner{padding:0 20px}
   .materials-grid{grid-template-columns:1fr}
   .emb-summary{grid-template-columns:1fr 1fr}
+}
+
+/* ── Assessment & community design tokens ─────────────────────────── */
+:root {
+  --surface: #12152A;
+  --card:    #0A0C17;
+  --fg:      #F5F0E8;
 }

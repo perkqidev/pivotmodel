@@ -6,11 +6,7 @@
 
 import { Resend } from 'resend';
 
-let _resend: Resend | null = null;
-function getResend() {
-  if (!_resend) _resend = new Resend(process.env.RESEND_API_KEY || process.env.SMTP_PASS);
-  return _resend;
-}
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const FROM = process.env.SMTP_FROM || 'The Pivot Model <noreply@thepivotmodel.com>';
 
@@ -18,7 +14,7 @@ export async function sendOtpEmail(email: string, otp: string, name?: string): P
   const greeting = name ? `Hi ${name},` : 'Hello,';
   const expiry = process.env.OTP_EXPIRY_MINUTES || '10';
 
-  const { error } = await getResend().emails.send({
+  const { error } = await resend.emails.send({
     from: FROM,
     to: email,
     subject: `Your Pivot Model verification code: ${otp}`,
