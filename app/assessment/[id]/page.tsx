@@ -62,6 +62,7 @@ export default function AssessmentPage() {
   const [collab, setCollab] = useState('');
   const [collabMsg, setCollabMsg] = useState('');
   const [showCollab, setShowCollab] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     fetch(`/api/assessments`).then(r => r.json()).then(d => {
@@ -96,7 +97,7 @@ export default function AssessmentPage() {
       <Nav />
       <div style={{ minHeight:'100vh',background:'var(--ink)',paddingTop:80 }}>
         {/* Header */}
-        <div style={{ background:'var(--surface)',borderBottom:'1px solid var(--border)',padding:'16px 32px',display:'flex',alignItems:'center',justifyContent:'space-between',gap:16 }}>
+        <div className="assess-header" style={{ background:'var(--surface)',borderBottom:'1px solid var(--border)',padding:'16px 32px',display:'flex',alignItems:'center',justifyContent:'space-between',gap:16,flexWrap:'wrap' }}>
           <div style={{ display:'flex',alignItems:'center',gap:16 }}>
             <button onClick={() => router.push('/community')} style={{ background:'none',border:'1px solid var(--border)',borderRadius:8,padding:'6px 12px',color:'var(--muted)',fontSize:12,cursor:'pointer' }}>← Back</button>
             <div>
@@ -119,9 +120,11 @@ export default function AssessmentPage() {
           </div>
         )}
         {/* Sidebar + Content */}
-        <div style={{ display:'flex',minHeight:'calc(100vh - 140px)' }}>
+        <div style={{ display:'flex',minHeight:'calc(100vh - 140px)',position:'relative' }}>
+          <button className="assess-menu-btn" onClick={() => setSidebarOpen(o => !o)} aria-label="Toggle sidebar">{sidebarOpen ? '✕' : '☰'}</button>
+          {sidebarOpen && <div className="assess-overlay" onClick={() => setSidebarOpen(false)} />}
           {/* Sidebar */}
-          <div style={{ width:240,minWidth:240,background:'var(--surface)',borderRight:'1px solid var(--border)',padding:'16px 0',overflowY:'auto' }}>
+          <div className={`assess-sidebar${sidebarOpen ? ' open' : ''}`} style={{ width:240,minWidth:240,background:'var(--surface)',borderRight:'1px solid var(--border)',padding:'16px 0',overflowY:'auto' }}>
             {SECTIONS_CONFIG.map(sec => {
               const groupActive = sec.tabs.some(t => t.id === activeModule);
               return (
@@ -137,7 +140,7 @@ export default function AssessmentPage() {
                     return (
                       <div
                         key={tab.id}
-                        onClick={() => setActiveModule(tab.id)}
+                        onClick={() => { setActiveModule(tab.id); setSidebarOpen(false); }}
                         style={{
                           padding:'8px 16px 8px 32px',
                           fontSize:13,
@@ -148,7 +151,7 @@ export default function AssessmentPage() {
                           cursor:'pointer',
                           transition:'all 0.15s',
                         }}
-                        onMouseEnter={e => { if (!isActive) { e.currentTarget.style.color = 'var(--fg)'; e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; }}}
+                        onMouseEnter={e => { if (!isActive) { e.currentTarget.style.color = 'var(--fg)'; e.currentTarget.style.background = 'var(--hover-bg)'; }}}
                         onMouseLeave={e => { if (!isActive) { e.currentTarget.style.color = 'var(--muted)'; e.currentTarget.style.background = 'transparent'; }}}
                       >
                         {tab.label}
@@ -160,7 +163,7 @@ export default function AssessmentPage() {
             })}
           </div>
           {/* Main Content */}
-          <div style={{ flex:1,padding:32,overflowY:'auto' }}>
+          <div className="assess-main" style={{ flex:1,padding:32,overflowY:'auto' }}>
             {activeModule === 'emb' && <EMBModule id={id} save={save} />}
             {activeModule === 'drivers' && <DriversModule id={id} save={save} />}
             {activeModule === 'scope' && <ScopeModule id={id} save={save} />}

@@ -8,6 +8,7 @@ export default function Nav() {
   const [menuOpen, setMenuOpen]   = useState(false);
   const [user, setUser]           = useState<NavUser | null>(null);
   const [dropOpen, setDropOpen]   = useState(false);
+  const [theme, setTheme]         = useState('dark');
   const dropRef                   = useRef<HTMLDivElement>(null);
 
   /* scroll effect */
@@ -16,6 +17,20 @@ export default function Nav() {
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  /* load theme */
+  useEffect(() => {
+    const saved = localStorage.getItem('theme') || 'dark';
+    setTheme(saved);
+    document.documentElement.setAttribute('data-theme', saved);
+  }, []);
+
+  function toggleTheme() {
+    const next = theme === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+  }
 
   /* load session once */
   useEffect(() => {
@@ -56,6 +71,10 @@ export default function Nav() {
           <a href="/#author">Author</a>
           <a href="/#insights">Insights</a>
           <a href="/#consulting" style={{ color: 'var(--gold)', fontWeight: 600 }}>Book Consulting</a>
+
+          <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
+            {theme === 'dark' ? '☀️' : '🌙'}
+          </button>
 
           {user ? (
             <div className="nav-user-wrap" ref={dropRef}>
@@ -101,6 +120,9 @@ export default function Nav() {
       </div>
 
       <div className={`mobile-menu${menuOpen ? ' open' : ''}`}>
+        <button className="theme-toggle" onClick={toggleTheme} style={{ margin:'8px 32px' }}>
+          {theme === 'dark' ? '☀️ Light mode' : '🌙 Dark mode'}
+        </button>
         <a href="/#about"    onClick={() => setMenuOpen(false)}>About</a>
         <a href="/#concepts" onClick={() => setMenuOpen(false)}>The Model</a>
         <a href="/#author"   onClick={() => setMenuOpen(false)}>Author</a>
