@@ -3,19 +3,60 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Nav from '@/components/Nav';
 
-type Tab = 'emb'|'drivers'|'benchmarks'|'scope'|'summary'|'maturity'|'kra'|'leadership'|'talent'|'skillset';
+type Section = 'hub' | 'maturity-assessment' | 'roles-leadership' | 'talent-skills';
+type MaturityTab = 'emb' | 'drivers' | 'scope' | 'benchmarks' | 'maturity' | 'summary';
+type RolesTab = 'kra' | 'leadership';
+type TalentTab = 'talent' | 'skillset';
 
-const TABS: { id: Tab; label: string; num: number }[] = [
-  { id:'emb', label:'1. Maturity', num:1 },
-  { id:'drivers', label:'2. Business Drivers', num:2 },
-  { id:'benchmarks', label:'3. Benchmarks', num:3 },
-  { id:'scope', label:'4. Scope', num:4 },
-  { id:'summary', label:'5. Summary', num:5 },
-  { id:'maturity', label:'6. Competency Maturity', num:6 },
-  { id:'kra', label:'7. Roles & KRA', num:7 },
-  { id:'leadership', label:'8. Leadership', num:8 },
-  { id:'talent', label:'9. Talent Map', num:9 },
-  { id:'skillset', label:'10. Skillset', num:10 },
+const SECTIONS_CONFIG: {
+  id: 'maturity-assessment' | 'roles-leadership' | 'talent-skills';
+  title: string;
+  icon: string;
+  question: string;
+  description: string;
+  accent: string;
+  tabs: { id: string; label: string }[];
+}[] = [
+  {
+    id: 'maturity-assessment',
+    title: 'Engineering Maturity Assessment',
+    icon: '\u{1F4CA}',
+    question: 'How mature is our engineering operation?',
+    description: 'Evaluates the engineering team as an operational unit. Used by VPs/Directors to determine if the team operates at the level the business needs.',
+    accent: 'var(--gold)',
+    tabs: [
+      { id: 'emb', label: 'EMB Maturity' },
+      { id: 'drivers', label: 'Business Drivers' },
+      { id: 'scope', label: 'Scope' },
+      { id: 'benchmarks', label: 'Benchmarks' },
+      { id: 'maturity', label: 'Competency Maturity' },
+      { id: 'summary', label: 'Summary' },
+    ],
+  },
+  {
+    id: 'roles-leadership',
+    title: 'Roles & Leadership Assessment',
+    icon: '\u{1F465}',
+    question: 'Do we have the right structure and leaders?',
+    description: 'Evaluates organizational design and leadership capability. Ensures roles have clear KRAs and leaders have the skills needed.',
+    accent: '#63acff',
+    tabs: [
+      { id: 'kra', label: 'Roles & KRA' },
+      { id: 'leadership', label: 'Leadership Qualities' },
+    ],
+  },
+  {
+    id: 'talent-skills',
+    title: 'Talent & Skill Mapping',
+    icon: '\u{1F3AF}',
+    question: 'Do our people have the right skills?',
+    description: 'Evaluates individual engineers and identifies team-level skill gaps. Used for hiring, training, and development planning.',
+    accent: '#22c55e',
+    tabs: [
+      { id: 'talent', label: 'Talent Map' },
+      { id: 'skillset', label: 'Skillset Requirements' },
+    ],
+  },
 ];
 
 const LEVEL_LABELS: Record<string,string> = { L1:'◆ L1', L2:'⚙ L2', L3:'🚀 L3' };
@@ -25,7 +66,10 @@ const STATUS_COLORS: Record<string,string> = { 'on-track':'#22c55e','at-risk':'#
 export default function AssessmentPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
-  const [tab, setTab] = useState<Tab>('emb');
+  const [section, setSection] = useState<Section>('hub');
+  const [maturityTab, setMaturityTab] = useState<MaturityTab>('emb');
+  const [rolesTab, setRolesTab] = useState<RolesTab>('kra');
+  const [talentTab, setTalentTab] = useState<TalentTab>('talent');
   const [assessment, setAssessment] = useState<any>(null);
   const [saving, setSaving] = useState(false);
   const [saveMsg, setSaveMsg] = useState('');
@@ -88,27 +132,89 @@ export default function AssessmentPage() {
             {collabMsg && <span style={{ fontSize:12,color:collabMsg.includes('Error')||collabMsg.includes('error')?'#ef4444':'#22c55e' }}>{collabMsg}</span>}
           </div>
         )}
-        {/* Tabs */}
-        <div style={{ display:'flex',gap:2,padding:'0 32px',background:'var(--surface)',borderBottom:'1px solid var(--border)',overflowX:'auto' }}>
-          {TABS.map(t => (
-            <button key={t.id} onClick={() => setTab(t.id)} style={{ padding:'12px 20px',background:'none',border:'none',borderBottom:`3px solid ${tab===t.id?'var(--gold)':'transparent'}`,color:tab===t.id?'var(--gold)':'var(--muted)',fontSize:13,fontWeight:tab===t.id?700:400,cursor:'pointer',whiteSpace:'nowrap' }}>
-              {t.label}
-            </button>
-          ))}
-        </div>
-        {/* Module Content */}
-        <div style={{ padding:32 }}>
-          {tab === 'emb' && <EMBModule id={id} save={save} />}
-          {tab === 'drivers' && <DriversModule id={id} save={save} />}
-          {tab === 'benchmarks' && <BenchmarksModule id={id} save={save} />}
-          {tab === 'scope' && <ScopeModule id={id} save={save} />}
-          {tab === 'summary' && <SummaryModule id={id} />}
-          {tab === 'maturity' && <MaturityModule id={id} save={save} />}
-          {tab === 'kra' && <KRAModule id={id} save={save} />}
-          {tab === 'leadership' && <LeadershipModule id={id} save={save} />}
-          {tab === 'talent' && <TalentMapModule id={id} />}
-          {tab === 'skillset' && <SkillsetModule id={id} />}
-        </div>
+        {/* Hub / Section View */}
+        {section === 'hub' ? (
+          <div style={{ padding:32 }}>
+            <div style={{ marginBottom:32 }}>
+              <h1 style={{ color:'var(--fg)',margin:0,fontSize:24,fontWeight:700 }}>Assessment Hub</h1>
+              <p style={{ color:'var(--muted)',fontSize:14,margin:'8px 0 0' }}>Select a dimension to assess for {assessment.team_name}</p>
+            </div>
+            <div style={{ display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:24 }}>
+              {SECTIONS_CONFIG.map(sec => (
+                <div
+                  key={sec.id}
+                  onClick={() => setSection(sec.id)}
+                  style={{ background:'var(--surface)',borderRadius:16,border:'1px solid var(--border)',overflow:'hidden',cursor:'pointer',transition:'all 0.2s' }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = sec.accent; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.transform = 'translateY(0)'; }}
+                >
+                  <div style={{ height:4,background:sec.accent }} />
+                  <div style={{ padding:24 }}>
+                    <div style={{ fontSize:28,marginBottom:12 }}>{sec.icon}</div>
+                    <div style={{ fontWeight:700,color:'var(--fg)',fontSize:16,marginBottom:8 }}>{sec.title}</div>
+                    <div style={{ color:'var(--muted)',fontSize:13,fontStyle:'italic',marginBottom:12 }}>&ldquo;{sec.question}&rdquo;</div>
+                    <div style={{ color:'var(--muted)',fontSize:12,lineHeight:1.5,marginBottom:16 }}>{sec.description}</div>
+                    <div style={{ display:'flex',flexWrap:'wrap',gap:6,marginBottom:16 }}>
+                      {sec.tabs.map(t => (
+                        <span key={t.id} style={{ background:'var(--card)',border:'1px solid var(--border)',borderRadius:12,padding:'4px 10px',fontSize:11,color:'var(--muted)' }}>{t.label}</span>
+                      ))}
+                    </div>
+                    <button
+                      onClick={e => { e.stopPropagation(); setSection(sec.id); }}
+                      style={{ width:'100%',background:sec.accent,border:'none',borderRadius:8,padding:'10px 0',color:sec.id==='maturity-assessment'?'#000':'#fff',fontWeight:700,fontSize:13,cursor:'pointer' }}
+                    >
+                      Open
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (() => {
+          const sec = SECTIONS_CONFIG.find(s => s.id === section)!;
+          const activeTab = section === 'maturity-assessment' ? maturityTab : section === 'roles-leadership' ? rolesTab : talentTab;
+          const onTabChange = (tabId: string) => {
+            if (section === 'maturity-assessment') setMaturityTab(tabId as MaturityTab);
+            else if (section === 'roles-leadership') setRolesTab(tabId as RolesTab);
+            else setTalentTab(tabId as TalentTab);
+          };
+          return (
+            <>
+              {/* Section Header */}
+              <div style={{ padding:'20px 32px',background:'var(--surface)',borderBottom:'1px solid var(--border)' }}>
+                <button onClick={() => setSection('hub')} style={{ background:'none',border:'1px solid var(--border)',borderRadius:8,padding:'6px 12px',color:'var(--muted)',fontSize:12,cursor:'pointer',marginBottom:12,display:'block' }}>&larr; Back to Hub</button>
+                <div style={{ borderLeft:`4px solid ${sec.accent}`,paddingLeft:12 }}>
+                  <div style={{ display:'flex',alignItems:'center',gap:8 }}>
+                    <span style={{ fontSize:20 }}>{sec.icon}</span>
+                    <span style={{ fontWeight:700,color:'var(--fg)',fontSize:18 }}>{sec.title}</span>
+                  </div>
+                  <div style={{ color:'var(--muted)',fontSize:13,fontStyle:'italic',marginTop:4 }}>&ldquo;{sec.question}&rdquo;</div>
+                </div>
+              </div>
+              {/* Section Tabs */}
+              <div style={{ display:'flex',gap:2,padding:'0 32px',background:'var(--surface)',borderBottom:'1px solid var(--border)',overflowX:'auto' }}>
+                {sec.tabs.map(t => (
+                  <button key={t.id} onClick={() => onTabChange(t.id)} style={{ padding:'12px 20px',background:'none',border:'none',borderBottom:`3px solid ${activeTab===t.id?sec.accent:'transparent'}`,color:activeTab===t.id?sec.accent:'var(--muted)',fontSize:13,fontWeight:activeTab===t.id?700:400,cursor:'pointer',whiteSpace:'nowrap' }}>
+                    {t.label}
+                  </button>
+                ))}
+              </div>
+              {/* Module Content */}
+              <div style={{ padding:32 }}>
+                {section === 'maturity-assessment' && maturityTab === 'emb' && <EMBModule id={id} save={save} />}
+                {section === 'maturity-assessment' && maturityTab === 'drivers' && <DriversModule id={id} save={save} />}
+                {section === 'maturity-assessment' && maturityTab === 'scope' && <ScopeModule id={id} save={save} />}
+                {section === 'maturity-assessment' && maturityTab === 'benchmarks' && <BenchmarksModule id={id} save={save} />}
+                {section === 'maturity-assessment' && maturityTab === 'maturity' && <MaturityModule id={id} save={save} />}
+                {section === 'maturity-assessment' && maturityTab === 'summary' && <SummaryModule id={id} />}
+                {section === 'roles-leadership' && rolesTab === 'kra' && <KRAModule id={id} save={save} />}
+                {section === 'roles-leadership' && rolesTab === 'leadership' && <LeadershipModule id={id} save={save} />}
+                {section === 'talent-skills' && talentTab === 'talent' && <TalentMapModule id={id} />}
+                {section === 'talent-skills' && talentTab === 'skillset' && <SkillsetModule id={id} />}
+              </div>
+            </>
+          );
+        })()}
       </div>
     </>
   );
