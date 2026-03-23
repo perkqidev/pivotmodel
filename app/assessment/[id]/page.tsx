@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Nav from '@/components/Nav';
 
-type Tab = 'emb'|'drivers'|'benchmarks'|'scope'|'summary'|'kra'|'leadership';
+type Tab = 'emb'|'drivers'|'benchmarks'|'scope'|'summary'|'maturity'|'kra'|'leadership';
 
 const TABS: { id: Tab; label: string; num: number }[] = [
   { id:'emb', label:'1. Maturity', num:1 },
@@ -11,21 +11,14 @@ const TABS: { id: Tab; label: string; num: number }[] = [
   { id:'benchmarks', label:'3. Benchmarks', num:3 },
   { id:'scope', label:'4. Scope', num:4 },
   { id:'summary', label:'5. Summary', num:5 },
-  { id:'kra', label:'6. Roles & KRA', num:6 },
-  { id:'leadership', label:'7. Leadership', num:7 },
+  { id:'maturity', label:'6. Competency Maturity', num:6 },
+  { id:'kra', label:'7. Roles & KRA', num:7 },
+  { id:'leadership', label:'8. Leadership', num:8 },
 ];
 
 const LEVEL_LABELS: Record<string,string> = { L1:'◆ L1', L2:'⚙ L2', L3:'🚀 L3' };
 const LEVEL_COLORS: Record<string,string> = { L1:'#ef4444', L2:'#f59e0b', L3:'#22c55e' };
 const STATUS_COLORS: Record<string,string> = { 'on-track':'#22c55e','at-risk':'#f59e0b','off-track':'#ef4444','pending':'#6b7280','achieved':'#22c55e','in-progress':'#f59e0b','not-started':'#6b7280' };
-
-function useAutoSave(data: unknown, saveFn: () => Promise<void>, deps: unknown[]) {
-  const timerRef = useCallback(() => {}, []);
-  useEffect(() => {
-    const t = setTimeout(() => { saveFn().catch(() => {}); }, 1500);
-    return () => clearTimeout(t);
-  }, deps);
-}
 
 export default function AssessmentPage() {
   const { id } = useParams<{ id: string }>();
@@ -108,6 +101,7 @@ export default function AssessmentPage() {
           {tab === 'benchmarks' && <BenchmarksModule id={id} save={save} />}
           {tab === 'scope' && <ScopeModule id={id} save={save} />}
           {tab === 'summary' && <SummaryModule id={id} />}
+          {tab === 'maturity' && <MaturityModule id={id} save={save} />}
           {tab === 'kra' && <KRAModule id={id} save={save} />}
           {tab === 'leadership' && <LeadershipModule id={id} save={save} />}
         </div>
@@ -140,11 +134,11 @@ function EMBModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Promi
         <div key={pillar} style={{ marginBottom:32 }}>
           <div style={{ fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:12,textTransform:'uppercase',letterSpacing:'0.05em' }}>{pillar}</div>
           <div style={{ background:'var(--surface)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border)' }}>
-            <div style={{ display:'grid',gridTemplateColumns:'2fr 2fr 2fr 2fr 120px 1fr 1fr',gap:0,background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em' }}>
-              <div>Capability</div><div>L1 Criteria</div><div>L2 Criteria</div><div>L3 Criteria</div><div>Level</div><div>Evidence</div><div>Gap Notes</div>
+            <div style={{ display:'grid',gridTemplateColumns:'2fr 2fr 2fr 2fr 120px 1fr 1fr 40px',gap:0,background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em' }}>
+              <div>Capability</div><div>L1 Criteria</div><div>L2 Criteria</div><div>L3 Criteria</div><div>Level</div><div>Evidence</div><div>Gap Notes</div><div></div>
             </div>
             {rows.filter(r=>r.pivot_name===pillar).map((row,i) => (
-              <div key={row.id} style={{ display:'grid',gridTemplateColumns:'2fr 2fr 2fr 2fr 120px 1fr 1fr',gap:0,padding:'10px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'start' }}>
+              <div key={row.id} style={{ display:'grid',gridTemplateColumns:'2fr 2fr 2fr 2fr 120px 1fr 1fr 40px',gap:0,padding:'10px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'start' }}>
                 <div style={{ color:'var(--fg)',fontSize:13,fontWeight:500,paddingRight:8 }}>{row.capability}</div>
                 <div style={{ color:'var(--muted)',fontSize:12,paddingRight:8,lineHeight:1.4 }}>{row.l1_criteria}</div>
                 <div style={{ color:'var(--muted)',fontSize:12,paddingRight:8,lineHeight:1.4 }}>{row.l2_criteria}</div>
@@ -154,6 +148,7 @@ function EMBModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Promi
                 </select>
                 <textarea value={row.evidence||''} onChange={e=>update(row.id,'evidence',e.target.value)} placeholder="Evidence…" rows={2} style={{ background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none' }} />
                 <textarea value={row.gap_notes||''} onChange={e=>update(row.id,'gap_notes',e.target.value)} placeholder="Gap notes…" rows={2} style={{ background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none' }} />
+                <button onClick={async()=>{await fetch(`/api/assessments/${id}/emb`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({row_id:row.id})});setRows(prev=>prev.filter(r=>r.id!==row.id));}} style={{background:'none',border:'none',color:'#ef4444',cursor:'pointer',fontSize:16,padding:4}}>✕</button>
               </div>
             ))}
           </div>
@@ -168,39 +163,40 @@ function DriversModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>P
   const [rows, setRows] = useState<any[]>([]);
   useEffect(() => { fetch(`/api/assessments/${id}/drivers`).then(r=>r.json()).then(d=>setRows(d.rows||[])); }, [id]);
   useEffect(() => { if (!rows.length) return; const t = setTimeout(() => save('drivers',rows), 1500); return () => clearTimeout(t); }, [rows]);
-  function update(rowId: number, field: string, val: string) { setRows(prev=>prev.map(r=>r.id===rowId?{...r,[field]:val}:r)); }
-  async function addRow() { const res = await fetch(`/api/assessments/${id}/drivers`,{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}); const d=await res.json(); if(d.id) setRows(prev=>[...prev,{id:d.id,category:'Cost',driver_name:'New Driver',description:'',current_state:'',target_state:'',priority:'Medium',notes:''}]); }
+  function update(rowId: number, field: string, val: string|boolean) { setRows(prev=>prev.map(r=>r.id===rowId?{...r,[field]:val}:r)); }
+  async function addRow() { const res = await fetch(`/api/assessments/${id}/drivers`,{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}); const d=await res.json(); if(d.id) setRows(prev=>[...prev,{id:d.id,category:'Engineering Cost',driver_name:'New Driver',description:'',is_mandatory:false,considerations:'',notes:''}]); }
   async function deleteRow(rowId: number) { await fetch(`/api/assessments/${id}/drivers`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({row_id:rowId})}); setRows(prev=>prev.filter(r=>r.id!==rowId)); }
-  const CATS = ['Cost','Scale','Expansion','Risk','Other'];
-  const PRIOS = ['High','Medium','Low'];
+  const CATS = ['Engineering Cost','Scale of Engineering Operations','Strategic Business Expansion'];
+  const categories = [...new Set(rows.map(r => r.category))];
   return (
     <div>
       <div style={{ display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24 }}>
         <div><h2 style={{color:'var(--fg)',margin:0}}>Business Drivers</h2><p style={{color:'var(--muted)',fontSize:13,margin:'4px 0 0'}}>Why the team exists — cost, scale, expansion, and strategic rationale.</p></div>
         <button onClick={addRow} style={{background:'var(--gold)',border:'none',borderRadius:8,padding:'8px 16px',color:'#000',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Driver</button>
       </div>
-      <div style={{ background:'var(--surface)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border)' }}>
-        <div style={{ display:'grid',gridTemplateColumns:'120px 1fr 1.5fr 1.5fr 1.5fr 100px 1fr 40px',gap:0,background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em' }}>
-          <div>Category</div><div>Driver</div><div>Description</div><div>Current State</div><div>Target State</div><div>Priority</div><div>Notes</div><div></div>
-        </div>
-        {rows.map((row,i) => (
-          <div key={row.id} style={{ display:'grid',gridTemplateColumns:'120px 1fr 1.5fr 1.5fr 1.5fr 100px 1fr 40px',gap:0,padding:'10px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'start' }}>
-            <select value={row.category} onChange={e=>update(row.id,'category',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:12,cursor:'pointer',outline:'none'}}>
-              {CATS.map(c=><option key={c}>{c}</option>)}
-            </select>
-            <input value={row.driver_name} onChange={e=>update(row.id,'driver_name',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
-            <textarea value={row.description||''} onChange={e=>update(row.id,'description',e.target.value)} rows={2} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
-            <textarea value={row.current_state||''} onChange={e=>update(row.id,'current_state',e.target.value)} rows={2} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
-            <textarea value={row.target_state||''} onChange={e=>update(row.id,'target_state',e.target.value)} rows={2} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
-            <select value={row.priority} onChange={e=>update(row.id,'priority',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:row.priority==='High'?'#ef4444':row.priority==='Medium'?'#f59e0b':'#22c55e',fontWeight:600,fontSize:12,cursor:'pointer',outline:'none'}}>
-              {PRIOS.map(p=><option key={p}>{p}</option>)}
-            </select>
-            <textarea value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} rows={2} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
-            <button onClick={()=>deleteRow(row.id)} style={{background:'none',border:'none',color:'#ef4444',cursor:'pointer',fontSize:16,padding:4}}>✕</button>
+      {categories.map(cat => (
+        <div key={cat} style={{marginBottom:28}}>
+          <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em'}}>{cat}</div>
+          <div style={{ background:'var(--surface)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border)' }}>
+            <div style={{ display:'grid',gridTemplateColumns:'1.5fr 1fr 80px 2fr 1.5fr 40px',gap:0,background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em' }}>
+              <div>Driver</div><div>Description</div><div>Mandatory</div><div>Considerations</div><div>Notes</div><div></div>
+            </div>
+            {rows.filter(r=>r.category===cat).map((row,i) => (
+              <div key={row.id} style={{ display:'grid',gridTemplateColumns:'1.5fr 1fr 80px 2fr 1.5fr 40px',gap:0,padding:'10px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'start' }}>
+                <input value={row.driver_name} onChange={e=>update(row.id,'driver_name',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
+                <textarea value={row.description||''} onChange={e=>update(row.id,'description',e.target.value)} rows={2} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
+                <div style={{display:'flex',justifyContent:'center',paddingTop:4}}>
+                  <button onClick={()=>update(row.id,'is_mandatory',!row.is_mandatory)} style={{background:row.is_mandatory?'var(--gold)':'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 10px',color:row.is_mandatory?'#000':'var(--muted)',fontSize:12,cursor:'pointer',fontWeight:row.is_mandatory?700:400}}>{row.is_mandatory?'Yes':'No'}</button>
+                </div>
+                <textarea value={row.considerations||''} onChange={e=>update(row.id,'considerations',e.target.value)} rows={3} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
+                <textarea value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} rows={2} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
+                <button onClick={()=>deleteRow(row.id)} style={{background:'none',border:'none',color:'#ef4444',cursor:'pointer',fontSize:16,padding:4}}>✕</button>
+              </div>
+            ))}
           </div>
-        ))}
-        {rows.length===0 && <div style={{padding:32,textAlign:'center',color:'var(--muted)',fontSize:13}}>No drivers yet. Click + Add Driver to start.</div>}
-      </div>
+        </div>
+      ))}
+      {rows.length===0 && <div style={{padding:32,textAlign:'center',color:'var(--muted)',fontSize:13}}>No drivers yet. Click + Add Driver to start.</div>}
     </div>
   );
 }
@@ -208,41 +204,65 @@ function DriversModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>P
 // ── Module 3: Benchmarks ───────────────────────────────────────────────────────
 function BenchmarksModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Promise<void> }) {
   const [rows, setRows] = useState<any[]>([]);
+  const [expanded, setExpanded] = useState<Set<number>>(new Set());
   useEffect(() => { fetch(`/api/assessments/${id}/benchmarks`).then(r=>r.json()).then(d=>setRows(d.rows||[])); }, [id]);
   useEffect(() => { if (!rows.length) return; const t = setTimeout(() => save('benchmarks',rows), 1500); return () => clearTimeout(t); }, [rows]);
   function update(rowId: number, field: string, val: string) { setRows(prev=>prev.map(r=>r.id===rowId?{...r,[field]:val}:r)); }
-  async function addRow() { const res=await fetch(`/api/assessments/${id}/benchmarks`,{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}); const d=await res.json(); if(d.id) setRows(prev=>[...prev,{id:d.id,pillar:'Delivery',kpi_name:'New KPI',unit:'%',target_value:'',current_value:'',status:'pending',notes:''}]); }
+  async function addRow(pillar: string, sub_category: string) { const res=await fetch(`/api/assessments/${id}/benchmarks`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pillar,sub_category})}); const d=await res.json(); if(d.id) setRows(prev=>[...prev,{id:d.id,pillar,sub_category,kpi_name:'New KPI',unit:'%',target_value:'',current_value:'',status:'pending',notes:'',weight:0,definition:''}]); }
   const pillars = [...new Set(rows.map(r => r.pillar))];
   const STATUSES = ['pending','on-track','at-risk','off-track'];
+  function toggleDef(rowId: number) { setExpanded(prev => { const n = new Set(prev); n.has(rowId) ? n.delete(rowId) : n.add(rowId); return n; }); }
   return (
     <div>
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24}}>
-        <div><h2 style={{color:'var(--fg)',margin:0}}>Performance Benchmarks</h2><p style={{color:'var(--muted)',fontSize:13,margin:'4px 0 0'}}>~27 KPIs across Delivery, Quality, People, and Operations pillars.</p></div>
-        <button onClick={addRow} style={{background:'var(--gold)',border:'none',borderRadius:8,padding:'8px 16px',color:'#000',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add KPI</button>
+        <div><h2 style={{color:'var(--fg)',margin:0}}>Performance Benchmarks</h2><p style={{color:'var(--muted)',fontSize:13,margin:'4px 0 0'}}>~52 KPIs across 4 pillars with weights, definitions, and sub-categories.</p></div>
       </div>
-      {pillars.map(pillar => (
-        <div key={pillar} style={{marginBottom:28}}>
-          <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em'}}>{pillar}</div>
-          <div style={{background:'var(--surface)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border)'}}>
-            <div style={{display:'grid',gridTemplateColumns:'2fr 80px 100px 100px 120px 1fr 40px',gap:0,background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
-              <div>KPI</div><div>Unit</div><div>Target</div><div>Current</div><div>Status</div><div>Notes</div><div></div>
-            </div>
-            {rows.filter(r=>r.pillar===pillar).map((row,i)=>(
-              <div key={row.id} style={{display:'grid',gridTemplateColumns:'2fr 80px 100px 100px 120px 1fr 40px',gap:0,padding:'10px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'center'}}>
-                <div style={{color:'var(--fg)',fontSize:13}}>{row.kpi_name}</div>
-                <div style={{color:'var(--muted)',fontSize:12}}>{row.unit}</div>
-                <div style={{color:'var(--muted)',fontSize:12}}>{row.target_value}</div>
-                <input value={row.current_value||''} onChange={e=>update(row.id,'current_value',e.target.value)} placeholder="–" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:13,outline:'none',width:'100%'}} />
-                <select value={row.status} onChange={e=>update(row.id,'status',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:STATUS_COLORS[row.status],fontWeight:600,fontSize:12,cursor:'pointer',outline:'none'}}>
-                  {STATUSES.map(s=><option key={s}>{s}</option>)}
-                </select>
-                <input value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} placeholder="Notes…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
-                <button onClick={async()=>{await fetch(`/api/assessments/${id}/benchmarks`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({row_id:row.id})});setRows(prev=>prev.filter(r=>r.id!==row.id));}} style={{background:'none',border:'none',color:'#ef4444',cursor:'pointer',fontSize:16,padding:4}}>✕</button>
+      {pillars.map(pillar => {
+        const pillarRows = rows.filter(r=>r.pillar===pillar);
+        const subCats = [...new Set(pillarRows.map(r=>r.sub_category||''))];
+        return (
+          <div key={pillar} style={{marginBottom:28}}>
+            <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em'}}>{pillar}</div>
+            {subCats.map(sub => (
+              <div key={sub} style={{marginBottom:16}}>
+                {sub && <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(201,168,76,0.08)',borderRadius:'8px 8px 0 0',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                  <span>{sub}</span>
+                  <button onClick={()=>addRow(pillar,sub)} style={{background:'var(--gold)',border:'none',borderRadius:6,padding:'3px 10px',color:'#000',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add KPI</button>
+                </div>}
+                <div style={{background:'var(--surface)',borderRadius:sub?'0 0 12px 12px':'12px',overflow:'hidden',border:'1px solid var(--border)'}}>
+                  <div style={{display:'grid',gridTemplateColumns:'2fr 60px 80px 100px 100px 120px 1fr 40px',gap:0,background:'var(--card)',padding:'10px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
+                    <div>KPI</div><div>Weight</div><div>Unit</div><div>Target</div><div>Current</div><div>Status</div><div>Notes</div><div></div>
+                  </div>
+                  {pillarRows.filter(r=>(r.sub_category||'')===sub).map((row,i)=>(
+                    <div key={row.id}>
+                      <div style={{display:'grid',gridTemplateColumns:'2fr 60px 80px 100px 100px 120px 1fr 40px',gap:0,padding:'8px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'center'}}>
+                        <div style={{display:'flex',alignItems:'center',gap:6}}>
+                          <button onClick={()=>toggleDef(row.id)} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:10,padding:0}} title="Toggle definition">{expanded.has(row.id)?'▼':'▶'}</button>
+                          <span style={{color:'var(--fg)',fontSize:13}}>{row.kpi_name}</span>
+                        </div>
+                        <div style={{color:'var(--muted)',fontSize:12}}>{row.weight ? `${(row.weight*100).toFixed(0)}%` : '–'}</div>
+                        <div style={{color:'var(--muted)',fontSize:12}}>{row.unit}</div>
+                        <div style={{color:'var(--muted)',fontSize:12}}>{row.target_value}</div>
+                        <input value={row.current_value||''} onChange={e=>update(row.id,'current_value',e.target.value)} placeholder="–" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:13,outline:'none',width:'100%'}} />
+                        <select value={row.status} onChange={e=>update(row.id,'status',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:STATUS_COLORS[row.status],fontWeight:600,fontSize:12,cursor:'pointer',outline:'none'}}>
+                          {STATUSES.map(s=><option key={s}>{s}</option>)}
+                        </select>
+                        <input value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} placeholder="Notes…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
+                        <button onClick={async()=>{await fetch(`/api/assessments/${id}/benchmarks`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({row_id:row.id})});setRows(prev=>prev.filter(r=>r.id!==row.id));}} style={{background:'none',border:'none',color:'#ef4444',cursor:'pointer',fontSize:16,padding:4}}>✕</button>
+                      </div>
+                      {expanded.has(row.id) && row.definition && (
+                        <div style={{padding:'4px 16px 8px 40px',fontSize:12,color:'var(--muted)',lineHeight:1.5,borderTop:'1px dashed var(--border)',background:'rgba(201,168,76,0.03)'}}>
+                          <strong>Definition:</strong> {row.definition}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
@@ -250,31 +270,51 @@ function BenchmarksModule({ id, save }: { id:string; save:(e:string,r:unknown[])
 // ── Module 4: Scope ────────────────────────────────────────────────────────────
 function ScopeModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Promise<void> }) {
   const [rows, setRows] = useState<any[]>([]);
+  const [expanded, setExpanded] = useState<Set<number>>(new Set());
   useEffect(() => { fetch(`/api/assessments/${id}/scope`).then(r=>r.json()).then(d=>setRows(d.rows||[])); }, [id]);
   useEffect(() => { if (!rows.length) return; const t = setTimeout(() => save('scope',rows), 1500); return () => clearTimeout(t); }, [rows]);
   function update(rowId: number, field: string, val: string|number) { setRows(prev=>prev.map(r=>r.id===rowId?{...r,[field]:val}:r)); }
   const pillars = [...new Set(rows.map(r => r.pillar))];
+  const LEVEL_ICONS: Record<number,string> = {1:'◆ L1',2:'⚙ L2',3:'🚀 L3'};
+  const LEVEL_CLR: Record<number,string> = {1:'#ef4444',2:'#f59e0b',3:'#22c55e'};
+  function toggleGuide(rowId: number) { setExpanded(prev => { const n = new Set(prev); n.has(rowId) ? n.delete(rowId) : n.add(rowId); return n; }); }
   return (
     <div>
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24}}>
-        <div><h2 style={{color:'var(--fg)',margin:0}}>Scope of Product Engineering</h2><p style={{color:'var(--muted)',fontSize:13,margin:'4px 0 0'}}>Per-activity required vs current level across 5 pillars. Gap is computed automatically.</p></div>
-        <button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/scope`,{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,pillar:'Operational Excellence',activity:'New Activity',required_level:1,current_level:1,gap:0,notes:''}]);}} style={{background:'var(--gold)',border:'none',borderRadius:8,padding:'8px 16px',color:'#000',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Activity</button>
+        <div><h2 style={{color:'var(--fg)',margin:0}}>Scope of Product Engineering</h2><p style={{color:'var(--muted)',fontSize:13,margin:'4px 0 0'}}>17 activities across 5 business-oriented sections with L1/L2/L3 guidance. Gap is computed automatically.</p></div>
+        <button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/scope`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,pillar:'Product Enhancement & Sustenance',activity:'New Activity',required_level:1,current_level:1,gap:0,notes:'',l1_guidance:'',l2_guidance:'',l3_guidance:''}]);}} style={{background:'var(--gold)',border:'none',borderRadius:8,padding:'8px 16px',color:'#000',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Activity</button>
       </div>
       {pillars.map(pillar=>(
         <div key={pillar} style={{marginBottom:28}}>
           <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em'}}>{pillar}</div>
           <div style={{background:'var(--surface)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border)'}}>
             <div style={{display:'grid',gridTemplateColumns:'2fr 120px 120px 80px 1fr 40px',gap:0,background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
-              <div>Activity</div><div>Required Level (1–3)</div><div>Current Level (1–3)</div><div>Gap</div><div>Notes</div><div></div>
+              <div>Activity</div><div>Required (1–3)</div><div>Current (1–3)</div><div>Gap</div><div>Notes</div><div></div>
             </div>
             {rows.filter(r=>r.pillar===pillar).map((row,i)=>(
-              <div key={row.id} style={{display:'grid',gridTemplateColumns:'2fr 120px 120px 80px 1fr 40px',gap:0,padding:'10px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'center'}}>
-                <div style={{color:'var(--fg)',fontSize:13}}>{row.activity}</div>
-                <input type="number" min={1} max={3} value={row.required_level} onChange={e=>update(row.id,'required_level',parseInt(e.target.value))} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:13,outline:'none',width:80}} />
-                <input type="number" min={1} max={3} value={row.current_level} onChange={e=>update(row.id,'current_level',parseInt(e.target.value))} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:13,outline:'none',width:80}} />
-                <div style={{fontWeight:700,color:row.gap>0?'#ef4444':'#22c55e',fontSize:14}}>{row.gap>0?`-${row.gap}`:'✓'}</div>
-                <input value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} placeholder="Notes…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
-                <button onClick={async()=>{await fetch(`/api/assessments/${id}/scope`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({row_id:row.id})});setRows(prev=>prev.filter(r=>r.id!==row.id));}} style={{background:'none',border:'none',color:'#ef4444',cursor:'pointer',fontSize:16,padding:4}}>✕</button>
+              <div key={row.id}>
+                <div style={{display:'grid',gridTemplateColumns:'2fr 120px 120px 80px 1fr 40px',gap:0,padding:'10px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'center'}}>
+                  <div style={{display:'flex',alignItems:'center',gap:6}}>
+                    {(row.l1_guidance||row.l2_guidance||row.l3_guidance) && <button onClick={()=>toggleGuide(row.id)} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:10,padding:0}} title="Toggle guidance">{expanded.has(row.id)?'▼':'▶'}</button>}
+                    <span style={{color:'var(--fg)',fontSize:13}}>{row.activity}</span>
+                  </div>
+                  <select value={row.required_level} onChange={e=>update(row.id,'required_level',parseInt(e.target.value))} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:LEVEL_CLR[row.required_level]||'var(--fg)',fontWeight:700,fontSize:13,cursor:'pointer',outline:'none'}}>
+                    {[1,2,3].map(l=><option key={l} value={l}>{LEVEL_ICONS[l]}</option>)}
+                  </select>
+                  <select value={row.current_level} onChange={e=>update(row.id,'current_level',parseInt(e.target.value))} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:LEVEL_CLR[row.current_level]||'var(--fg)',fontWeight:700,fontSize:13,cursor:'pointer',outline:'none'}}>
+                    {[1,2,3].map(l=><option key={l} value={l}>{LEVEL_ICONS[l]}</option>)}
+                  </select>
+                  <div style={{fontWeight:700,color:Math.max(0,row.required_level-row.current_level)>0?'#ef4444':'#22c55e',fontSize:14}}>{Math.max(0,row.required_level-row.current_level)>0?`-${Math.max(0,row.required_level-row.current_level)}`:'✓'}</div>
+                  <input value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} placeholder="Notes…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
+                  <button onClick={async()=>{await fetch(`/api/assessments/${id}/scope`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({row_id:row.id})});setRows(prev=>prev.filter(r=>r.id!==row.id));}} style={{background:'none',border:'none',color:'#ef4444',cursor:'pointer',fontSize:16,padding:4}}>✕</button>
+                </div>
+                {expanded.has(row.id) && (
+                  <div style={{padding:'8px 16px 12px 40px',borderTop:'1px dashed var(--border)',background:'rgba(201,168,76,0.03)',display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:12}}>
+                    <div><div style={{fontSize:11,fontWeight:600,color:'#ef4444',marginBottom:4}}>◆ L1 Guidance</div><div style={{fontSize:12,color:'var(--muted)',lineHeight:1.5}}>{row.l1_guidance||'–'}</div></div>
+                    <div><div style={{fontSize:11,fontWeight:600,color:'#f59e0b',marginBottom:4}}>⚙ L2 Guidance</div><div style={{fontSize:12,color:'var(--muted)',lineHeight:1.5}}>{row.l2_guidance||'–'}</div></div>
+                    <div><div style={{fontSize:11,fontWeight:600,color:'#22c55e',marginBottom:4}}>🚀 L3 Guidance</div><div style={{fontSize:12,color:'var(--muted)',lineHeight:1.5}}>{row.l3_guidance||'–'}</div></div>
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -298,11 +338,11 @@ function SummaryModule({ id }: { id:string }) {
     if (!pr.length) return 0;
     return pr.reduce((a,r)=>a+(r.current_level==='L3'?3:r.current_level==='L2'?2:1),0)/pr.length;
   });
-  const scopeScores = PILLARS.map(p => {
+  const SCOPE_PILLARS = ['Product Enhancement & Sustenance','Thought Leadership','Business Result Focused','Customer Satisfaction','High Performance Talent'];
+  const scopeScores = SCOPE_PILLARS.map(p => {
     const pr = scopeRows.filter(r=>r.pillar===p);
     if (!pr.length) return 0;
-    const avgCurrent = pr.reduce((a,r)=>a+(r.current_level||1),0)/pr.length;
-    return avgCurrent;
+    return pr.reduce((a,r)=>a+(r.current_level||1),0)/pr.length;
   });
   const cx=200, cy=200, r=150;
   function polarToXY(angle: number, radius: number) { const a=(angle-90)*Math.PI/180; return { x:cx+radius*Math.cos(a), y:cy+radius*Math.sin(a) }; }
@@ -323,7 +363,7 @@ function SummaryModule({ id }: { id:string }) {
             {gridLevels.map(l=>(
               <polygon key={l} points={angles.map(a=>{const p=polarToXY(a,(l/3)*r);return `${p.x},${p.y}`;}).join(' ')} fill="none" stroke="var(--border)" strokeWidth={1} />
             ))}
-            {angles.map((a,i)=>{const p=polarToXY(a,r+20);return<text key={i} x={p.x} y={p.y} textAnchor="middle" dominantBaseline="middle" fontSize={11} fill="var(--muted)" style={{fontSize:11}}>{PILLARS[i].split(' ')[0]}</text>;})}
+            {angles.map((a,i)=>{const p=polarToXY(a,r+20);return<text key={i} x={p.x} y={p.y} textAnchor="middle" dominantBaseline="middle" fontSize={11} fill="var(--muted)" style={{fontSize:11}}>{PILLARS[i].split(' ').slice(0,2).join(' ')}</text>;})}
             <path d={pathFromScores(embScores,3)} fill="rgba(201,168,76,0.2)" stroke="var(--gold)" strokeWidth={2} />
             <path d={pathFromScores(scopeScores,3)} fill="rgba(99,172,255,0.1)" stroke="#63acff" strokeWidth={2} strokeDasharray="4,4" />
           </svg>
@@ -351,56 +391,105 @@ function SummaryModule({ id }: { id:string }) {
   );
 }
 
-// ── Module 6: KRA ──────────────────────────────────────────────────────────────
+// ── Module 6: Competency Maturity Levels ────────────────────────────────────────
+function MaturityModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Promise<void> }) {
+  const [rows, setRows] = useState<any[]>([]);
+  useEffect(() => { fetch(`/api/assessments/${id}/maturity`).then(r=>r.json()).then(d=>setRows(d.rows||[])); }, [id]);
+  useEffect(() => { if (!rows.length) return; const t = setTimeout(() => save('maturity',rows), 1500); return () => clearTimeout(t); }, [rows]);
+  function update(rowId: number, field: string, val: string|number) { setRows(prev=>prev.map(r=>r.id===rowId?{...r,[field]:val}:r)); }
+  async function addRow() { const res=await fetch(`/api/assessments/${id}/maturity`,{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}); const d=await res.json(); if(d.id) setRows(prev=>[...prev,{id:d.id,factor_name:'New Factor',maturity_level:1,ownership_level:'',skill_level:'',business_value:'',notes:''}]); }
+  async function deleteRow(rowId: number) { await fetch(`/api/assessments/${id}/maturity`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({row_id:rowId})}); setRows(prev=>prev.filter(r=>r.id!==rowId)); }
+  const LEVEL_CLR: Record<number,string> = {1:'#ef4444',2:'#f59e0b',3:'#22c55e'};
+  return (
+    <div>
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24}}>
+        <div><h2 style={{color:'var(--fg)',margin:0}}>Competency Maturity Levels</h2><p style={{color:'var(--muted)',fontSize:13,margin:'4px 0 0'}}>5 factors influencing maturity with ownership, skill, and business value descriptions.</p></div>
+        <button onClick={addRow} style={{background:'var(--gold)',border:'none',borderRadius:8,padding:'8px 16px',color:'#000',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Factor</button>
+      </div>
+      <div style={{background:'var(--surface)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border)'}}>
+        <div style={{display:'grid',gridTemplateColumns:'1.5fr 100px 1.5fr 1.5fr 1.5fr 1fr 40px',gap:0,background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
+          <div>Factor</div><div>Level (1–3)</div><div>Ownership Level</div><div>Skill Level</div><div>Business Value</div><div>Notes</div><div></div>
+        </div>
+        {rows.map((row,i)=>(
+          <div key={row.id} style={{display:'grid',gridTemplateColumns:'1.5fr 100px 1.5fr 1.5fr 1.5fr 1fr 40px',gap:0,padding:'10px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'start'}}>
+            <input value={row.factor_name} onChange={e=>update(row.id,'factor_name',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:13,fontWeight:500,outline:'none',width:'100%'}} />
+            <select value={row.maturity_level} onChange={e=>update(row.id,'maturity_level',parseInt(e.target.value))} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:LEVEL_CLR[row.maturity_level]||'var(--fg)',fontWeight:700,fontSize:13,cursor:'pointer',outline:'none'}}>
+              <option value={1}>◆ L1</option><option value={2}>⚙ L2</option><option value={3}>🚀 L3</option>
+            </select>
+            <textarea value={row.ownership_level||''} onChange={e=>update(row.id,'ownership_level',e.target.value)} rows={2} placeholder="Describe ownership level…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
+            <textarea value={row.skill_level||''} onChange={e=>update(row.id,'skill_level',e.target.value)} rows={2} placeholder="Describe skill level…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
+            <textarea value={row.business_value||''} onChange={e=>update(row.id,'business_value',e.target.value)} rows={2} placeholder="Describe business value…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
+            <textarea value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} rows={2} placeholder="Notes…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
+            <button onClick={()=>deleteRow(row.id)} style={{background:'none',border:'none',color:'#ef4444',cursor:'pointer',fontSize:16,padding:4}}>✕</button>
+          </div>
+        ))}
+        {rows.length===0 && <div style={{padding:32,textAlign:'center',color:'var(--muted)',fontSize:13}}>No maturity factors yet. Click + Add Factor.</div>}
+      </div>
+    </div>
+  );
+}
+
+// ── Module 7: KRA ──────────────────────────────────────────────────────────────
 function KRAModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Promise<void> }) {
   const [rows, setRows] = useState<any[]>([]);
   const [roleFilter, setRoleFilter] = useState('All');
   useEffect(() => { fetch(`/api/assessments/${id}/kra`).then(r=>r.json()).then(d=>setRows(d.rows||[])); }, [id]);
   useEffect(() => { if (!rows.length) return; const t = setTimeout(() => save('kra',rows), 1500); return () => clearTimeout(t); }, [rows]);
   function update(rowId: number, field: string, val: string) { setRows(prev=>prev.map(r=>r.id===rowId?{...r,[field]:val}:r)); }
-  const ROLES=['VP','Director','Manager','Developer']; const STATUSES=['not-started','in-progress','achieved'];
+  const ROLES=['Sr Director, Engineering/ VP','Senior Manager/ Director, Engineering','Manager / Project Lead','Developer / Senior Developer'];
+  const STATUSES=['not-started','in-progress','achieved'];
+  const PILLARS=['Operational Excellence','Pace of Product Evolution','Alignment','Business Results Focused'];
   const filtered = roleFilter==='All' ? rows : rows.filter(r=>r.role_level===roleFilter);
+  const roles = [...new Set(filtered.map(r=>r.role_level))];
   return (
     <div>
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24}}>
-        <div><h2 style={{color:'var(--fg)',margin:0}}>Roles & Performance KRA</h2><p style={{color:'var(--muted)',fontSize:13,margin:'4px 0 0'}}>Key Result Areas by role level.</p></div>
-        <div style={{display:'flex',gap:8}}>
-          {['All',...ROLES].map(r=><button key={r} onClick={()=>setRoleFilter(r)} style={{background:roleFilter===r?'var(--gold)':'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 12px',color:roleFilter===r?'#000':'var(--fg)',fontSize:12,fontWeight:roleFilter===r?700:400,cursor:'pointer'}}>{r}</button>)}
-          <button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/kra`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({role_level:roleFilter==='All'?'Manager':roleFilter})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,role_level:roleFilter==='All'?'Manager':roleFilter,person_name:'',kra_name:'New KRA',description:'',target:'',current:'',status:'not-started',notes:''}]);}} style={{background:'var(--gold)',border:'none',borderRadius:8,padding:'6px 14px',color:'#000',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add KRA</button>
+        <div><h2 style={{color:'var(--fg)',margin:0}}>Roles & Performance KRA</h2><p style={{color:'var(--muted)',fontSize:13,margin:'4px 0 0'}}>Key Result Areas by role level and pillar.</p></div>
+        <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+          {['All',...ROLES].map(r=><button key={r} onClick={()=>setRoleFilter(r)} style={{background:roleFilter===r?'var(--gold)':'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:roleFilter===r?'#000':'var(--fg)',fontSize:11,fontWeight:roleFilter===r?700:400,cursor:'pointer'}}>{r==='All'?'All':r.split(',')[0]}</button>)}
+          <button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/kra`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({role_level:roleFilter==='All'?'Manager / Project Lead':roleFilter,pillar:'Operational Excellence'})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,role_level:roleFilter==='All'?'Manager / Project Lead':roleFilter,pillar:'Operational Excellence',person_name:'',kra_name:'New KRA',description:'',target:'',current:'',status:'not-started',notes:''}]);}} style={{background:'var(--gold)',border:'none',borderRadius:8,padding:'6px 14px',color:'#000',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add KRA</button>
         </div>
       </div>
-      <div style={{background:'var(--surface)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border)'}}>
-        <div style={{display:'grid',gridTemplateColumns:'100px 120px 1.5fr 2fr 1fr 1fr 120px 1fr 40px',gap:0,background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
-          <div>Role</div><div>Person</div><div>KRA</div><div>Description</div><div>Target</div><div>Current</div><div>Status</div><div>Notes</div><div></div>
-        </div>
-        {filtered.map((row,i)=>(
-          <div key={row.id} style={{display:'grid',gridTemplateColumns:'100px 120px 1.5fr 2fr 1fr 1fr 120px 1fr 40px',gap:0,padding:'10px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'start'}}>
-            <select value={row.role_level} onChange={e=>update(row.id,'role_level',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px',color:'var(--fg)',fontSize:12,cursor:'pointer',outline:'none'}}>
-              {ROLES.map(r=><option key={r}>{r}</option>)}
-            </select>
-            <input value={row.person_name||''} onChange={e=>update(row.id,'person_name',e.target.value)} placeholder="Name…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 6px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
-            <input value={row.kra_name} onChange={e=>update(row.id,'kra_name',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 6px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
-            <textarea value={row.description||''} onChange={e=>update(row.id,'description',e.target.value)} rows={2} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 6px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
-            <input value={row.target||''} onChange={e=>update(row.id,'target',e.target.value)} placeholder="Target…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 6px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
-            <input value={row.current||''} onChange={e=>update(row.id,'current',e.target.value)} placeholder="Current…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 6px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
-            <select value={row.status} onChange={e=>update(row.id,'status',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px',color:STATUS_COLORS[row.status],fontWeight:600,fontSize:12,cursor:'pointer',outline:'none'}}>
-              {STATUSES.map(s=><option key={s}>{s}</option>)}
-            </select>
-            <textarea value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} rows={2} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 6px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
-            <button onClick={async()=>{await fetch(`/api/assessments/${id}/kra`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({row_id:row.id})});setRows(prev=>prev.filter(r=>r.id!==row.id));}} style={{background:'none',border:'none',color:'#ef4444',cursor:'pointer',fontSize:16,padding:4}}>✕</button>
+      {roles.map(role => {
+        const roleRows = filtered.filter(r=>r.role_level===role);
+        const rolePillars = [...new Set(roleRows.map(r=>r.pillar||''))];
+        return (
+          <div key={role} style={{marginBottom:32}}>
+            <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em'}}>{role}</div>
+            {rolePillars.map(pillar => (
+              <div key={pillar} style={{marginBottom:12}}>
+                {pillar && <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'4px 16px',background:'rgba(201,168,76,0.06)'}}>{pillar}</div>}
+                <div style={{background:'var(--surface)',borderRadius:8,overflow:'hidden',border:'1px solid var(--border)'}}>
+                  {roleRows.filter(r=>(r.pillar||'')===pillar).map((row,i)=>(
+                    <div key={row.id} style={{display:'grid',gridTemplateColumns:'2fr 2fr 1fr 1fr 120px 1fr 40px',gap:0,padding:'8px 16px',borderTop:i>0?'1px solid var(--border)':'none',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'start'}}>
+                      <input value={row.kra_name} onChange={e=>update(row.id,'kra_name',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 6px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
+                      <textarea value={row.description||''} onChange={e=>update(row.id,'description',e.target.value)} rows={1} placeholder="Description…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 6px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
+                      <input value={row.target||''} onChange={e=>update(row.id,'target',e.target.value)} placeholder="Target…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 6px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
+                      <input value={row.current||''} onChange={e=>update(row.id,'current',e.target.value)} placeholder="Current…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 6px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
+                      <select value={row.status} onChange={e=>update(row.id,'status',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px',color:STATUS_COLORS[row.status],fontWeight:600,fontSize:12,cursor:'pointer',outline:'none'}}>
+                        {STATUSES.map(s=><option key={s}>{s}</option>)}
+                      </select>
+                      <textarea value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} rows={1} placeholder="Notes…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 6px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
+                      <button onClick={async()=>{await fetch(`/api/assessments/${id}/kra`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({row_id:row.id})});setRows(prev=>prev.filter(r=>r.id!==row.id));}} style={{background:'none',border:'none',color:'#ef4444',cursor:'pointer',fontSize:16,padding:4}}>✕</button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-        {filtered.length===0 && <div style={{padding:32,textAlign:'center',color:'var(--muted)',fontSize:13}}>No KRAs yet.</div>}
-      </div>
+        );
+      })}
+      {filtered.length===0 && <div style={{padding:32,textAlign:'center',color:'var(--muted)',fontSize:13}}>No KRAs yet.</div>}
     </div>
   );
 }
 
-// ── Module 7: Leadership ───────────────────────────────────────────────────────
+// ── Module 8: Leadership ───────────────────────────────────────────────────────
 function LeadershipModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Promise<void> }) {
   const [rows, setRows] = useState<any[]>([]);
   const [newLeader, setNewLeader] = useState('');
   const [newRole, setNewRole] = useState('');
+  const [expanded, setExpanded] = useState<Set<number>>(new Set());
   useEffect(() => { fetch(`/api/assessments/${id}/leadership`).then(r=>r.json()).then(d=>setRows(d.rows||[])); }, [id]);
   useEffect(() => { if (!rows.length) return; const t = setTimeout(() => save('leadership',rows), 1500); return () => clearTimeout(t); }, [rows]);
   function update(rowId: number, field: string, val: string|number) { setRows(prev=>prev.map(r=>r.id===rowId?{...r,[field]:val}:r)); }
@@ -412,10 +501,12 @@ function LeadershipModule({ id, save }: { id:string; save:(e:string,r:unknown[])
     if(d.success){fetch(`/api/assessments/${id}/leadership`).then(r=>r.json()).then(d=>setRows(d.rows||[]));setNewLeader('');setNewRole('');}
   }
   async function deleteLeader(leader_name: string) { await fetch(`/api/assessments/${id}/leadership`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({leader_name})}); setRows(prev=>prev.filter(r=>r.leader_name!==leader_name)); }
+  async function deleteSkill(rowId: number) { await fetch(`/api/assessments/${id}/leadership`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({row_id:rowId})}); setRows(prev=>prev.filter(r=>r.id!==rowId)); }
+  function toggleDetail(rowId: number) { setExpanded(prev => { const n = new Set(prev); n.has(rowId) ? n.delete(rowId) : n.add(rowId); return n; }); }
   return (
     <div>
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24}}>
-        <div><h2 style={{color:'var(--fg)',margin:0}}>Leadership Qualities</h2><p style={{color:'var(--muted)',fontSize:13,margin:'4px 0 0'}}>20 skills per leader. Mandatory skills are flagged. Score 0–10.</p></div>
+        <div><h2 style={{color:'var(--fg)',margin:0}}>Leadership Qualities</h2><p style={{color:'var(--muted)',fontSize:13,margin:'4px 0 0'}}>33 skills per leader across 5 categories. Mandatory skills are flagged. Score 0–10.</p></div>
         <div style={{display:'flex',gap:8,alignItems:'center'}}>
           <input value={newLeader} onChange={e=>setNewLeader(e.target.value)} placeholder="Leader name" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'8px 12px',color:'var(--fg)',fontSize:13,outline:'none',width:160}} />
           <input value={newRole} onChange={e=>setNewRole(e.target.value)} placeholder="Role title" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'8px 12px',color:'var(--fg)',fontSize:13,outline:'none',width:140}} />
@@ -425,6 +516,7 @@ function LeadershipModule({ id, save }: { id:string; save:(e:string,r:unknown[])
       {leaders.map(leader=>{
         const leaderRows = rows.filter(r=>r.leader_name===leader);
         const leaderRole = leaderRows[0]?.leader_role||'';
+        const categories = [...new Set(leaderRows.map(r=>r.skill_category||''))];
         const mandatoryScore = leaderRows.filter(r=>r.is_mandatory).reduce((a,r)=>a+r.score,0);
         const mandatoryMax = leaderRows.filter(r=>r.is_mandatory).length*10;
         const totalScore = leaderRows.reduce((a,r)=>a+r.score,0);
@@ -436,28 +528,44 @@ function LeadershipModule({ id, save }: { id:string; save:(e:string,r:unknown[])
                 {leaderRole&&<span style={{color:'var(--muted)',fontSize:13,marginLeft:8}}>{leaderRole}</span>}
                 <span style={{color:'var(--muted)',fontSize:12,marginLeft:16}}>Total: {totalScore}/{leaderRows.length*10} · Mandatory: {mandatoryScore}/{mandatoryMax}</span>
               </div>
-              <button onClick={()=>deleteLeader(leader)} style={{background:'none',border:'1px solid #ef4444',borderRadius:6,padding:'4px 10px',color:'#ef4444',cursor:'pointer',fontSize:12}}>Remove</button>
+              <button onClick={()=>deleteLeader(leader)} style={{background:'none',border:'1px solid #ef4444',borderRadius:6,padding:'4px 10px',color:'#ef4444',cursor:'pointer',fontSize:12}}>Remove Leader</button>
             </div>
-            <div style={{background:'var(--surface)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border)'}}>
-              <div style={{display:'grid',gridTemplateColumns:'2fr 80px 1fr 40px',gap:0,background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
-                <div>Skill</div><div>Score (0–10)</div><div>Notes</div><div>M</div>
-              </div>
-              {leaderRows.map((row,i)=>(
-                <div key={row.id} style={{display:'grid',gridTemplateColumns:'2fr 80px 1fr 40px',gap:0,padding:'8px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'center'}}>
-                  <div style={{color:'var(--fg)',fontSize:13,fontWeight:row.is_mandatory?600:400}}>{row.skill_name}</div>
-                  <div style={{display:'flex',alignItems:'center',gap:8}}>
-                    <input type="range" min={0} max={10} value={row.score} onChange={e=>update(row.id,'score',parseInt(e.target.value))} style={{width:60,accentColor:'var(--gold)'}} />
-                    <span style={{color:'var(--gold)',fontWeight:700,fontSize:14,minWidth:16}}>{row.score}</span>
+            {categories.map(cat => {
+              const catRows = leaderRows.filter(r=>(r.skill_category||'')===cat);
+              return (
+                <div key={cat} style={{marginBottom:16}}>
+                  {cat && <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(201,168,76,0.08)',borderRadius:'8px 8px 0 0',textTransform:'uppercase',letterSpacing:'0.05em'}}>{cat}</div>}
+                  <div style={{background:'var(--surface)',borderRadius:cat?'0 0 12px 12px':'12px',overflow:'hidden',border:'1px solid var(--border)'}}>
+                    {catRows.map((row,i)=>(
+                      <div key={row.id}>
+                        <div style={{display:'grid',gridTemplateColumns:'2fr 80px 1fr 30px 40px',gap:0,padding:'8px 16px',borderTop:i>0?'1px solid var(--border)':'none',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'center'}}>
+                          <div style={{display:'flex',alignItems:'center',gap:6}}>
+                            {row.detailed_skills && <button onClick={()=>toggleDetail(row.id)} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:10,padding:0}}>{expanded.has(row.id)?'▼':'▶'}</button>}
+                            <span style={{color:'var(--fg)',fontSize:13,fontWeight:row.is_mandatory?600:400}}>{row.skill_name}</span>
+                          </div>
+                          <div style={{display:'flex',alignItems:'center',gap:8}}>
+                            <input type="range" min={0} max={10} value={row.score} onChange={e=>update(row.id,'score',parseInt(e.target.value))} style={{width:50,accentColor:'var(--gold)'}} />
+                            <span style={{color:'var(--gold)',fontWeight:700,fontSize:14,minWidth:16}}>{row.score}</span>
+                          </div>
+                          <input value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} placeholder="Notes…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
+                          <div style={{textAlign:'center',color:row.is_mandatory?'#f59e0b':'var(--border)',fontSize:14}} title={row.is_mandatory?'Mandatory':''}>★</div>
+                          <button onClick={()=>deleteSkill(row.id)} style={{background:'none',border:'none',color:'#ef4444',cursor:'pointer',fontSize:14,padding:2}}>✕</button>
+                        </div>
+                        {expanded.has(row.id) && row.detailed_skills && (
+                          <div style={{padding:'4px 16px 8px 40px',fontSize:12,color:'var(--muted)',lineHeight:1.5,borderTop:'1px dashed var(--border)',background:'rgba(201,168,76,0.03)'}}>
+                            <strong>Detailed Skills:</strong> {row.detailed_skills}
+                          </div>
+                        )}
+                      </div>
+                    ))}
                   </div>
-                  <input value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} placeholder="Notes…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
-                  <div style={{textAlign:'center',color:row.is_mandatory?'#f59e0b':'var(--border)',fontSize:14}} title={row.is_mandatory?'Mandatory':''}>★</div>
                 </div>
-              ))}
-            </div>
+              );
+            })}
           </div>
         );
       })}
-      {leaders.length===0&&<div style={{textAlign:'center',color:'var(--muted)',padding:48,fontSize:14}}>Add leaders using the form above. Each leader gets all 20 leadership skills to rate.</div>}
+      {leaders.length===0&&<div style={{textAlign:'center',color:'var(--muted)',padding:48,fontSize:14}}>Add leaders using the form above. Each leader gets all 33 leadership skills to rate.</div>}
     </div>
   );
 }

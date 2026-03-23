@@ -17,14 +17,15 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   const { rows } = await req.json();
   for (const r of rows) {
     const gap = Math.max(0, (r.required_level||1) - (r.current_level||1));
-    await execute(`UPDATE assessment_scope SET required_level=$1,current_level=$2,gap=$3,notes=$4 WHERE id=$5 AND assessment_id=$6`, [r.required_level,r.current_level,gap,r.notes,r.id,params.id]);
+    await execute(`UPDATE assessment_scope SET required_level=$1,current_level=$2,gap=$3,notes=$4,activity=$5,pillar=$6 WHERE id=$7 AND assessment_id=$8`, [r.required_level,r.current_level,gap,r.notes,r.activity,r.pillar,r.id,params.id]);
   }
   await execute(`UPDATE assessments SET updated_at=NOW() WHERE id=$1`, [params.id]);
   return NextResponse.json({ success: true });
 }
 export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
   const user = await canAccess(req, params.id); if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  const r = await query<{id:number}>(`INSERT INTO assessment_scope (assessment_id,pillar,activity) VALUES ($1,'Operational Excellence','New Activity') RETURNING id`, [params.id]);
+  const body = await req.json().catch(() => ({}));
+  const r = await query<{id:number}>(`INSERT INTO assessment_scope (assessment_id,pillar,activity) VALUES ($1,$2,'New Activity') RETURNING id`, [params.id, body.pillar||'Product Enhancement & Sustenance']);
   return NextResponse.json({ id: r[0].id });
 }
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {

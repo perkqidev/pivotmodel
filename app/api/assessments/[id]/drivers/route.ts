@@ -15,13 +15,13 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   const user = await canAccess(req, params.id); if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   const { rows } = await req.json();
-  for (const r of rows) await execute(`UPDATE assessment_business_drivers SET category=$1,driver_name=$2,description=$3,current_state=$4,target_state=$5,priority=$6,notes=$7 WHERE id=$8 AND assessment_id=$9`, [r.category,r.driver_name,r.description,r.current_state,r.target_state,r.priority,r.notes,r.id,params.id]);
+  for (const r of rows) await execute(`UPDATE assessment_business_drivers SET category=$1,driver_name=$2,description=$3,is_mandatory=$4,considerations=$5,notes=$6 WHERE id=$7 AND assessment_id=$8`, [r.category,r.driver_name,r.description,r.is_mandatory??false,r.considerations,r.notes,r.id,params.id]);
   await execute(`UPDATE assessments SET updated_at=NOW() WHERE id=$1`, [params.id]);
   return NextResponse.json({ success: true });
 }
 export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
   const user = await canAccess(req, params.id); if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  const r = await query<{id:number}>(`INSERT INTO assessment_business_drivers (assessment_id,category,driver_name) VALUES ($1,'Cost','New Driver') RETURNING id`, [params.id]);
+  const r = await query<{id:number}>(`INSERT INTO assessment_business_drivers (assessment_id,category,driver_name) VALUES ($1,'Engineering Cost','New Driver') RETURNING id`, [params.id]);
   return NextResponse.json({ id: r[0].id });
 }
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {

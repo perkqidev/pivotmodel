@@ -15,14 +15,14 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   const user = await canAccess(req, params.id); if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   const { rows } = await req.json();
-  for (const r of rows) await execute(`UPDATE assessment_kra SET role_level=$1,person_name=$2,kra_name=$3,description=$4,target=$5,current=$6,status=$7,notes=$8 WHERE id=$9 AND assessment_id=$10`, [r.role_level,r.person_name,r.kra_name,r.description,r.target,r.current,r.status,r.notes,r.id,params.id]);
+  for (const r of rows) await execute(`UPDATE assessment_kra SET role_level=$1,person_name=$2,kra_name=$3,description=$4,target=$5,current=$6,status=$7,notes=$8,pillar=$9 WHERE id=$10 AND assessment_id=$11`, [r.role_level,r.person_name,r.kra_name,r.description,r.target,r.current,r.status,r.notes,r.pillar,r.id,params.id]);
   await execute(`UPDATE assessments SET updated_at=NOW() WHERE id=$1`, [params.id]);
   return NextResponse.json({ success: true });
 }
 export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
   const user = await canAccess(req, params.id); if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  const { role_level } = await req.json();
-  const r = await query<{id:number}>(`INSERT INTO assessment_kra (assessment_id,role_level,kra_name) VALUES ($1,$2,'New KRA') RETURNING id`, [params.id, role_level||'Manager']);
+  const body = await req.json().catch(() => ({}));
+  const r = await query<{id:number}>(`INSERT INTO assessment_kra (assessment_id,role_level,kra_name,pillar) VALUES ($1,$2,'New KRA',$3) RETURNING id`, [params.id, body.role_level||'Manager / Project Lead', body.pillar||'Operational Excellence']);
   return NextResponse.json({ id: r[0].id });
 }
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
