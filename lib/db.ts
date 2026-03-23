@@ -30,6 +30,10 @@ export async function initSchema() {
     CREATE TABLE IF NOT EXISTS assessment_kra (id SERIAL PRIMARY KEY, assessment_id INTEGER NOT NULL REFERENCES assessments(id) ON DELETE CASCADE, role_level TEXT NOT NULL DEFAULT 'Manager', person_name TEXT, kra_name TEXT NOT NULL DEFAULT 'New KRA', description TEXT, target TEXT, current TEXT, status TEXT NOT NULL DEFAULT 'not-started', notes TEXT, sort_order INTEGER DEFAULT 0, pillar TEXT);
     CREATE TABLE IF NOT EXISTS assessment_leadership (id SERIAL PRIMARY KEY, assessment_id INTEGER NOT NULL REFERENCES assessments(id) ON DELETE CASCADE, leader_name TEXT NOT NULL DEFAULT 'Leader', leader_role TEXT, skill_name TEXT NOT NULL, is_mandatory BOOLEAN NOT NULL DEFAULT FALSE, score INTEGER NOT NULL DEFAULT 0, notes TEXT, sort_order INTEGER DEFAULT 0, skill_category TEXT, detailed_skills TEXT);
     CREATE TABLE IF NOT EXISTS assessment_maturity_levels (id SERIAL PRIMARY KEY, assessment_id INTEGER NOT NULL REFERENCES assessments(id) ON DELETE CASCADE, factor_name TEXT NOT NULL, maturity_level INTEGER NOT NULL DEFAULT 1, ownership_level TEXT, skill_level TEXT, business_value TEXT, notes TEXT, sort_order INTEGER DEFAULT 0);
+    CREATE TABLE IF NOT EXISTS talent_engineers (id SERIAL PRIMARY KEY, assessment_id INTEGER NOT NULL REFERENCES assessments(id) ON DELETE CASCADE, name TEXT NOT NULL DEFAULT 'New Engineer', employee_id TEXT, team TEXT, reports_to TEXT, job_title TEXT, level TEXT DEFAULT 'Mid', specialisation TEXT, employment TEXT DEFAULT 'Full-time', product_name TEXT, industry TEXT, ai_phase TEXT DEFAULT 'Phase 1', primary_stack TEXT, key_strengths TEXT, development_focus TEXT, training_recommendation TEXT, career_goal TEXT, manager_notes TEXT, sort_order INTEGER DEFAULT 0);
+    CREATE TABLE IF NOT EXISTS talent_skills (id SERIAL PRIMARY KEY, engineer_id INTEGER NOT NULL REFERENCES talent_engineers(id) ON DELETE CASCADE, section TEXT NOT NULL, category TEXT NOT NULL, skill_name TEXT NOT NULL, description TEXT, self_score INTEGER DEFAULT 0, manager_score INTEGER DEFAULT 0, target_score INTEGER DEFAULT 0, notes TEXT, sort_order INTEGER DEFAULT 0);
+    CREATE TABLE IF NOT EXISTS skillset_context (id SERIAL PRIMARY KEY, assessment_id INTEGER NOT NULL REFERENCES assessments(id) ON DELETE CASCADE, field_name TEXT NOT NULL, field_value TEXT, field_group TEXT DEFAULT 'basics', sort_order INTEGER DEFAULT 0);
+    CREATE TABLE IF NOT EXISTS skillset_items (id SERIAL PRIMARY KEY, assessment_id INTEGER NOT NULL REFERENCES assessments(id) ON DELETE CASCADE, section TEXT NOT NULL, category TEXT, item_name TEXT NOT NULL, description TEXT, importance TEXT, current_level TEXT, required_level TEXT, gap TEXT, notes TEXT, sort_order INTEGER DEFAULT 0);
     CREATE TABLE IF NOT EXISTS chat_usage (id SERIAL PRIMARY KEY, user_id INTEGER NOT NULL REFERENCES users(id), message_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
     CREATE INDEX IF NOT EXISTS chat_usage_user_time ON chat_usage(user_id, message_at);
     CREATE TABLE IF NOT EXISTS blog_posts (id SERIAL PRIMARY KEY, title TEXT NOT NULL, category TEXT, excerpt TEXT, body TEXT, emoji TEXT DEFAULT '📝', read_time INTEGER DEFAULT 4, status TEXT NOT NULL DEFAULT 'draft', author_name TEXT DEFAULT 'The Pivot Model', published_at TIMESTAMPTZ, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
@@ -263,4 +267,134 @@ export const MATURITY_TEMPLATE = [
   {factor_name:'Business Result Focused',maturity_level:2,sort_order:3},
   {factor_name:'Customer Satisfaction',maturity_level:2,sort_order:4},
   {factor_name:'High Performance Talent',maturity_level:2,sort_order:5},
+];
+
+export const TALENT_SKILLS_TEMPLATE: {section:string;category:string;skill_name:string;description:string;sort_order:number}[] = [
+  // Technical Skills
+  {section:'Technical Skills',category:'Design Patterns',skill_name:'SOLID Principles',description:'Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion',sort_order:1},
+  {section:'Technical Skills',category:'Design Patterns',skill_name:'Creational Patterns',description:'Factory, Abstract Factory, Builder, Singleton, Prototype',sort_order:2},
+  {section:'Technical Skills',category:'Design Patterns',skill_name:'Structural Patterns',description:'Adapter, Bridge, Composite, Decorator, Facade, Proxy',sort_order:3},
+  {section:'Technical Skills',category:'Design Patterns',skill_name:'Behavioral Patterns',description:'Observer, Strategy, Command, State, Template Method, Iterator',sort_order:4},
+  {section:'Technical Skills',category:'Design Patterns',skill_name:'Architectural Patterns',description:'MVC, MVVM, Microservices, Event-Driven, CQRS, Hexagonal',sort_order:5},
+  {section:'Technical Skills',category:'Coding & AI Tools',skill_name:'Clean Code Practices',description:'Readable, maintainable code with clear naming, small functions, and minimal complexity',sort_order:6},
+  {section:'Technical Skills',category:'Coding & AI Tools',skill_name:'Code Review Expertise',description:'Ability to provide constructive, thorough code reviews focusing on design, correctness, and performance',sort_order:7},
+  {section:'Technical Skills',category:'Coding & AI Tools',skill_name:'AI-Assisted Development',description:'Proficiency with AI coding tools (Copilot, ChatGPT, Claude) for code generation, refactoring, and debugging',sort_order:8},
+  {section:'Technical Skills',category:'Coding & AI Tools',skill_name:'Test-Driven Development',description:'Writing tests first, red-green-refactor cycle, unit/integration/e2e testing',sort_order:9},
+  {section:'Technical Skills',category:'Coding & AI Tools',skill_name:'Refactoring Skills',description:'Systematic code improvement without changing external behavior, eliminating code smells',sort_order:10},
+  {section:'Technical Skills',category:'System Understanding',skill_name:'System Architecture',description:'Understanding of distributed systems, scalability patterns, and system design trade-offs',sort_order:11},
+  {section:'Technical Skills',category:'System Understanding',skill_name:'Database Design',description:'Schema design, normalization, indexing strategies, query optimization (SQL and NoSQL)',sort_order:12},
+  {section:'Technical Skills',category:'System Understanding',skill_name:'API Design',description:'RESTful API design, GraphQL, gRPC, versioning, authentication, rate limiting',sort_order:13},
+  {section:'Technical Skills',category:'System Understanding',skill_name:'Cloud Infrastructure',description:'AWS/GCP/Azure services, IaC (Terraform/CloudFormation), containerization (Docker/K8s)',sort_order:14},
+  {section:'Technical Skills',category:'System Understanding',skill_name:'Security Fundamentals',description:'OWASP Top 10, authentication/authorization, encryption, vulnerability assessment',sort_order:15},
+  {section:'Technical Skills',category:'Operational Factors',skill_name:'CI/CD Pipeline Management',description:'Build, test, deploy automation; environment management; release strategies',sort_order:16},
+  {section:'Technical Skills',category:'Operational Factors',skill_name:'Monitoring & Observability',description:'Logging, metrics, tracing, alerting; tools like Datadog, Grafana, ELK',sort_order:17},
+  {section:'Technical Skills',category:'Operational Factors',skill_name:'Incident Response',description:'On-call readiness, incident triage, root cause analysis, post-mortem documentation',sort_order:18},
+  {section:'Technical Skills',category:'Operational Factors',skill_name:'Performance Optimization',description:'Profiling, load testing, caching strategies, database tuning, CDN optimization',sort_order:19},
+  {section:'Technical Skills',category:'Sizing & Deployment',skill_name:'Capacity Planning',description:'Resource estimation, load forecasting, auto-scaling configuration',sort_order:20},
+  {section:'Technical Skills',category:'Sizing & Deployment',skill_name:'Deployment Strategies',description:'Blue-green, canary, rolling deployments, feature flags, rollback procedures',sort_order:21},
+  {section:'Technical Skills',category:'Sizing & Deployment',skill_name:'Cost Optimization',description:'Cloud cost management, right-sizing, reserved instances, spot instances',sort_order:22},
+  // Product Mindset
+  {section:'Product Mindset',category:'Attitude',skill_name:'Ownership Mentality',description:'Takes end-to-end responsibility for features from ideation to production monitoring',sort_order:23},
+  {section:'Product Mindset',category:'Attitude',skill_name:'Curiosity & Learning',description:'Proactively explores new technologies, reads documentation, experiments with PoCs',sort_order:24},
+  {section:'Product Mindset',category:'Attitude',skill_name:'Bias for Action',description:'Makes progress without waiting for perfect information; ships iteratively',sort_order:25},
+  {section:'Product Mindset',category:'Attitude',skill_name:'Resilience',description:'Handles setbacks, production incidents, and changing requirements with composure',sort_order:26},
+  {section:'Product Mindset',category:'Collaboration',skill_name:'Cross-Team Communication',description:'Effectively communicates with product, design, QA, and business stakeholders',sort_order:27},
+  {section:'Product Mindset',category:'Collaboration',skill_name:'Pair Programming',description:'Productive in pair/mob programming sessions, knowledge sharing through collaboration',sort_order:28},
+  {section:'Product Mindset',category:'Collaboration',skill_name:'Mentoring Ability',description:'Guides junior team members, provides constructive feedback, fosters growth',sort_order:29},
+  {section:'Product Mindset',category:'Collaboration',skill_name:'Conflict Resolution',description:'Addresses disagreements constructively, focuses on solutions over blame',sort_order:30},
+  {section:'Product Mindset',category:'Knowledge',skill_name:'Domain Expertise',description:'Deep understanding of the business domain, user workflows, and industry regulations',sort_order:31},
+  {section:'Product Mindset',category:'Knowledge',skill_name:'Technical Documentation',description:'Creates clear architecture docs, ADRs, runbooks, and onboarding guides',sort_order:32},
+  {section:'Product Mindset',category:'Knowledge',skill_name:'Data-Driven Decisions',description:'Uses metrics, A/B tests, and user analytics to inform technical decisions',sort_order:33},
+  {section:'Product Mindset',category:'Product Lifecycle Engagement',skill_name:'Requirements Analysis',description:'Translates business requirements into technical specifications and user stories',sort_order:34},
+  {section:'Product Mindset',category:'Product Lifecycle Engagement',skill_name:'Release Planning',description:'Participates in sprint planning, story sizing, and release coordination',sort_order:35},
+  {section:'Product Mindset',category:'Product Lifecycle Engagement',skill_name:'User Empathy',description:'Considers end-user experience in technical decisions, participates in user research',sort_order:36},
+  {section:'Product Mindset',category:'Product Lifecycle Engagement',skill_name:'Feedback Loop Participation',description:'Acts on customer feedback, production metrics, and retrospective outcomes',sort_order:37},
+  // Knowledge Management
+  {section:'Knowledge Management',category:'Self-Evaluation',skill_name:'Skills Self-Assessment',description:'Regularly evaluates own technical and soft skills against career framework',sort_order:38},
+  {section:'Knowledge Management',category:'Self-Evaluation',skill_name:'Goal Setting',description:'Sets SMART goals for professional development aligned with team objectives',sort_order:39},
+  {section:'Knowledge Management',category:'Self-Evaluation',skill_name:'Strengths Identification',description:'Identifies and leverages personal strengths for team benefit',sort_order:40},
+  {section:'Knowledge Management',category:'Self-Evaluation',skill_name:'Gap Awareness',description:'Honestly identifies skill gaps and creates plans to address them',sort_order:41},
+  {section:'Knowledge Management',category:'Skill Tracking',skill_name:'Learning Plan Execution',description:'Follows through on planned learning activities (courses, certifications, reading)',sort_order:42},
+  {section:'Knowledge Management',category:'Skill Tracking',skill_name:'Certification Progress',description:'Pursues relevant industry certifications (AWS, GCP, Kubernetes, etc.)',sort_order:43},
+  {section:'Knowledge Management',category:'Skill Tracking',skill_name:'Skill Matrix Updates',description:'Keeps team skill matrix current, identifies coverage gaps',sort_order:44},
+  {section:'Knowledge Management',category:'Training & Development',skill_name:'Internal Training Contribution',description:'Conducts tech talks, workshops, or brown bag sessions for the team',sort_order:45},
+  {section:'Knowledge Management',category:'Training & Development',skill_name:'External Learning',description:'Attends conferences, meetups, webinars; brings back insights to the team',sort_order:46},
+  {section:'Knowledge Management',category:'Training & Development',skill_name:'Hands-On Practice',description:'Builds side projects, contributes to open source, participates in hackathons',sort_order:47},
+  {section:'Knowledge Management',category:'Research & Community',skill_name:'Technology Evaluation',description:'Evaluates new tools, frameworks, and platforms for potential team adoption',sort_order:48},
+  {section:'Knowledge Management',category:'Research & Community',skill_name:'Community Participation',description:'Active in developer communities, forums, or open-source projects',sort_order:49},
+  {section:'Knowledge Management',category:'Research & Community',skill_name:'Knowledge Sharing Culture',description:'Contributes to team wiki, internal blog posts, or documentation repositories',sort_order:50},
+  {section:'Knowledge Management',category:'Progress Review',skill_name:'Quarterly Skill Review',description:'Participates in regular skill assessment reviews with manager',sort_order:51},
+  {section:'Knowledge Management',category:'Progress Review',skill_name:'Career Path Alignment',description:'Aligns skill development with career progression framework',sort_order:52},
+  {section:'Knowledge Management',category:'Progress Review',skill_name:'Impact Measurement',description:'Measures how skill improvements translate to team productivity and quality',sort_order:53},
+  // AI Readiness
+  {section:'AI Readiness',category:'Phase 1 — Foundation',skill_name:'AI Tool Adoption',description:'Uses AI coding assistants (Copilot, ChatGPT) for everyday development tasks',sort_order:54},
+  {section:'AI Readiness',category:'Phase 1 — Foundation',skill_name:'Prompt Engineering Basics',description:'Crafts effective prompts for code generation, debugging, and documentation',sort_order:55},
+  {section:'AI Readiness',category:'Phase 1 — Foundation',skill_name:'AI-Generated Code Review',description:'Critically evaluates AI-generated code for correctness, security, and maintainability',sort_order:56},
+  {section:'AI Readiness',category:'Phase 1 — Foundation',skill_name:'AI for Testing',description:'Uses AI to generate test cases, identify edge cases, and improve test coverage',sort_order:57},
+  {section:'AI Readiness',category:'Phase 1 — Foundation',skill_name:'AI Documentation',description:'Leverages AI for generating and maintaining documentation, commit messages, PR descriptions',sort_order:58},
+  {section:'AI Readiness',category:'Phase 1 — Foundation',skill_name:'AI Ethics Awareness',description:'Understands bias, privacy, and security implications of AI-generated code',sort_order:59},
+  {section:'AI Readiness',category:'Phase 2 — Integration',skill_name:'AI Pipeline Integration',description:'Integrates AI into CI/CD pipelines for automated code review, security scanning',sort_order:60},
+  {section:'AI Readiness',category:'Phase 2 — Integration',skill_name:'Custom AI Workflows',description:'Builds custom AI workflows for domain-specific development tasks',sort_order:61},
+  {section:'AI Readiness',category:'Phase 2 — Integration',skill_name:'AI-Powered Analytics',description:'Uses AI for log analysis, anomaly detection, and predictive monitoring',sort_order:62},
+  {section:'AI Readiness',category:'Phase 2 — Integration',skill_name:'ML Model Integration',description:'Integrates pre-trained ML models into applications (APIs, edge deployment)',sort_order:63},
+  {section:'AI Readiness',category:'Phase 2 — Integration',skill_name:'Data Pipeline for AI',description:'Builds data pipelines to support AI/ML feature development',sort_order:64},
+  {section:'AI Readiness',category:'Phase 2 — Integration',skill_name:'AI Performance Optimization',description:'Optimizes AI model inference time, resource usage, and cost',sort_order:65},
+  {section:'AI Readiness',category:'Phase 3 — Leadership',skill_name:'AI Strategy Development',description:'Contributes to organizational AI adoption strategy and roadmap',sort_order:66},
+  {section:'AI Readiness',category:'Phase 3 — Leadership',skill_name:'AI Product Innovation',description:'Identifies opportunities to build AI-native product features',sort_order:67},
+  {section:'AI Readiness',category:'Phase 3 — Leadership',skill_name:'AI Team Enablement',description:'Trains and mentors team members on AI tools and best practices',sort_order:68},
+  {section:'AI Readiness',category:'Phase 3 — Leadership',skill_name:'AI Governance',description:'Establishes guidelines for responsible AI use in development workflows',sort_order:69},
+  {section:'AI Readiness',category:'Phase 3 — Leadership',skill_name:'AI ROI Measurement',description:'Measures and reports on productivity gains from AI tool adoption',sort_order:70},
+];
+
+export const SKILLSET_CONTEXT_TEMPLATE: {field_name:string;field_value:string;field_group:string;sort_order:number}[] = [
+  {field_name:'Product Name',field_value:'',field_group:'basics',sort_order:1},
+  {field_name:'Industry / Domain',field_value:'',field_group:'basics',sort_order:2},
+  {field_name:'Product Stage',field_value:'Growth',field_group:'basics',sort_order:3},
+  {field_name:'Team Size',field_value:'',field_group:'basics',sort_order:4},
+  {field_name:'Primary Tech Stack',field_value:'',field_group:'technical',sort_order:5},
+  {field_name:'Deployment Model',field_value:'Cloud',field_group:'technical',sort_order:6},
+  {field_name:'Architecture Style',field_value:'Microservices',field_group:'technical',sort_order:7},
+  {field_name:'Compliance Requirements',field_value:'',field_group:'technical',sort_order:8},
+  {field_name:'AI/ML Integration Level',field_value:'Phase 1',field_group:'technical',sort_order:9},
+  {field_name:'Customer Base',field_value:'',field_group:'business',sort_order:10},
+  {field_name:'Release Cadence',field_value:'Bi-weekly',field_group:'business',sort_order:11},
+  {field_name:'Offshore Percentage',field_value:'',field_group:'business',sort_order:12},
+];
+
+export const SKILLSET_ITEMS_TEMPLATE: {section:string;category:string;item_name:string;description:string;importance:string;required_level:string;sort_order:number}[] = [
+  // Core Engineering Skills
+  {section:'Core Engineering',category:'Languages & Frameworks',item_name:'Primary Language Proficiency',description:'Deep expertise in the primary programming language used by the team',importance:'Critical',required_level:'Advanced',sort_order:1},
+  {section:'Core Engineering',category:'Languages & Frameworks',item_name:'Framework Mastery',description:'Proficiency in primary web/mobile/backend frameworks (React, Spring, Django, etc.)',importance:'Critical',required_level:'Advanced',sort_order:2},
+  {section:'Core Engineering',category:'Languages & Frameworks',item_name:'Secondary Language',description:'Working knowledge of a secondary language for specific use cases',importance:'Important',required_level:'Intermediate',sort_order:3},
+  {section:'Core Engineering',category:'Data & Storage',item_name:'Relational Databases',description:'SQL, schema design, query optimization, migrations, replication',importance:'Critical',required_level:'Advanced',sort_order:4},
+  {section:'Core Engineering',category:'Data & Storage',item_name:'NoSQL Databases',description:'Document stores, key-value stores, graph databases — when and how to use each',importance:'Important',required_level:'Intermediate',sort_order:5},
+  {section:'Core Engineering',category:'Data & Storage',item_name:'Caching Strategies',description:'Redis, Memcached, CDN caching, application-level caching patterns',importance:'Important',required_level:'Intermediate',sort_order:6},
+  {section:'Core Engineering',category:'Infrastructure',item_name:'Cloud Platform',description:'Core cloud services (compute, storage, networking, IAM) on primary cloud provider',importance:'Critical',required_level:'Advanced',sort_order:7},
+  {section:'Core Engineering',category:'Infrastructure',item_name:'Containerization',description:'Docker, Kubernetes, container orchestration, service mesh',importance:'Critical',required_level:'Intermediate',sort_order:8},
+  {section:'Core Engineering',category:'Infrastructure',item_name:'CI/CD',description:'Pipeline design, automated testing, deployment automation, environment management',importance:'Critical',required_level:'Advanced',sort_order:9},
+  // Architecture & Design
+  {section:'Architecture & Design',category:'System Design',item_name:'Distributed Systems',description:'CAP theorem, consensus, eventual consistency, partitioning strategies',importance:'Critical',required_level:'Advanced',sort_order:10},
+  {section:'Architecture & Design',category:'System Design',item_name:'API Design & Integration',description:'REST, GraphQL, gRPC, API gateways, versioning, backward compatibility',importance:'Critical',required_level:'Advanced',sort_order:11},
+  {section:'Architecture & Design',category:'System Design',item_name:'Event-Driven Architecture',description:'Message queues, event sourcing, CQRS, pub/sub patterns',importance:'Important',required_level:'Intermediate',sort_order:12},
+  {section:'Architecture & Design',category:'Security',item_name:'Application Security',description:'OWASP Top 10, secure coding practices, authentication/authorization patterns',importance:'Critical',required_level:'Advanced',sort_order:13},
+  {section:'Architecture & Design',category:'Security',item_name:'Data Protection',description:'Encryption at rest/in transit, PII handling, data classification, access controls',importance:'Critical',required_level:'Intermediate',sort_order:14},
+  {section:'Architecture & Design',category:'Reliability',item_name:'High Availability Design',description:'Redundancy, failover, load balancing, disaster recovery planning',importance:'Critical',required_level:'Intermediate',sort_order:15},
+  {section:'Architecture & Design',category:'Reliability',item_name:'Performance Engineering',description:'Load testing, profiling, optimization techniques, SLO/SLA definition',importance:'Important',required_level:'Intermediate',sort_order:16},
+  // Quality & Testing
+  {section:'Quality & Testing',category:'Testing Strategy',item_name:'Unit Testing',description:'Test isolation, mocking, assertion patterns, coverage targets',importance:'Critical',required_level:'Advanced',sort_order:17},
+  {section:'Quality & Testing',category:'Testing Strategy',item_name:'Integration Testing',description:'API testing, database testing, contract testing between services',importance:'Critical',required_level:'Intermediate',sort_order:18},
+  {section:'Quality & Testing',category:'Testing Strategy',item_name:'E2E & Performance Testing',description:'End-to-end test automation, load testing, stress testing, chaos engineering',importance:'Important',required_level:'Intermediate',sort_order:19},
+  {section:'Quality & Testing',category:'Quality Practices',item_name:'Code Review Standards',description:'Review checklists, constructive feedback, architectural review process',importance:'Critical',required_level:'Advanced',sort_order:20},
+  {section:'Quality & Testing',category:'Quality Practices',item_name:'Technical Debt Management',description:'Identification, tracking, prioritization, and systematic reduction of tech debt',importance:'Important',required_level:'Intermediate',sort_order:21},
+  // Team & Process
+  {section:'Team & Process',category:'Agile Practices',item_name:'Sprint Execution',description:'Story writing, estimation, sprint planning, retrospectives, velocity tracking',importance:'Critical',required_level:'Advanced',sort_order:22},
+  {section:'Team & Process',category:'Agile Practices',item_name:'Cross-Functional Collaboration',description:'Working effectively with product, design, QA, and DevOps teams',importance:'Critical',required_level:'Advanced',sort_order:23},
+  {section:'Team & Process',category:'Talent Development',item_name:'Hiring & Interviewing',description:'Technical interview design, candidate evaluation, hiring bar calibration',importance:'Important',required_level:'Intermediate',sort_order:24},
+  {section:'Team & Process',category:'Talent Development',item_name:'Onboarding & Mentoring',description:'New hire ramp-up programs, buddy systems, structured mentoring',importance:'Important',required_level:'Intermediate',sort_order:25},
+  {section:'Team & Process',category:'Talent Development',item_name:'Career Framework',description:'Engineering ladder definition, promotion criteria, growth planning',importance:'Important',required_level:'Intermediate',sort_order:26},
+  // AI & Innovation
+  {section:'AI & Innovation',category:'AI Adoption',item_name:'AI-Assisted Development',description:'Team-wide adoption of AI coding tools with productivity measurement',importance:'Critical',required_level:'Intermediate',sort_order:27},
+  {section:'AI & Innovation',category:'AI Adoption',item_name:'AI/ML Feature Development',description:'Ability to build and integrate AI-powered product features',importance:'Important',required_level:'Basic',sort_order:28},
+  {section:'AI & Innovation',category:'Innovation',item_name:'Technology Radar',description:'Systematic evaluation and adoption of emerging technologies',importance:'Important',required_level:'Intermediate',sort_order:29},
+  {section:'AI & Innovation',category:'Innovation',item_name:'Experimentation Culture',description:'PoC development, A/B testing, innovation sprints, hackathons',importance:'Important',required_level:'Intermediate',sort_order:30},
 ];

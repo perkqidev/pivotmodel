@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Nav from '@/components/Nav';
 
-type Tab = 'emb'|'drivers'|'benchmarks'|'scope'|'summary'|'maturity'|'kra'|'leadership';
+type Tab = 'emb'|'drivers'|'benchmarks'|'scope'|'summary'|'maturity'|'kra'|'leadership'|'talent'|'skillset';
 
 const TABS: { id: Tab; label: string; num: number }[] = [
   { id:'emb', label:'1. Maturity', num:1 },
@@ -14,6 +14,8 @@ const TABS: { id: Tab; label: string; num: number }[] = [
   { id:'maturity', label:'6. Competency Maturity', num:6 },
   { id:'kra', label:'7. Roles & KRA', num:7 },
   { id:'leadership', label:'8. Leadership', num:8 },
+  { id:'talent', label:'9. Talent Map', num:9 },
+  { id:'skillset', label:'10. Skillset', num:10 },
 ];
 
 const LEVEL_LABELS: Record<string,string> = { L1:'◆ L1', L2:'⚙ L2', L3:'🚀 L3' };
@@ -104,6 +106,8 @@ export default function AssessmentPage() {
           {tab === 'maturity' && <MaturityModule id={id} save={save} />}
           {tab === 'kra' && <KRAModule id={id} save={save} />}
           {tab === 'leadership' && <LeadershipModule id={id} save={save} />}
+          {tab === 'talent' && <TalentMapModule id={id} />}
+          {tab === 'skillset' && <SkillsetModule id={id} />}
         </div>
       </div>
     </>
@@ -566,6 +570,437 @@ function LeadershipModule({ id, save }: { id:string; save:(e:string,r:unknown[])
         );
       })}
       {leaders.length===0&&<div style={{textAlign:'center',color:'var(--muted)',padding:48,fontSize:14}}>Add leaders using the form above. Each leader gets all 33 leadership skills to rate.</div>}
+    </div>
+  );
+}
+
+// ── Module 9: Engineering Talent Map ──────────────────────────────────────────
+type TalentSubTab = 'profile'|'technical'|'mindset'|'knowledge'|'ai'|'tracker';
+function TalentMapModule({ id }: { id:string }) {
+  const [engineers, setEngineers] = useState<any[]>([]);
+  const [selectedEng, setSelectedEng] = useState<number|null>(null);
+  const [subTab, setSubTab] = useState<TalentSubTab>('profile');
+  const [newName, setNewName] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [saveMsg, setSaveMsg] = useState('');
+  const [expanded, setExpanded] = useState<Set<number>>(new Set());
+
+  useEffect(() => {
+    fetch(`/api/assessments/${id}/talent`).then(r=>r.json()).then(d=>{
+      setEngineers(d.engineers||[]);
+      if (d.engineers?.length && !selectedEng) setSelectedEng(d.engineers[0].id);
+    });
+  }, [id]);
+
+  const eng = engineers.find(e => e.id === selectedEng);
+
+  async function addEngineer() {
+    if (!newName.trim()) return;
+    const res = await fetch(`/api/assessments/${id}/talent`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:newName})});
+    const d = await res.json();
+    if (d.id) {
+      // Refetch to get skills
+      const r2 = await fetch(`/api/assessments/${id}/talent`).then(r=>r.json());
+      setEngineers(r2.engineers||[]);
+      setSelectedEng(d.id);
+      setNewName('');
+    }
+  }
+
+  async function deleteEngineer(engId: number) {
+    await fetch(`/api/assessments/${id}/talent`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({engineer_id:engId})});
+    setEngineers(prev => prev.filter(e => e.id !== engId));
+    if (selectedEng === engId) setSelectedEng(engineers.find(e => e.id !== engId)?.id || null);
+  }
+
+  function updateEng(field: string, val: string) {
+    setEngineers(prev => prev.map(e => e.id===selectedEng ? {...e,[field]:val} : e));
+  }
+
+  function updateSkill(skillId: number, field: string, val: string|number) {
+    setEngineers(prev => prev.map(e => e.id===selectedEng ? {...e, skills: e.skills.map((s:any) => s.id===skillId ? {...s,[field]:val} : s)} : e));
+  }
+
+  // Auto-save with debounce
+  useEffect(() => {
+    if (!eng) return;
+    const t = setTimeout(async () => {
+      setSaving(true);
+      await fetch(`/api/assessments/${id}/talent`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({engineer:eng,skills:eng.skills})});
+      setSaving(false); setSaveMsg('Saved'); setTimeout(()=>setSaveMsg(''),2000);
+    }, 1500);
+    return () => clearTimeout(t);
+  }, [eng]);
+
+  function toggleDetail(rowId: number) { setExpanded(prev => { const n = new Set(prev); n.has(rowId) ? n.delete(rowId) : n.add(rowId); return n; }); }
+
+  const SECTIONS_MAP: Record<TalentSubTab, string> = { profile:'', technical:'Technical Skills', mindset:'Product Mindset', knowledge:'Knowledge Management', ai:'AI Readiness', tracker:'' };
+  const SUB_TABS: {id:TalentSubTab;label:string}[] = [
+    {id:'profile',label:'Profile'},{id:'technical',label:'Technical Skills'},{id:'mindset',label:'Product Mindset'},
+    {id:'knowledge',label:'Knowledge Mgmt'},{id:'ai',label:'AI Readiness'},{id:'tracker',label:'Team Tracker'},
+  ];
+
+  const SCORE_CLR = (s:number) => s>=8?'#22c55e':s>=5?'#f59e0b':s>=1?'#ef4444':'var(--muted)';
+
+  return (
+    <div>
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24}}>
+        <div><h2 style={{color:'var(--fg)',margin:0}}>Engineering Talent Map</h2><p style={{color:'var(--muted)',fontSize:13,margin:'4px 0 0'}}>Profile, skills, mindset, knowledge, and AI readiness per engineer.</p></div>
+        <div style={{display:'flex',gap:8,alignItems:'center'}}>
+          {saving && <span style={{color:'var(--muted)',fontSize:12}}>Saving…</span>}
+          {saveMsg && <span style={{color:'#22c55e',fontSize:12}}>{saveMsg}</span>}
+          <input value={newName} onChange={e=>setNewName(e.target.value)} placeholder="Engineer name" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'8px 12px',color:'var(--fg)',fontSize:13,outline:'none',width:160}} />
+          <button onClick={addEngineer} style={{background:'var(--gold)',border:'none',borderRadius:8,padding:'8px 16px',color:'#000',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Engineer</button>
+        </div>
+      </div>
+
+      {/* Engineer selector tabs */}
+      {engineers.length > 0 && (
+        <div style={{display:'flex',gap:4,marginBottom:16,flexWrap:'wrap',alignItems:'center'}}>
+          {engineers.map(e => (
+            <div key={e.id} style={{display:'flex',alignItems:'center',gap:0}}>
+              <button onClick={()=>setSelectedEng(e.id)} style={{background:selectedEng===e.id?'var(--gold)':'var(--card)',border:'1px solid var(--border)',borderRadius:'8px 0 0 8px',padding:'8px 14px',color:selectedEng===e.id?'#000':'var(--fg)',fontSize:13,fontWeight:selectedEng===e.id?700:400,cursor:'pointer'}}>{e.name}</button>
+              <button onClick={()=>deleteEngineer(e.id)} style={{background:selectedEng===e.id?'var(--gold)':'var(--card)',border:'1px solid var(--border)',borderLeft:'none',borderRadius:'0 8px 8px 0',padding:'8px 8px',color:'#ef4444',cursor:'pointer',fontSize:12}}>✕</button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {eng && (
+        <>
+          {/* Sub-tabs */}
+          <div style={{display:'flex',gap:2,marginBottom:20,background:'var(--surface)',borderRadius:8,overflow:'hidden',border:'1px solid var(--border)'}}>
+            {SUB_TABS.map(st => (
+              <button key={st.id} onClick={()=>setSubTab(st.id)} style={{flex:1,padding:'10px 8px',background:'none',border:'none',borderBottom:`3px solid ${subTab===st.id?'var(--gold)':'transparent'}`,color:subTab===st.id?'var(--gold)':'var(--muted)',fontSize:12,fontWeight:subTab===st.id?700:400,cursor:'pointer',whiteSpace:'nowrap'}}>
+                {st.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Profile sub-tab */}
+          {subTab === 'profile' && (
+            <div style={{background:'var(--surface)',borderRadius:12,border:'1px solid var(--border)',padding:24}}>
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16}}>
+                {([
+                  ['name','Name'],['employee_id','Employee ID'],['team','Team'],['reports_to','Reports To'],
+                  ['job_title','Job Title'],['level','Level'],['specialisation','Specialisation'],['employment','Employment Type'],
+                  ['product_name','Product'],['industry','Industry'],['ai_phase','AI Phase'],['primary_stack','Primary Stack'],
+                ] as [string,string][]).map(([field,label]) => (
+                  <div key={field}>
+                    <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,marginBottom:4}}>{label}</div>
+                    {field==='level' ? (
+                      <select value={eng[field]||'Mid'} onChange={e=>updateEng(field,e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:13,outline:'none',width:'100%'}}>
+                        {['Junior','Mid','Senior','Staff','Principal','Lead','Manager'].map(l=><option key={l}>{l}</option>)}
+                      </select>
+                    ) : field==='employment' ? (
+                      <select value={eng[field]||'Full-time'} onChange={e=>updateEng(field,e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:13,outline:'none',width:'100%'}}>
+                        {['Full-time','Part-time','Contract','Intern'].map(l=><option key={l}>{l}</option>)}
+                      </select>
+                    ) : field==='ai_phase' ? (
+                      <select value={eng[field]||'Phase 1'} onChange={e=>updateEng(field,e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:13,outline:'none',width:'100%'}}>
+                        {['Phase 1','Phase 2','Phase 3'].map(l=><option key={l}>{l}</option>)}
+                      </select>
+                    ) : (
+                      <input value={eng[field]||''} onChange={e=>updateEng(field,e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:13,outline:'none',width:'100%'}} />
+                    )}
+                  </div>
+                ))}
+              </div>
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16,marginTop:16}}>
+                {([['key_strengths','Key Strengths'],['development_focus','Development Focus'],['training_recommendation','Training Recommendation'],['career_goal','Career Goal'],['manager_notes','Manager Notes']] as [string,string][]).map(([field,label]) => (
+                  <div key={field}>
+                    <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,marginBottom:4}}>{label}</div>
+                    <textarea value={eng[field]||''} onChange={e=>updateEng(field,e.target.value)} rows={3} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:13,resize:'vertical',width:'100%',outline:'none'}} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Skill assessment sub-tabs (technical, mindset, knowledge, ai) */}
+          {['technical','mindset','knowledge','ai'].includes(subTab) && (
+            <div>
+              {(() => {
+                const section = SECTIONS_MAP[subTab];
+                const sectionSkills = (eng.skills || []).filter((s:any) => s.section === section);
+                const categories = [...new Set(sectionSkills.map((s:any) => s.category))] as string[];
+                return categories.map((cat) => (
+                  <div key={cat} style={{marginBottom:20}}>
+                    <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(201,168,76,0.08)',borderRadius:'8px 8px 0 0',textTransform:'uppercase',letterSpacing:'0.05em'}}>{cat}</div>
+                    <div style={{background:'var(--surface)',borderRadius:'0 0 12px 12px',overflow:'hidden',border:'1px solid var(--border)'}}>
+                      <div style={{display:'grid',gridTemplateColumns:'2fr 80px 80px 80px 1fr 40px',gap:0,background:'var(--card)',padding:'8px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
+                        <div>Skill</div><div>Self</div><div>Manager</div><div>Target</div><div>Notes</div><div></div>
+                      </div>
+                      {sectionSkills.filter((s:any)=>s.category===cat).map((skill:any,i:number)=>(
+                        <div key={skill.id}>
+                          <div style={{display:'grid',gridTemplateColumns:'2fr 80px 80px 80px 1fr 40px',gap:0,padding:'8px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'center'}}>
+                            <div style={{display:'flex',alignItems:'center',gap:6}}>
+                              {skill.description && <button onClick={()=>toggleDetail(skill.id)} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:10,padding:0}}>{expanded.has(skill.id)?'▼':'▶'}</button>}
+                              <span style={{color:'var(--fg)',fontSize:13}}>{skill.skill_name}</span>
+                            </div>
+                            <div style={{display:'flex',alignItems:'center',gap:4}}>
+                              <input type="number" min={0} max={10} value={skill.self_score} onChange={e=>updateSkill(skill.id,'self_score',parseInt(e.target.value)||0)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 6px',color:SCORE_CLR(skill.self_score),fontWeight:700,fontSize:13,outline:'none',width:44,textAlign:'center'}} />
+                            </div>
+                            <div style={{display:'flex',alignItems:'center',gap:4}}>
+                              <input type="number" min={0} max={10} value={skill.manager_score} onChange={e=>updateSkill(skill.id,'manager_score',parseInt(e.target.value)||0)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 6px',color:SCORE_CLR(skill.manager_score),fontWeight:700,fontSize:13,outline:'none',width:44,textAlign:'center'}} />
+                            </div>
+                            <div style={{display:'flex',alignItems:'center',gap:4}}>
+                              <input type="number" min={0} max={10} value={skill.target_score} onChange={e=>updateSkill(skill.id,'target_score',parseInt(e.target.value)||0)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 6px',color:'var(--muted)',fontWeight:700,fontSize:13,outline:'none',width:44,textAlign:'center'}} />
+                            </div>
+                            <input value={skill.notes||''} onChange={e=>updateSkill(skill.id,'notes',e.target.value)} placeholder="Notes…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
+                            <div style={{textAlign:'center',color:skill.target_score > 0 && skill.manager_score < skill.target_score ? '#ef4444' : '#22c55e',fontSize:12,fontWeight:700}}>
+                              {skill.target_score > 0 ? (skill.manager_score >= skill.target_score ? '✓' : `-${skill.target_score - skill.manager_score}`) : '–'}
+                            </div>
+                          </div>
+                          {expanded.has(skill.id) && skill.description && (
+                            <div style={{padding:'4px 16px 8px 40px',fontSize:12,color:'var(--muted)',lineHeight:1.5,borderTop:'1px dashed var(--border)',background:'rgba(201,168,76,0.03)'}}>
+                              {skill.description}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ));
+              })()}
+            </div>
+          )}
+
+          {/* Team Tracker sub-tab */}
+          {subTab === 'tracker' && (
+            <div style={{background:'var(--surface)',borderRadius:12,border:'1px solid var(--border)',overflow:'hidden'}}>
+              <div style={{display:'grid',gridTemplateColumns:'1.5fr 1fr repeat(4,100px) 120px',gap:0,background:'var(--card)',padding:'10px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
+                <div>Engineer</div><div>Level</div><div>Technical</div><div>Mindset</div><div>Knowledge</div><div>AI Ready</div><div>Overall</div>
+              </div>
+              {engineers.map((e,i) => {
+                const getAvg = (section:string) => {
+                  const sk = (e.skills||[]).filter((s:any)=>s.section===section);
+                  if (!sk.length) return 0;
+                  return sk.reduce((a:number,s:any)=>a+s.manager_score,0)/sk.length;
+                };
+                const techAvg = getAvg('Technical Skills');
+                const mindAvg = getAvg('Product Mindset');
+                const knowAvg = getAvg('Knowledge Management');
+                const aiAvg = getAvg('AI Readiness');
+                const overall = (techAvg+mindAvg+knowAvg+aiAvg)/4;
+                return (
+                  <div key={e.id} style={{display:'grid',gridTemplateColumns:'1.5fr 1fr repeat(4,100px) 120px',gap:0,padding:'10px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'center'}}>
+                    <div style={{color:'var(--fg)',fontSize:13,fontWeight:500}}>{e.name}</div>
+                    <div style={{color:'var(--muted)',fontSize:12}}>{e.level||'–'}</div>
+                    <div style={{color:SCORE_CLR(techAvg),fontWeight:700,fontSize:13}}>{techAvg.toFixed(1)}</div>
+                    <div style={{color:SCORE_CLR(mindAvg),fontWeight:700,fontSize:13}}>{mindAvg.toFixed(1)}</div>
+                    <div style={{color:SCORE_CLR(knowAvg),fontWeight:700,fontSize:13}}>{knowAvg.toFixed(1)}</div>
+                    <div style={{color:SCORE_CLR(aiAvg),fontWeight:700,fontSize:13}}>{aiAvg.toFixed(1)}</div>
+                    <div style={{display:'flex',alignItems:'center',gap:8}}>
+                      <div style={{flex:1,background:'var(--card)',borderRadius:4,height:8,overflow:'hidden'}}>
+                        <div style={{width:`${(overall/10)*100}%`,height:'100%',background:SCORE_CLR(overall),borderRadius:4,transition:'width 0.5s'}}></div>
+                      </div>
+                      <span style={{color:SCORE_CLR(overall),fontWeight:700,fontSize:13,minWidth:28}}>{overall.toFixed(1)}</span>
+                    </div>
+                  </div>
+                );
+              })}
+              {engineers.length===0 && <div style={{padding:32,textAlign:'center',color:'var(--muted)',fontSize:13}}>No engineers added yet.</div>}
+            </div>
+          )}
+        </>
+      )}
+      {engineers.length===0 && <div style={{textAlign:'center',color:'var(--muted)',padding:48,fontSize:14}}>Add engineers using the form above. Each engineer gets a full talent assessment.</div>}
+    </div>
+  );
+}
+
+// ── Module 10: Technical Skillset Requirements ─────────────────────────────────
+function SkillsetModule({ id }: { id:string }) {
+  const [context, setContext] = useState<any[]>([]);
+  const [items, setItems] = useState<any[]>([]);
+  const [saving, setSaving] = useState(false);
+  const [saveMsg, setSaveMsg] = useState('');
+  const [expanded, setExpanded] = useState<Set<number>>(new Set());
+
+  useEffect(() => {
+    fetch(`/api/assessments/${id}/skillset`).then(r=>r.json()).then(d=>{
+      setContext(d.context||[]);
+      setItems(d.items||[]);
+    });
+  }, [id]);
+
+  function updateCtx(rowId: number, val: string) { setContext(prev=>prev.map(c=>c.id===rowId?{...c,field_value:val}:c)); }
+  function updateItem(rowId: number, field: string, val: string) { setItems(prev=>prev.map(i=>i.id===rowId?{...i,[field]:val}:i)); }
+
+  // Auto-save
+  useEffect(() => {
+    if (!context.length && !items.length) return;
+    const t = setTimeout(async () => {
+      setSaving(true);
+      await fetch(`/api/assessments/${id}/skillset`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({context,items})});
+      setSaving(false); setSaveMsg('Saved'); setTimeout(()=>setSaveMsg(''),2000);
+    }, 1500);
+    return () => clearTimeout(t);
+  }, [context, items]);
+
+  async function addItem(section:string, category:string) {
+    const res=await fetch(`/api/assessments/${id}/skillset`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'item',section,category})});
+    const d=await res.json();
+    if(d.id) setItems(prev=>[...prev,{id:d.id,section,category,item_name:'New Skill',description:'',importance:'Important',current_level:'',required_level:'Intermediate',gap:'',notes:''}]);
+  }
+  async function deleteItem(rowId:number) {
+    await fetch(`/api/assessments/${id}/skillset`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'item',row_id:rowId})});
+    setItems(prev=>prev.filter(i=>i.id!==rowId));
+  }
+
+  function toggleDetail(rowId: number) { setExpanded(prev => { const n = new Set(prev); n.has(rowId) ? n.delete(rowId) : n.add(rowId); return n; }); }
+
+  const IMPORTANCE_CLR: Record<string,string> = {'Critical':'#ef4444','Important':'#f59e0b','Nice-to-Have':'#6b7280'};
+  const LEVEL_CLR: Record<string,string> = {'Advanced':'#22c55e','Intermediate':'#f59e0b','Basic':'#ef4444','':'var(--muted)'};
+  const sections = [...new Set(items.map(i=>i.section))];
+  const groups = [...new Set(context.map(c=>c.field_group))];
+
+  return (
+    <div>
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24}}>
+        <div><h2 style={{color:'var(--fg)',margin:0}}>Technical Skillset Requirements</h2><p style={{color:'var(--muted)',fontSize:13,margin:'4px 0 0'}}>Product context, skill matrix, and gap analysis.</p></div>
+        <div style={{display:'flex',gap:8,alignItems:'center'}}>
+          {saving && <span style={{color:'var(--muted)',fontSize:12}}>Saving…</span>}
+          {saveMsg && <span style={{color:'#22c55e',fontSize:12}}>{saveMsg}</span>}
+        </div>
+      </div>
+
+      {/* Product Context */}
+      <div style={{marginBottom:28}}>
+        <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em'}}>Product Context</div>
+        {groups.map(group => (
+          <div key={group} style={{marginBottom:12}}>
+            <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(201,168,76,0.08)',borderRadius:'8px 8px 0 0',textTransform:'capitalize'}}>{group}</div>
+            <div style={{background:'var(--surface)',borderRadius:'0 0 12px 12px',border:'1px solid var(--border)',padding:16}}>
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
+                {context.filter(c=>c.field_group===group).map(c => (
+                  <div key={c.id}>
+                    <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,marginBottom:4}}>{c.field_name}</div>
+                    <input value={c.field_value||''} onChange={e=>updateCtx(c.id,e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:13,outline:'none',width:'100%'}} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Skill Requirements */}
+      {sections.map(section => {
+        const sectionItems = items.filter(i=>i.section===section);
+        const cats = [...new Set(sectionItems.map(i=>i.category||''))];
+        return (
+          <div key={section} style={{marginBottom:28}}>
+            <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em'}}>{section}</div>
+            {cats.map(cat => (
+              <div key={cat} style={{marginBottom:16}}>
+                {cat && <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(201,168,76,0.08)',borderRadius:'8px 8px 0 0',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                  <span>{cat}</span>
+                  <button onClick={()=>addItem(section,cat)} style={{background:'var(--gold)',border:'none',borderRadius:6,padding:'3px 10px',color:'#000',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Skill</button>
+                </div>}
+                <div style={{background:'var(--surface)',borderRadius:cat?'0 0 12px 12px':'12px',overflow:'hidden',border:'1px solid var(--border)'}}>
+                  <div style={{display:'grid',gridTemplateColumns:'2fr 100px 100px 100px 80px 1fr 40px',gap:0,background:'var(--card)',padding:'8px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
+                    <div>Skill</div><div>Importance</div><div>Required</div><div>Current</div><div>Gap</div><div>Notes</div><div></div>
+                  </div>
+                  {sectionItems.filter(i=>(i.category||'')===cat).map((item,i)=>(
+                    <div key={item.id}>
+                      <div style={{display:'grid',gridTemplateColumns:'2fr 100px 100px 100px 80px 1fr 40px',gap:0,padding:'8px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'center'}}>
+                        <div style={{display:'flex',alignItems:'center',gap:6}}>
+                          {item.description && <button onClick={()=>toggleDetail(item.id)} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:10,padding:0}}>{expanded.has(item.id)?'▼':'▶'}</button>}
+                          <input value={item.item_name} onChange={e=>updateItem(item.id,'item_name',e.target.value)} style={{background:'transparent',border:'none',color:'var(--fg)',fontSize:13,outline:'none',width:'100%'}} />
+                        </div>
+                        <select value={item.importance||'Important'} onChange={e=>updateItem(item.id,'importance',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 6px',color:IMPORTANCE_CLR[item.importance]||'var(--fg)',fontWeight:600,fontSize:11,cursor:'pointer',outline:'none'}}>
+                          {['Critical','Important','Nice-to-Have'].map(v=><option key={v}>{v}</option>)}
+                        </select>
+                        <select value={item.required_level||''} onChange={e=>updateItem(item.id,'required_level',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 6px',color:LEVEL_CLR[item.required_level]||'var(--fg)',fontWeight:600,fontSize:11,cursor:'pointer',outline:'none'}}>
+                          {['Basic','Intermediate','Advanced'].map(v=><option key={v}>{v}</option>)}
+                        </select>
+                        <select value={item.current_level||''} onChange={e=>updateItem(item.id,'current_level',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 6px',color:LEVEL_CLR[item.current_level]||'var(--fg)',fontWeight:600,fontSize:11,cursor:'pointer',outline:'none'}}>
+                          <option value="">–</option>
+                          {['Basic','Intermediate','Advanced'].map(v=><option key={v}>{v}</option>)}
+                        </select>
+                        <div style={{fontWeight:700,fontSize:12,color:item.current_level&&item.required_level?(item.current_level===item.required_level||(['Advanced'].includes(item.current_level)&&['Basic','Intermediate'].includes(item.required_level))||(['Intermediate','Advanced'].includes(item.current_level)&&item.required_level==='Basic')?'#22c55e':'#ef4444'):'var(--muted)'}}>
+                          {item.current_level ? (item.current_level===item.required_level||(['Advanced'].includes(item.current_level)&&['Basic','Intermediate'].includes(item.required_level))||(['Intermediate','Advanced'].includes(item.current_level)&&item.required_level==='Basic') ? '✓' : 'GAP') : '–'}
+                        </div>
+                        <input value={item.notes||''} onChange={e=>updateItem(item.id,'notes',e.target.value)} placeholder="Notes…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
+                        <button onClick={()=>deleteItem(item.id)} style={{background:'none',border:'none',color:'#ef4444',cursor:'pointer',fontSize:16,padding:4}}>✕</button>
+                      </div>
+                      {expanded.has(item.id) && item.description && (
+                        <div style={{padding:'4px 16px 8px 40px',fontSize:12,color:'var(--muted)',lineHeight:1.5,borderTop:'1px dashed var(--border)',background:'rgba(201,168,76,0.03)'}}>
+                          {item.description}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        );
+      })}
+
+      {/* Gap Analysis Summary */}
+      {items.length > 0 && (
+        <div style={{marginBottom:28}}>
+          <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em'}}>Gap Analysis Summary</div>
+          <div style={{background:'var(--surface)',borderRadius:12,border:'1px solid var(--border)',padding:24}}>
+            <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:16}}>
+              {(() => {
+                const total = items.length;
+                const assessed = items.filter(i=>i.current_level).length;
+                const gaps = items.filter(i => {
+                  if (!i.current_level || !i.required_level) return false;
+                  const levels = ['Basic','Intermediate','Advanced'];
+                  return levels.indexOf(i.current_level) < levels.indexOf(i.required_level);
+                }).length;
+                const met = items.filter(i => {
+                  if (!i.current_level || !i.required_level) return false;
+                  const levels = ['Basic','Intermediate','Advanced'];
+                  return levels.indexOf(i.current_level) >= levels.indexOf(i.required_level);
+                }).length;
+                return (
+                  <>
+                    <div style={{textAlign:'center'}}>
+                      <div style={{fontSize:36,fontWeight:700,color:'var(--fg)'}}>{total}</div>
+                      <div style={{fontSize:12,color:'var(--muted)'}}>Total Skills</div>
+                    </div>
+                    <div style={{textAlign:'center'}}>
+                      <div style={{fontSize:36,fontWeight:700,color:'#22c55e'}}>{met}</div>
+                      <div style={{fontSize:12,color:'var(--muted)'}}>Requirements Met</div>
+                    </div>
+                    <div style={{textAlign:'center'}}>
+                      <div style={{fontSize:36,fontWeight:700,color:'#ef4444'}}>{gaps}</div>
+                      <div style={{fontSize:12,color:'var(--muted)'}}>Gaps Identified</div>
+                    </div>
+                  </>
+                );
+              })()}
+            </div>
+            {/* Critical gaps list */}
+            {(() => {
+              const criticalGaps = items.filter(i => {
+                if (!i.current_level || !i.required_level || i.importance !== 'Critical') return false;
+                const levels = ['Basic','Intermediate','Advanced'];
+                return levels.indexOf(i.current_level) < levels.indexOf(i.required_level);
+              });
+              if (!criticalGaps.length) return null;
+              return (
+                <div style={{marginTop:16,padding:16,background:'rgba(239,68,68,0.08)',borderRadius:8,border:'1px solid rgba(239,68,68,0.2)'}}>
+                  <div style={{fontSize:12,fontWeight:700,color:'#ef4444',marginBottom:8,textTransform:'uppercase'}}>Critical Gaps</div>
+                  {criticalGaps.map(g => (
+                    <div key={g.id} style={{fontSize:13,color:'var(--fg)',marginBottom:4}}>
+                      <strong>{g.item_name}</strong> <span style={{color:'var(--muted)'}}>({g.section} / {g.category})</span> — Current: {g.current_level}, Required: {g.required_level}
+                    </div>
+                  ))}
+                </div>
+              );
+            })()}
+          </div>
+        </div>
+      )}
+
+      {items.length===0 && context.length===0 && <div style={{padding:32,textAlign:'center',color:'var(--muted)',fontSize:13}}>No skillset data yet. Create a new assessment to get pre-populated templates.</div>}
     </div>
   );
 }

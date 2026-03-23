@@ -46,6 +46,29 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   const leaderData = leadership.map(r => ({ Leader: r.leader_name, Role: r.leader_role||'', Category: r.skill_category||'', Skill: r.skill_name, Mandatory: r.is_mandatory?'Yes':'No', Score: r.score, 'Detailed Skills': r.detailed_skills||'', Notes: r.notes||'' }));
   XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(leaderData.length ? leaderData : [{}]), 'Leadership');
 
+  // Sheet 8: Talent Map - Engineers
+  const engineers = await query<any>(`SELECT * FROM talent_engineers WHERE assessment_id=$1 ORDER BY sort_order,id`, [params.id]);
+  const engData = engineers.map(r => ({ Name: r.name, 'Employee ID': r.employee_id||'', Team: r.team||'', 'Reports To': r.reports_to||'', 'Job Title': r.job_title||'', Level: r.level||'', Specialisation: r.specialisation||'', Employment: r.employment||'', Product: r.product_name||'', Industry: r.industry||'', 'AI Phase': r.ai_phase||'', 'Primary Stack': r.primary_stack||'', 'Key Strengths': r.key_strengths||'', 'Development Focus': r.development_focus||'', 'Training Recommendation': r.training_recommendation||'', 'Career Goal': r.career_goal||'', 'Manager Notes': r.manager_notes||'' }));
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(engData.length ? engData : [{}]), 'Talent Profiles');
+
+  // Sheet 9: Talent Map - Skills
+  const talentSkillData: any[] = [];
+  for (const eng of engineers) {
+    const skills = await query<any>(`SELECT * FROM talent_skills WHERE engineer_id=$1 ORDER BY sort_order,id`, [eng.id]);
+    for (const s of skills) talentSkillData.push({ Engineer: eng.name, Section: s.section, Category: s.category, Skill: s.skill_name, Description: s.description||'', 'Self Score': s.self_score, 'Manager Score': s.manager_score, 'Target Score': s.target_score, Notes: s.notes||'' });
+  }
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(talentSkillData.length ? talentSkillData : [{}]), 'Talent Skills');
+
+  // Sheet 10: Skillset Context
+  const sCtx = await query<any>(`SELECT * FROM skillset_context WHERE assessment_id=$1 ORDER BY sort_order,id`, [params.id]);
+  const ctxData = sCtx.map(r => ({ Field: r.field_name, Value: r.field_value||'', Group: r.field_group||'' }));
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(ctxData.length ? ctxData : [{}]), 'Skillset Context');
+
+  // Sheet 11: Skillset Requirements
+  const sItems = await query<any>(`SELECT * FROM skillset_items WHERE assessment_id=$1 ORDER BY sort_order,id`, [params.id]);
+  const itemData = sItems.map(r => ({ Section: r.section, Category: r.category||'', Skill: r.item_name, Description: r.description||'', Importance: r.importance||'', 'Current Level': r.current_level||'', 'Required Level': r.required_level||'', Gap: r.gap||'', Notes: r.notes||'' }));
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(itemData.length ? itemData : [{}]), 'Skillset Requirements');
+
   const buf = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
   return new NextResponse(buf, {
     headers: {

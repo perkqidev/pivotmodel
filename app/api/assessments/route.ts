@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { query, queryOne, execute, EMB_TEMPLATE, BENCHMARK_TEMPLATE, SCOPE_TEMPLATE, DRIVER_TEMPLATE, KRA_TEMPLATE, MATURITY_TEMPLATE } from '@/lib/db';
+import { query, queryOne, execute, EMB_TEMPLATE, BENCHMARK_TEMPLATE, SCOPE_TEMPLATE, DRIVER_TEMPLATE, KRA_TEMPLATE, MATURITY_TEMPLATE, TALENT_SKILLS_TEMPLATE, SKILLSET_CONTEXT_TEMPLATE, SKILLSET_ITEMS_TEMPLATE } from '@/lib/db';
 import { getSessionFromRequest } from '@/lib/auth';
 
 export async function GET(req: NextRequest) {
@@ -28,6 +28,15 @@ export async function POST(req: NextRequest) {
     await execute(`INSERT INTO assessment_kra (assessment_id,role_level,person_name,kra_name,description,target,current,status,notes,sort_order,pillar) SELECT $1,role_level,person_name,kra_name,description,target,current,status,notes,sort_order,pillar FROM assessment_kra WHERE assessment_id=$2`, [nid, assessment_id]);
     await execute(`INSERT INTO assessment_leadership (assessment_id,leader_name,leader_role,skill_name,is_mandatory,score,notes,sort_order,skill_category,detailed_skills) SELECT $1,leader_name,leader_role,skill_name,is_mandatory,score,notes,sort_order,skill_category,detailed_skills FROM assessment_leadership WHERE assessment_id=$2`, [nid, assessment_id]);
     await execute(`INSERT INTO assessment_maturity_levels (assessment_id,factor_name,maturity_level,ownership_level,skill_level,business_value,notes,sort_order) SELECT $1,factor_name,maturity_level,ownership_level,skill_level,business_value,notes,sort_order FROM assessment_maturity_levels WHERE assessment_id=$2`, [nid, assessment_id]);
+    // Duplicate talent engineers + their skills
+    const origEngineers = await query<{id:number}>(`SELECT id FROM talent_engineers WHERE assessment_id=$1 ORDER BY sort_order,id`, [assessment_id]);
+    for (const oe of origEngineers) {
+      const ne = await query<{id:number}>(`INSERT INTO talent_engineers (assessment_id,name,employee_id,team,reports_to,job_title,level,specialisation,employment,product_name,industry,ai_phase,primary_stack,key_strengths,development_focus,training_recommendation,career_goal,manager_notes,sort_order) SELECT $1,name,employee_id,team,reports_to,job_title,level,specialisation,employment,product_name,industry,ai_phase,primary_stack,key_strengths,development_focus,training_recommendation,career_goal,manager_notes,sort_order FROM talent_engineers WHERE id=$2 RETURNING id`, [nid, oe.id]);
+      if (ne.length) await execute(`INSERT INTO talent_skills (engineer_id,section,category,skill_name,description,self_score,manager_score,target_score,notes,sort_order) SELECT $1,section,category,skill_name,description,self_score,manager_score,target_score,notes,sort_order FROM talent_skills WHERE engineer_id=$2`, [ne[0].id, oe.id]);
+    }
+    // Duplicate skillset
+    await execute(`INSERT INTO skillset_context (assessment_id,field_name,field_value,field_group,sort_order) SELECT $1,field_name,field_value,field_group,sort_order FROM skillset_context WHERE assessment_id=$2`, [nid, assessment_id]);
+    await execute(`INSERT INTO skillset_items (assessment_id,section,category,item_name,description,importance,current_level,required_level,gap,notes,sort_order) SELECT $1,section,category,item_name,description,importance,current_level,required_level,gap,notes,sort_order FROM skillset_items WHERE assessment_id=$2`, [nid, assessment_id]);
     return NextResponse.json({ id: nid });
   }
 
@@ -41,5 +50,8 @@ export async function POST(req: NextRequest) {
   for (const r of SCOPE_TEMPLATE) await execute(`INSERT INTO assessment_scope (assessment_id,pillar,activity,required_level,sort_order,l1_guidance,l2_guidance,l3_guidance) VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`, [aid,r.pillar,r.activity,r.required_level||1,r.sort_order,r.l1_guidance,r.l2_guidance,r.l3_guidance]);
   for (const r of KRA_TEMPLATE) await execute(`INSERT INTO assessment_kra (assessment_id,role_level,kra_name,pillar,sort_order) VALUES ($1,$2,$3,$4,$5)`, [aid,r.role_level,r.kra_name,r.pillar,r.sort_order]);
   for (const r of MATURITY_TEMPLATE) await execute(`INSERT INTO assessment_maturity_levels (assessment_id,factor_name,maturity_level,sort_order) VALUES ($1,$2,$3,$4)`, [aid,r.factor_name,r.maturity_level,r.sort_order]);
+  // Seed skillset context + items
+  for (const r of SKILLSET_CONTEXT_TEMPLATE) await execute(`INSERT INTO skillset_context (assessment_id,field_name,field_value,field_group,sort_order) VALUES ($1,$2,$3,$4,$5)`, [aid,r.field_name,r.field_value,r.field_group,r.sort_order]);
+  for (const r of SKILLSET_ITEMS_TEMPLATE) await execute(`INSERT INTO skillset_items (assessment_id,section,category,item_name,description,importance,required_level,sort_order) VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`, [aid,r.section,r.category,r.item_name,r.description,r.importance,r.required_level,r.sort_order]);
   return NextResponse.json({ id: aid });
 }
