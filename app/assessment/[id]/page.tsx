@@ -64,6 +64,14 @@ export default function AssessmentPage() {
   const [showCollab, setShowCollab] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  /* Close mobile sidebar when viewport crosses 768px */
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width:768px)');
+    const handler = () => setSidebarOpen(false);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
   useEffect(() => {
     fetch(`/api/assessments`).then(r => r.json()).then(d => {
       const all = [...(d.owned||[]), ...(d.shared||[])];
