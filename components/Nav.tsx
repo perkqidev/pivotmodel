@@ -129,7 +129,7 @@ export default function Nav() {
         {user ? (
           <>
             <a href="/community" onClick={() => setMenuOpen(false)}>Community</a>
-            <button style={{ background:'none', border:'none', color:'var(--gold)', fontSize:14, cursor:'pointer', padding:'10px 0', textAlign:'left' }} onClick={logout}>Sign Out</button>
+            <button style={{ background:'none', border:'none', color:'var(--gold)', fontSize:14, cursor:'pointer', padding:'10px 32px', textAlign:'left', width:'100%' }} onClick={logout}>Sign Out</button>
           </>
         ) : (
           <a href="/community" onClick={() => setMenuOpen(false)}>Join Community</a>
