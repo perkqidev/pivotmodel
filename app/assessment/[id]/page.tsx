@@ -63,12 +63,18 @@ export default function AssessmentPage() {
   const [collabMsg, setCollabMsg] = useState('');
   const [showCollab, setShowCollab] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-  /* Close mobile sidebar when viewport goes above 768px */
+  /* Track mobile vs desktop and auto-close sidebar on switch */
   useEffect(() => {
-    const handler = () => { if (window.innerWidth > 768) setSidebarOpen(false); };
-    window.addEventListener('resize', handler);
-    return () => window.removeEventListener('resize', handler);
+    const check = () => {
+      const mobile = window.innerWidth <= 768;
+      setIsMobile(mobile);
+      if (!mobile) setSidebarOpen(false);
+    };
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
   }, []);
 
   useEffect(() => {
@@ -128,10 +134,10 @@ export default function AssessmentPage() {
         )}
         {/* Sidebar + Content */}
         <div style={{ display:'flex',minHeight:'calc(100vh - 140px)',position:'relative' }}>
-          <button className="assess-menu-btn" onClick={() => setSidebarOpen(o => !o)} aria-label="Toggle sidebar">{sidebarOpen ? '✕' : '☰'}</button>
-          {sidebarOpen && <div className="assess-overlay" onClick={() => setSidebarOpen(false)} />}
+          {isMobile && <button className="assess-menu-btn" onClick={() => setSidebarOpen(o => !o)} aria-label="Toggle sidebar">{sidebarOpen ? '✕' : '☰'}</button>}
+          {isMobile && sidebarOpen && <div className="assess-overlay" onClick={() => setSidebarOpen(false)} />}
           {/* Sidebar */}
-          <div className={`assess-sidebar${sidebarOpen ? ' open' : ''}`} style={{ width:240,minWidth:240,background:'var(--surface)',borderRight:'1px solid var(--border)',padding:'16px 0',overflowY:'auto' }}>
+          <div className={`assess-sidebar${isMobile && sidebarOpen ? ' open' : ''}`} style={{ width:240,minWidth:240,background:'var(--surface)',borderRight:'1px solid var(--border)',padding:'16px 0',overflowY:'auto' }}>
             {SECTIONS_CONFIG.map(sec => {
               const groupActive = sec.tabs.some(t => t.id === activeModule);
               return (
