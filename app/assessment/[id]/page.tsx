@@ -211,12 +211,11 @@ function EMBModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Promi
     <div>
       <div style={{ display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24,gap:12,flexWrap:'wrap' as const }}>
         <div><h2 style={{color:'var(--fg)',margin:0}}>Engineering Maturity Benchmark</h2><p style={{color:'var(--muted)',fontSize:13,margin:'4px 0 0'}}>Rate each capability across 5 pillars. Changes auto-save.</p></div>
-        <button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/emb`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,pivot_num:1,pivot_name:'Operational Excellence',capability:'New Capability',current_level:'L1',score_icon:'diamond',evidence:'',gap_notes:'',sort_order:99}]);}} style={{background:'var(--gold)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Row</button>
       </div>
       {nudge && <div style={{ background:'rgba(201,168,76,0.1)',border:'1px solid var(--gold)',borderRadius:12,padding:'12px 16px',marginBottom:24,fontSize:13,color:'var(--fg)' }}>💡 <strong>Intelligence Nudge:</strong> Based on your scores (avg {nudge.avg_score}/3), the computed maturity level is <strong style={{color:'var(--gold)'}}>{nudge.suggested_level}</strong>. Consider adjusting your overall rating.</div>}
       {pillars.map(pillar => (
         <div key={pillar} style={{ marginBottom:32 }}>
-          <div style={{ fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:12,textTransform:'uppercase',letterSpacing:'0.05em' }}>{pillar}</div>
+          <div style={{ fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:12,textTransform:'uppercase',letterSpacing:'0.05em',display:'flex',alignItems:'center',justifyContent:'space-between' }}><span>{pillar}</span><button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/emb`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pivot_name:pillar})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,pivot_name:pillar,capability:'New Capability',current_level:'L1',evidence:'',gap_notes:'',sort_order:99}]);}} style={{background:'var(--gold)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Row</button></div>
           <div className="scroll-table" style={{ background:'var(--surface)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border)' }}>
             <div style={{ display:'grid',gridTemplateColumns:'1.2fr 1fr 1fr 1fr 90px 1.8fr 1.8fr 36px',gap:'0 10px',background:'var(--card)',padding:'10px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em' }}>
               <div>Capability</div><div>L1 Criteria</div><div>L2 Criteria</div><div>L3 Criteria</div><div>Level</div><div>Evidence</div><div>Gap Notes</div><div></div>
@@ -248,7 +247,7 @@ function DriversModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>P
   useEffect(() => { fetch(`/api/assessments/${id}/drivers`).then(r=>r.json()).then(d=>setRows(d.rows||[])); }, [id]);
   useEffect(() => { if (!rows.length) return; const t = setTimeout(() => save('drivers',rows), 1500); return () => clearTimeout(t); }, [rows]);
   function update(rowId: number, field: string, val: string|boolean) { setRows(prev=>prev.map(r=>r.id===rowId?{...r,[field]:val}:r)); }
-  async function addRow() { const res = await fetch(`/api/assessments/${id}/drivers`,{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}); const d=await res.json(); if(d.id) setRows(prev=>[...prev,{id:d.id,category:'Engineering Cost',driver_name:'New Driver',description:'',is_mandatory:false,considerations:'',notes:''}]); }
+  async function addRow(cat:string) { const res = await fetch(`/api/assessments/${id}/drivers`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({category:cat})}); const d=await res.json(); if(d.id) setRows(prev=>[...prev,{id:d.id,category:cat,driver_name:'New Driver',description:'',is_mandatory:false,considerations:'',notes:''}]); }
   async function deleteRow(rowId: number) { await fetch(`/api/assessments/${id}/drivers`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({row_id:rowId})}); setRows(prev=>prev.filter(r=>r.id!==rowId)); }
   const CATS = ['Engineering Cost','Scale of Engineering Operations','Strategic Business Expansion'];
   const categories = [...new Set(rows.map(r => r.category))];
@@ -256,11 +255,10 @@ function DriversModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>P
     <div>
       <div style={{ display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24,gap:12,flexWrap:'wrap' as const }}>
         <div><h2 style={{color:'var(--fg)',margin:0}}>Business Drivers</h2><p style={{color:'var(--muted)',fontSize:13,margin:'4px 0 0'}}>Why the team exists — cost, scale, expansion, and strategic rationale.</p></div>
-        <button onClick={addRow} style={{background:'var(--gold)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Driver</button>
       </div>
       {categories.map(cat => (
         <div key={cat} style={{marginBottom:28}}>
-          <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em'}}>{cat}</div>
+          <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em',display:'flex',alignItems:'center',justifyContent:'space-between'}}><span>{cat}</span><button onClick={()=>addRow(cat)} style={{background:'var(--gold)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Driver</button></div>
           <div className="scroll-table" style={{ background:'var(--surface)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border)' }}>
             <div style={{ display:'grid',gridTemplateColumns:'1.5fr 1fr 80px 2fr 1.5fr 40px',gap:0,background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em' }}>
               <div>Driver</div><div>Description</div><div>Mandatory</div><div>Considerations</div><div>Notes</div><div></div>
@@ -366,11 +364,10 @@ function ScopeModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Pro
     <div>
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24,gap:12,flexWrap:'wrap' as const}}>
         <div><h2 style={{color:'var(--fg)',margin:0}}>Scope of Product Engineering</h2><p style={{color:'var(--muted)',fontSize:13,margin:'4px 0 0'}}>17 activities across 5 business-oriented sections with L1/L2/L3 guidance. Gap is computed automatically.</p></div>
-        <button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/scope`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,pillar:'Product Enhancement & Sustenance',activity:'New Activity',required_level:1,current_level:1,gap:0,notes:'',l1_guidance:'',l2_guidance:'',l3_guidance:''}]);}} style={{background:'var(--gold)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Activity</button>
       </div>
       {pillars.map(pillar=>(
         <div key={pillar} style={{marginBottom:28}}>
-          <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em'}}>{pillar}</div>
+          <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em',display:'flex',alignItems:'center',justifyContent:'space-between'}}><span>{pillar}</span><button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/scope`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pillar})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,pillar,activity:'New Activity',required_level:1,current_level:1,gap:0,notes:'',l1_guidance:'',l2_guidance:'',l3_guidance:''}]);}} style={{background:'var(--gold)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Activity</button></div>
           <div className="scroll-table" style={{background:'var(--surface)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border)'}}>
             <div style={{display:'grid',gridTemplateColumns:'2fr 120px 120px 80px 1fr 40px',gap:0,background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
               <div>Activity</div><div>Required (1–3)</div><div>Current (1–3)</div><div>Gap</div><div>Notes</div><div></div>
@@ -531,7 +528,6 @@ function KRAModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Promi
         <div><h2 style={{color:'var(--fg)',margin:0}}>Roles & Performance KRA</h2><p style={{color:'var(--muted)',fontSize:13,margin:'4px 0 0'}}>Key Result Areas by role level and pillar.</p></div>
         <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
           {['All',...ROLES].map(r=><button key={r} onClick={()=>setRoleFilter(r)} style={{background:roleFilter===r?'var(--gold)':'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:roleFilter===r?'#000':'var(--fg)',fontSize:11,fontWeight:roleFilter===r?700:400,cursor:'pointer'}}>{r==='All'?'All':r.split(',')[0]}</button>)}
-          <button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/kra`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({role_level:roleFilter==='All'?'Manager / Project Lead':roleFilter,pillar:'Operational Excellence'})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,role_level:roleFilter==='All'?'Manager / Project Lead':roleFilter,pillar:'Operational Excellence',person_name:'',kra_name:'New KRA',description:'',target:'',current:'',status:'not-started',notes:''}]);}} style={{background:'var(--gold)',border:'none',borderRadius:8,padding:'6px 14px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add KRA</button>
         </div>
       </div>
       {roles.map(role => {
@@ -539,7 +535,7 @@ function KRAModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Promi
         const rolePillars = [...new Set(roleRows.map(r=>r.pillar||''))];
         return (
           <div key={role} style={{marginBottom:32}}>
-            <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em'}}>{role}</div>
+            <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em',display:'flex',alignItems:'center',justifyContent:'space-between'}}><span>{role}</span><button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/kra`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({role_level:role,pillar:'Operational Excellence'})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,role_level:role,pillar:'Operational Excellence',person_name:'',kra_name:'New KRA',description:'',target:'',current:'',status:'not-started',notes:''}]);}} style={{background:'var(--gold)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add KRA</button></div>
             {rolePillars.map(pillar => (
               <div key={pillar} style={{marginBottom:12}}>
                 {pillar && <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'4px 16px',background:'rgba(201,168,76,0.06)'}}>{pillar}</div>}
