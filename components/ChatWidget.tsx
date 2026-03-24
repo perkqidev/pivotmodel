@@ -68,7 +68,7 @@ export default function ChatWidget() {
             )}
             {messages.map((m, i) => (
               <div key={i} style={{ display:'flex',justifyContent:m.role==='user'?'flex-end':'flex-start' }}>
-                <div style={{ maxWidth:'85%',padding:'10px 14px',borderRadius:m.role==='user'?'16px 16px 4px 16px':'16px 16px 16px 4px',background:m.role==='user'?'var(--gold)':'var(--card)',color:m.role==='user'?'#000':'var(--fg)',fontSize:13,lineHeight:1.5,whiteSpace:'pre-wrap' }}>
+                <div style={{ maxWidth:'85%',padding:'10px 14px',borderRadius:m.role==='user'?'16px 16px 4px 16px':'16px 16px 16px 4px',background:m.role==='user'?'var(--gold)':'var(--card)',color:m.role==='user'?'var(--gold-btn-text)':'var(--fg)',fontSize:13,lineHeight:1.5,whiteSpace:'pre-wrap' }}>
                   {m.content}
                 </div>
               </div>

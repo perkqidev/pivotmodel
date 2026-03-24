@@ -214,7 +214,7 @@ function ChatConfigTab() {
         <div style={{marginBottom:20}}>
           <div style={{fontSize:12,color:'#6B7280',marginBottom:6,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.05em'}}>Chat Enabled</div>
           <div style={{display:'flex',gap:8}}>
-            {['true','false'].map(v=><button key={v} onClick={()=>setConfig(p=>({...p,chat_enabled:v}))} style={{padding:'8px 20px',background:config.chat_enabled===v?'#C9A84C':'#0A0C17',border:'1px solid #2A2D3E',borderRadius:8,color:config.chat_enabled===v?'#000':'#8A8FA8',fontWeight:config.chat_enabled===v?700:400,cursor:'pointer',fontSize:13}}>{v==='true'?'Enabled':'Disabled'}</button>)}
+            {['true','false'].map(v=><button key={v} onClick={()=>setConfig(p=>({...p,chat_enabled:v}))} style={{padding:'8px 20px',background:config.chat_enabled===v?'#C9A84C':'#0A0C17',border:'1px solid #2A2D3E',borderRadius:8,color:config.chat_enabled===v?'var(--gold-btn-text)':'#8A8FA8',fontWeight:config.chat_enabled===v?700:400,cursor:'pointer',fontSize:13}}>{v==='true'?'Enabled':'Disabled'}</button>)}
           </div>
         </div>
         <div style={{marginBottom:20}}>
