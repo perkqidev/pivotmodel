@@ -218,20 +218,20 @@ function EMBModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Promi
         <div key={pillar} style={{ marginBottom:32 }}>
           <div style={{ fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:12,textTransform:'uppercase',letterSpacing:'0.05em' }}>{pillar}</div>
           <div className="scroll-table" style={{ background:'var(--surface)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border)' }}>
-            <div style={{ display:'grid',gridTemplateColumns:'2fr 2fr 2fr 2fr 120px 1fr 1fr 40px',gap:0,background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em' }}>
+            <div style={{ display:'grid',gridTemplateColumns:'1.2fr 1fr 1fr 1fr 90px 1.8fr 1.8fr 36px',gap:'0 10px',background:'var(--card)',padding:'10px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em' }}>
               <div>Capability</div><div>L1 Criteria</div><div>L2 Criteria</div><div>L3 Criteria</div><div>Level</div><div>Evidence</div><div>Gap Notes</div><div></div>
             </div>
             {rows.filter(r=>r.pivot_name===pillar).map((row,i) => (
-              <div key={row.id} style={{ display:'grid',gridTemplateColumns:'2fr 2fr 2fr 2fr 120px 1fr 1fr 40px',gap:0,padding:'10px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'start' }}>
-                <div style={{ color:'var(--fg)',fontSize:13,fontWeight:500,paddingRight:8 }}>{row.capability}</div>
-                <div style={{ color:'var(--muted)',fontSize:12,paddingRight:8,lineHeight:1.4 }}>{row.l1_criteria}</div>
-                <div style={{ color:'var(--muted)',fontSize:12,paddingRight:8,lineHeight:1.4 }}>{row.l2_criteria}</div>
-                <div style={{ color:'var(--muted)',fontSize:12,paddingRight:8,lineHeight:1.4 }}>{row.l3_criteria}</div>
-                <select value={row.current_level||'L1'} onChange={e=>update(row.id,'current_level',e.target.value)} style={{ background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:LEVEL_COLORS[row.current_level||'L1'],fontWeight:700,fontSize:13,cursor:'pointer',outline:'none' }}>
+              <div key={row.id} style={{ display:'grid',gridTemplateColumns:'1.2fr 1fr 1fr 1fr 90px 1.8fr 1.8fr 36px',gap:'0 10px',padding:'12px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'start' }}>
+                <div style={{ color:'var(--fg)',fontSize:13,fontWeight:500 }}>{row.capability}</div>
+                <div style={{ color:'var(--muted)',fontSize:11,lineHeight:1.5 }}>{row.l1_criteria}</div>
+                <div style={{ color:'var(--muted)',fontSize:11,lineHeight:1.5 }}>{row.l2_criteria}</div>
+                <div style={{ color:'var(--muted)',fontSize:11,lineHeight:1.5 }}>{row.l3_criteria}</div>
+                <select value={row.current_level||'L1'} onChange={e=>update(row.id,'current_level',e.target.value)} style={{ background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 8px',color:LEVEL_COLORS[row.current_level||'L1'],fontWeight:700,fontSize:13,cursor:'pointer',outline:'none' }}>
                   {['L1','L2','L3'].map(l=><option key={l} value={l}>{LEVEL_LABELS[l]}</option>)}
                 </select>
-                <textarea value={row.evidence||''} onChange={e=>update(row.id,'evidence',e.target.value)} placeholder="Evidence…" rows={2} style={{ background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none' }} />
-                <textarea value={row.gap_notes||''} onChange={e=>update(row.id,'gap_notes',e.target.value)} placeholder="Gap notes…" rows={2} style={{ background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 8px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none' }} />
+                <textarea value={row.evidence||''} onChange={e=>update(row.id,'evidence',e.target.value)} placeholder="Evidence…" rows={2} style={{ background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none' }} />
+                <textarea value={row.gap_notes||''} onChange={e=>update(row.id,'gap_notes',e.target.value)} placeholder="Gap notes…" rows={2} style={{ background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none' }} />
                 <button onClick={async()=>{await fetch(`/api/assessments/${id}/emb`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({row_id:row.id})});setRows(prev=>prev.filter(r=>r.id!==row.id));}} style={{background:'none',border:'none',color:'#ef4444',cursor:'pointer',fontSize:16,padding:4}}>✕</button>
               </div>
             ))}
