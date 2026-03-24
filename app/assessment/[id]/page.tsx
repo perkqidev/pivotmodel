@@ -64,12 +64,11 @@ export default function AssessmentPage() {
   const [showCollab, setShowCollab] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  /* Close mobile sidebar when viewport crosses 768px */
+  /* Close mobile sidebar when viewport goes above 768px */
   useEffect(() => {
-    const mq = window.matchMedia('(max-width:768px)');
-    const handler = () => setSidebarOpen(false);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
+    const handler = () => { if (window.innerWidth > 768) setSidebarOpen(false); };
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
   }, []);
 
   useEffect(() => {
