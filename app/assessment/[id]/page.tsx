@@ -217,11 +217,11 @@ function EMBModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Promi
         <div key={pillar} style={{ marginBottom:32 }}>
           <div style={{ fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:12,textTransform:'uppercase',letterSpacing:'0.05em',display:'flex',alignItems:'center',justifyContent:'space-between' }}><span>{pillar}</span><button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/emb`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pivot_name:pillar})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,pivot_name:pillar,capability:'New Capability',current_level:'L1',evidence:'',gap_notes:'',sort_order:99}]);}} style={{background:'var(--gold)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Row</button></div>
           <div className="scroll-table" style={{ background:'var(--surface)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border)' }}>
-            <div style={{ display:'grid',gridTemplateColumns:'1.2fr 1fr 1fr 1fr 90px 1.8fr 1.8fr 36px',gap:'0 10px',background:'var(--card)',padding:'10px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em' }}>
+            <div style={{ display:'grid',gridTemplateColumns:'1fr 0.8fr 0.8fr 0.8fr 90px 2fr 2fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em' }}>
               <div>Capability</div><div>L1 Criteria</div><div>L2 Criteria</div><div>L3 Criteria</div><div>Level</div><div>Evidence</div><div>Gap Notes</div><div></div>
             </div>
             {rows.filter(r=>r.pivot_name===pillar).map((row,i) => (
-              <div key={row.id} style={{ display:'grid',gridTemplateColumns:'1.2fr 1fr 1fr 1fr 90px 1.8fr 1.8fr 36px',gap:'0 10px',padding:'12px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'start' }}>
+              <div key={row.id} style={{ display:'grid',gridTemplateColumns:'1fr 0.8fr 0.8fr 0.8fr 90px 2fr 2fr 36px',gap:'0 12px',padding:'12px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'start' }}>
                 <div style={{ color:'var(--fg)',fontSize:13,fontWeight:500 }}>{row.capability}</div>
                 <div style={{ color:'var(--muted)',fontSize:11,lineHeight:1.5 }}>{row.l1_criteria}</div>
                 <div style={{ color:'var(--muted)',fontSize:11,lineHeight:1.5 }}>{row.l2_criteria}</div>
@@ -229,8 +229,8 @@ function EMBModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Promi
                 <select value={row.current_level||'L1'} onChange={e=>update(row.id,'current_level',e.target.value)} style={{ background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 8px',color:LEVEL_COLORS[row.current_level||'L1'],fontWeight:700,fontSize:13,cursor:'pointer',outline:'none' }}>
                   {['L1','L2','L3'].map(l=><option key={l} value={l}>{LEVEL_LABELS[l]}</option>)}
                 </select>
-                <textarea value={row.evidence||''} onChange={e=>update(row.id,'evidence',e.target.value)} placeholder="Evidence…" rows={2} style={{ background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none' }} />
-                <textarea value={row.gap_notes||''} onChange={e=>update(row.id,'gap_notes',e.target.value)} placeholder="Gap notes…" rows={2} style={{ background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none' }} />
+                <textarea value={row.evidence||''} onChange={e=>update(row.id,'evidence',e.target.value)} placeholder="Evidence…" rows={2} style={{ background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none' }} />
+                <textarea value={row.gap_notes||''} onChange={e=>update(row.id,'gap_notes',e.target.value)} placeholder="Gap notes…" rows={2} style={{ background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none' }} />
                 <button onClick={async()=>{await fetch(`/api/assessments/${id}/emb`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({row_id:row.id})});setRows(prev=>prev.filter(r=>r.id!==row.id));}} style={{background:'none',border:'none',color:'#ef4444',cursor:'pointer',fontSize:16,padding:4}}>✕</button>
               </div>
             ))}
@@ -260,18 +260,18 @@ function DriversModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>P
         <div key={cat} style={{marginBottom:28}}>
           <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em',display:'flex',alignItems:'center',justifyContent:'space-between'}}><span>{cat}</span><button onClick={()=>addRow(cat)} style={{background:'var(--gold)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Driver</button></div>
           <div className="scroll-table" style={{ background:'var(--surface)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border)' }}>
-            <div style={{ display:'grid',gridTemplateColumns:'1.5fr 1fr 80px 2fr 1.5fr 40px',gap:'0 10px',background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em' }}>
+            <div style={{ display:'grid',gridTemplateColumns:'1.2fr 1.5fr 70px 2.5fr 1.5fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em' }}>
               <div>Driver</div><div>Description</div><div>Mandatory</div><div>Considerations</div><div>Notes</div><div></div>
             </div>
             {rows.filter(r=>r.category===cat).map((row,i) => (
-              <div key={row.id} style={{ display:'grid',gridTemplateColumns:'1.5fr 1fr 80px 2fr 1.5fr 40px',gap:'0 10px',padding:'12px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'start' }}>
-                <input value={row.driver_name} onChange={e=>update(row.id,'driver_name',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
-                <textarea value={row.description||''} onChange={e=>update(row.id,'description',e.target.value)} rows={2} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
+              <div key={row.id} style={{ display:'grid',gridTemplateColumns:'1.2fr 1.5fr 70px 2.5fr 1.5fr 36px',gap:'0 12px',padding:'12px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'start' }}>
+                <input value={row.driver_name} onChange={e=>update(row.id,'driver_name',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
+                <textarea value={row.description||''} onChange={e=>update(row.id,'description',e.target.value)} rows={2} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
                 <div style={{display:'flex',justifyContent:'center',paddingTop:4}}>
                   <button onClick={()=>update(row.id,'is_mandatory',!row.is_mandatory)} style={{background:row.is_mandatory?'var(--gold)':'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 10px',color:row.is_mandatory?'var(--gold-btn-text)':'var(--muted)',fontSize:12,cursor:'pointer',fontWeight:row.is_mandatory?700:400}}>{row.is_mandatory?'Yes':'No'}</button>
                 </div>
-                <textarea value={row.considerations||''} onChange={e=>update(row.id,'considerations',e.target.value)} rows={3} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
-                <textarea value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} rows={2} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
+                <textarea value={row.considerations||''} onChange={e=>update(row.id,'considerations',e.target.value)} rows={3} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
+                <textarea value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} rows={2} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
                 <button onClick={()=>deleteRow(row.id)} style={{background:'none',border:'none',color:'#ef4444',cursor:'pointer',fontSize:16,padding:4}}>✕</button>
               </div>
             ))}
@@ -312,12 +312,12 @@ function BenchmarksModule({ id, save }: { id:string; save:(e:string,r:unknown[])
                   <button onClick={()=>addRow(pillar,sub)} style={{background:'var(--gold)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add KPI</button>
                 </div>}
                 <div className="scroll-table" style={{background:'var(--surface)',borderRadius:sub?'0 0 12px 12px':'12px',overflow:'hidden',border:'1px solid var(--border)'}}>
-                  <div style={{display:'grid',gridTemplateColumns:'2fr 60px 80px 100px 100px 120px 1fr 40px',gap:'0 10px',background:'var(--card)',padding:'10px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
+                  <div style={{display:'grid',gridTemplateColumns:'1.2fr 50px 60px 70px 100px 110px 2fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
                     <div>KPI</div><div>Weight</div><div>Unit</div><div>Target</div><div>Current</div><div>Status</div><div>Notes</div><div></div>
                   </div>
                   {pillarRows.filter(r=>(r.sub_category||'')===sub).map((row,i)=>(
                     <div key={row.id}>
-                      <div style={{display:'grid',gridTemplateColumns:'2fr 60px 80px 100px 100px 120px 1fr 40px',gap:'0 10px',padding:'10px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'center'}}>
+                      <div style={{display:'grid',gridTemplateColumns:'1.2fr 50px 60px 70px 100px 110px 2fr 36px',gap:'0 12px',padding:'10px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'center'}}>
                         <div style={{display:'flex',alignItems:'center',gap:6}}>
                           <button onClick={()=>toggleDef(row.id)} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:10,padding:0}} title="Toggle definition">{expanded.has(row.id)?'▼':'▶'}</button>
                           <span style={{color:'var(--fg)',fontSize:13}}>{row.kpi_name}</span>
@@ -325,11 +325,11 @@ function BenchmarksModule({ id, save }: { id:string; save:(e:string,r:unknown[])
                         <div style={{color:'var(--muted)',fontSize:12}}>{row.weight ? `${(row.weight*100).toFixed(0)}%` : '–'}</div>
                         <div style={{color:'var(--muted)',fontSize:12}}>{row.unit}</div>
                         <div style={{color:'var(--muted)',fontSize:12}}>{row.target_value}</div>
-                        <input value={row.current_value||''} onChange={e=>update(row.id,'current_value',e.target.value)} placeholder="–" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:'var(--fg)',fontSize:13,outline:'none',width:'100%'}} />
-                        <select value={row.status} onChange={e=>update(row.id,'status',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:STATUS_COLORS[row.status],fontWeight:600,fontSize:12,cursor:'pointer',outline:'none'}}>
+                        <input value={row.current_value||''} onChange={e=>update(row.id,'current_value',e.target.value)} placeholder="–" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:13,outline:'none',width:'100%'}} />
+                        <select value={row.status} onChange={e=>update(row.id,'status',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:STATUS_COLORS[row.status],fontWeight:600,fontSize:12,cursor:'pointer',outline:'none'}}>
                           {STATUSES.map(s=><option key={s}>{s}</option>)}
                         </select>
-                        <input value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} placeholder="Notes…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
+                        <input value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} placeholder="Notes…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
                         <button onClick={async()=>{await fetch(`/api/assessments/${id}/benchmarks`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({row_id:row.id})});setRows(prev=>prev.filter(r=>r.id!==row.id));}} style={{background:'none',border:'none',color:'#ef4444',cursor:'pointer',fontSize:16,padding:4}}>✕</button>
                       </div>
                       {expanded.has(row.id) && row.definition && (
@@ -369,24 +369,24 @@ function ScopeModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Pro
         <div key={pillar} style={{marginBottom:28}}>
           <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em',display:'flex',alignItems:'center',justifyContent:'space-between'}}><span>{pillar}</span><button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/scope`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pillar})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,pillar,activity:'New Activity',required_level:1,current_level:1,gap:0,notes:'',l1_guidance:'',l2_guidance:'',l3_guidance:''}]);}} style={{background:'var(--gold)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Activity</button></div>
           <div className="scroll-table" style={{background:'var(--surface)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border)'}}>
-            <div style={{display:'grid',gridTemplateColumns:'2fr 120px 120px 80px 1fr 40px',gap:'0 10px',background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
+            <div style={{display:'grid',gridTemplateColumns:'1.2fr 100px 100px 60px 2fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
               <div>Activity</div><div>Required (1–3)</div><div>Current (1–3)</div><div>Gap</div><div>Notes</div><div></div>
             </div>
             {rows.filter(r=>r.pillar===pillar).map((row,i)=>(
               <div key={row.id}>
-                <div style={{display:'grid',gridTemplateColumns:'2fr 120px 120px 80px 1fr 40px',gap:'0 10px',padding:'12px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'center'}}>
+                <div style={{display:'grid',gridTemplateColumns:'1.2fr 100px 100px 60px 2fr 36px',gap:'0 12px',padding:'12px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'center'}}>
                   <div style={{display:'flex',alignItems:'center',gap:6}}>
                     {(row.l1_guidance||row.l2_guidance||row.l3_guidance) && <button onClick={()=>toggleGuide(row.id)} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:10,padding:0}} title="Toggle guidance">{expanded.has(row.id)?'▼':'▶'}</button>}
                     <span style={{color:'var(--fg)',fontSize:13}}>{row.activity}</span>
                   </div>
-                  <select value={row.required_level} onChange={e=>update(row.id,'required_level',parseInt(e.target.value))} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:LEVEL_CLR[row.required_level]||'var(--fg)',fontWeight:700,fontSize:13,cursor:'pointer',outline:'none'}}>
+                  <select value={row.required_level} onChange={e=>update(row.id,'required_level',parseInt(e.target.value))} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:LEVEL_CLR[row.required_level]||'var(--fg)',fontWeight:700,fontSize:13,cursor:'pointer',outline:'none'}}>
                     {[1,2,3].map(l=><option key={l} value={l}>{LEVEL_ICONS[l]}</option>)}
                   </select>
-                  <select value={row.current_level} onChange={e=>update(row.id,'current_level',parseInt(e.target.value))} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:LEVEL_CLR[row.current_level]||'var(--fg)',fontWeight:700,fontSize:13,cursor:'pointer',outline:'none'}}>
+                  <select value={row.current_level} onChange={e=>update(row.id,'current_level',parseInt(e.target.value))} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:LEVEL_CLR[row.current_level]||'var(--fg)',fontWeight:700,fontSize:13,cursor:'pointer',outline:'none'}}>
                     {[1,2,3].map(l=><option key={l} value={l}>{LEVEL_ICONS[l]}</option>)}
                   </select>
                   <div style={{fontWeight:700,color:Math.max(0,row.required_level-row.current_level)>0?'#ef4444':'#22c55e',fontSize:14}}>{Math.max(0,row.required_level-row.current_level)>0?`-${Math.max(0,row.required_level-row.current_level)}`:'✓'}</div>
-                  <input value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} placeholder="Notes…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
+                  <input value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} placeholder="Notes…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
                   <button onClick={async()=>{await fetch(`/api/assessments/${id}/scope`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({row_id:row.id})});setRows(prev=>prev.filter(r=>r.id!==row.id));}} style={{background:'none',border:'none',color:'#ef4444',cursor:'pointer',fontSize:16,padding:4}}>✕</button>
                 </div>
                 {expanded.has(row.id) && (
@@ -488,19 +488,19 @@ function MaturityModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>
         <button onClick={addRow} style={{background:'var(--gold)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Factor</button>
       </div>
       <div className="scroll-table" style={{background:'var(--surface)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border)'}}>
-        <div style={{display:'grid',gridTemplateColumns:'1.5fr 100px 1.5fr 1.5fr 1.5fr 1fr 40px',gap:'0 10px',background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
+        <div style={{display:'grid',gridTemplateColumns:'1.2fr 90px 1.5fr 1.5fr 1.5fr 1.2fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
           <div>Factor</div><div>Level (1–3)</div><div>Ownership Level</div><div>Skill Level</div><div>Business Value</div><div>Notes</div><div></div>
         </div>
         {rows.map((row,i)=>(
-          <div key={row.id} style={{display:'grid',gridTemplateColumns:'1.5fr 100px 1.5fr 1.5fr 1.5fr 1fr 40px',gap:'0 10px',padding:'12px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'start'}}>
-            <input value={row.factor_name} onChange={e=>update(row.id,'factor_name',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:'var(--fg)',fontSize:13,fontWeight:500,outline:'none',width:'100%'}} />
-            <select value={row.maturity_level} onChange={e=>update(row.id,'maturity_level',parseInt(e.target.value))} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:LEVEL_CLR[row.maturity_level]||'var(--fg)',fontWeight:700,fontSize:13,cursor:'pointer',outline:'none'}}>
+          <div key={row.id} style={{display:'grid',gridTemplateColumns:'1.2fr 90px 1.5fr 1.5fr 1.5fr 1.2fr 36px',gap:'0 12px',padding:'12px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'start'}}>
+            <input value={row.factor_name} onChange={e=>update(row.id,'factor_name',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:13,fontWeight:500,outline:'none',width:'100%'}} />
+            <select value={row.maturity_level} onChange={e=>update(row.id,'maturity_level',parseInt(e.target.value))} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:LEVEL_CLR[row.maturity_level]||'var(--fg)',fontWeight:700,fontSize:13,cursor:'pointer',outline:'none'}}>
               <option value={1}>◆ L1</option><option value={2}>⚙ L2</option><option value={3}>🚀 L3</option>
             </select>
-            <textarea value={row.ownership_level||''} onChange={e=>update(row.id,'ownership_level',e.target.value)} rows={2} placeholder="Describe ownership level…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
-            <textarea value={row.skill_level||''} onChange={e=>update(row.id,'skill_level',e.target.value)} rows={2} placeholder="Describe skill level…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
-            <textarea value={row.business_value||''} onChange={e=>update(row.id,'business_value',e.target.value)} rows={2} placeholder="Describe business value…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
-            <textarea value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} rows={2} placeholder="Notes…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
+            <textarea value={row.ownership_level||''} onChange={e=>update(row.id,'ownership_level',e.target.value)} rows={2} placeholder="Describe ownership level…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
+            <textarea value={row.skill_level||''} onChange={e=>update(row.id,'skill_level',e.target.value)} rows={2} placeholder="Describe skill level…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
+            <textarea value={row.business_value||''} onChange={e=>update(row.id,'business_value',e.target.value)} rows={2} placeholder="Describe business value…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
+            <textarea value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} rows={2} placeholder="Notes…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
             <button onClick={()=>deleteRow(row.id)} style={{background:'none',border:'none',color:'#ef4444',cursor:'pointer',fontSize:16,padding:4}}>✕</button>
           </div>
         ))}
@@ -527,7 +527,7 @@ function KRAModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Promi
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24,gap:12,flexWrap:'wrap' as const}}>
         <div><h2 style={{color:'var(--fg)',margin:0}}>Roles & Performance KRA</h2><p style={{color:'var(--muted)',fontSize:13,margin:'4px 0 0'}}>Key Result Areas by role level and pillar.</p></div>
         <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
-          {['All',...ROLES].map(r=><button key={r} onClick={()=>setRoleFilter(r)} style={{background:roleFilter===r?'var(--gold)':'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:roleFilter===r?'var(--gold-btn-text)':'var(--fg)',fontSize:11,fontWeight:roleFilter===r?700:400,cursor:'pointer'}}>{r==='All'?'All':r.split(',')[0]}</button>)}
+          {['All',...ROLES].map(r=><button key={r} onClick={()=>setRoleFilter(r)} style={{background:roleFilter===r?'var(--gold)':'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:roleFilter===r?'var(--gold-btn-text)':'var(--fg)',fontSize:11,fontWeight:roleFilter===r?700:400,cursor:'pointer'}}>{r==='All'?'All':r.split(',')[0]}</button>)}
         </div>
       </div>
       {roles.map(role => {
@@ -541,15 +541,15 @@ function KRAModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Promi
                 {pillar && <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'4px 16px',background:'rgba(201,168,76,0.06)'}}>{pillar}</div>}
                 <div className="scroll-table" style={{background:'var(--surface)',borderRadius:8,overflow:'hidden',border:'1px solid var(--border)'}}>
                   {roleRows.filter(r=>(r.pillar||'')===pillar).map((row,i)=>(
-                    <div key={row.id} style={{display:'grid',gridTemplateColumns:'2fr 2fr 1fr 1fr 120px 1fr 40px',gap:'0 10px',padding:'10px 16px',borderTop:i>0?'1px solid var(--border)':'none',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'start'}}>
-                      <input value={row.kra_name} onChange={e=>update(row.id,'kra_name',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
-                      <textarea value={row.description||''} onChange={e=>update(row.id,'description',e.target.value)} rows={1} placeholder="Description…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
-                      <input value={row.target||''} onChange={e=>update(row.id,'target',e.target.value)} placeholder="Target…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
-                      <input value={row.current||''} onChange={e=>update(row.id,'current',e.target.value)} placeholder="Current…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
+                    <div key={row.id} style={{display:'grid',gridTemplateColumns:'1.5fr 2.5fr 0.8fr 0.8fr 110px 1.5fr 36px',gap:'0 12px',padding:'10px 16px',borderTop:i>0?'1px solid var(--border)':'none',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'start'}}>
+                      <input value={row.kra_name} onChange={e=>update(row.id,'kra_name',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
+                      <textarea value={row.description||''} onChange={e=>update(row.id,'description',e.target.value)} rows={1} placeholder="Description…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
+                      <input value={row.target||''} onChange={e=>update(row.id,'target',e.target.value)} placeholder="Target…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
+                      <input value={row.current||''} onChange={e=>update(row.id,'current',e.target.value)} placeholder="Current…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
                       <select value={row.status} onChange={e=>update(row.id,'status',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px',color:STATUS_COLORS[row.status],fontWeight:600,fontSize:12,cursor:'pointer',outline:'none'}}>
                         {STATUSES.map(s=><option key={s}>{s}</option>)}
                       </select>
-                      <textarea value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} rows={1} placeholder="Notes…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
+                      <textarea value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} rows={1} placeholder="Notes…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
                       <button onClick={async()=>{await fetch(`/api/assessments/${id}/kra`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({row_id:row.id})});setRows(prev=>prev.filter(r=>r.id!==row.id));}} style={{background:'none',border:'none',color:'#ef4444',cursor:'pointer',fontSize:16,padding:4}}>✕</button>
                     </div>
                   ))}
@@ -618,7 +618,7 @@ function LeadershipModule({ id, save }: { id:string; save:(e:string,r:unknown[])
                   <div className="scroll-table" style={{background:'var(--surface)',borderRadius:cat?'0 0 12px 12px':'12px',overflow:'hidden',border:'1px solid var(--border)'}}>
                     {catRows.map((row,i)=>(
                       <div key={row.id}>
-                        <div style={{display:'grid',gridTemplateColumns:'2fr 80px 1fr 30px 40px',gap:'0 10px',padding:'10px 16px',borderTop:i>0?'1px solid var(--border)':'none',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'center'}}>
+                        <div style={{display:'grid',gridTemplateColumns:'1.2fr 100px 2fr 28px 36px',gap:'0 12px',padding:'10px 16px',borderTop:i>0?'1px solid var(--border)':'none',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'center'}}>
                           <div style={{display:'flex',alignItems:'center',gap:6}}>
                             {row.detailed_skills && <button onClick={()=>toggleDetail(row.id)} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:10,padding:0}}>{expanded.has(row.id)?'▼':'▶'}</button>}
                             <span style={{color:'var(--fg)',fontSize:13,fontWeight:row.is_mandatory?600:400}}>{row.skill_name}</span>
@@ -627,7 +627,7 @@ function LeadershipModule({ id, save }: { id:string; save:(e:string,r:unknown[])
                             <input type="range" min={0} max={10} value={row.score} onChange={e=>update(row.id,'score',parseInt(e.target.value))} style={{width:50,accentColor:'var(--gold)'}} />
                             <span style={{color:'var(--gold)',fontWeight:700,fontSize:14,minWidth:16}}>{row.score}</span>
                           </div>
-                          <input value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} placeholder="Notes…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
+                          <input value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} placeholder="Notes…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
                           <div style={{textAlign:'center',color:row.is_mandatory?'#f59e0b':'var(--border)',fontSize:14}} title={row.is_mandatory?'Mandatory':''}>★</div>
                           <button onClick={()=>deleteSkill(row.id)} style={{background:'none',border:'none',color:'#ef4444',cursor:'pointer',fontSize:14,padding:2}}>✕</button>
                         </div>
@@ -804,26 +804,26 @@ function TalentMapModule({ id }: { id:string }) {
                   <div key={cat} style={{marginBottom:20}}>
                     <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(201,168,76,0.08)',borderRadius:'8px 8px 0 0',textTransform:'uppercase',letterSpacing:'0.05em'}}>{cat}</div>
                     <div className="scroll-table" style={{background:'var(--surface)',borderRadius:'0 0 12px 12px',overflow:'hidden',border:'1px solid var(--border)'}}>
-                      <div style={{display:'grid',gridTemplateColumns:'2fr 80px 80px 80px 1fr 40px',gap:'0 10px',background:'var(--card)',padding:'8px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
+                      <div style={{display:'grid',gridTemplateColumns:'1.2fr 64px 64px 64px 2fr 40px',gap:'0 12px',background:'var(--card)',padding:'8px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
                         <div>Skill</div><div>Self</div><div>Manager</div><div>Target</div><div>Notes</div><div></div>
                       </div>
                       {sectionSkills.filter((s:any)=>s.category===cat).map((skill:any,i:number)=>(
                         <div key={skill.id}>
-                          <div style={{display:'grid',gridTemplateColumns:'2fr 80px 80px 80px 1fr 40px',gap:'0 10px',padding:'10px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'center'}}>
+                          <div style={{display:'grid',gridTemplateColumns:'1.2fr 64px 64px 64px 2fr 40px',gap:'0 12px',padding:'10px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'center'}}>
                             <div style={{display:'flex',alignItems:'center',gap:6}}>
                               {skill.description && <button onClick={()=>toggleDetail(skill.id)} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:10,padding:0}}>{expanded.has(skill.id)?'▼':'▶'}</button>}
                               <span style={{color:'var(--fg)',fontSize:13}}>{skill.skill_name}</span>
                             </div>
                             <div style={{display:'flex',alignItems:'center',gap:4}}>
-                              <input type="number" min={0} max={10} value={skill.self_score} onChange={e=>updateSkill(skill.id,'self_score',parseInt(e.target.value)||0)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:SCORE_CLR(skill.self_score),fontWeight:700,fontSize:13,outline:'none',width:44,textAlign:'center'}} />
+                              <input type="number" min={0} max={10} value={skill.self_score} onChange={e=>updateSkill(skill.id,'self_score',parseInt(e.target.value)||0)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:SCORE_CLR(skill.self_score),fontWeight:700,fontSize:13,outline:'none',width:44,textAlign:'center'}} />
                             </div>
                             <div style={{display:'flex',alignItems:'center',gap:4}}>
-                              <input type="number" min={0} max={10} value={skill.manager_score} onChange={e=>updateSkill(skill.id,'manager_score',parseInt(e.target.value)||0)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:SCORE_CLR(skill.manager_score),fontWeight:700,fontSize:13,outline:'none',width:44,textAlign:'center'}} />
+                              <input type="number" min={0} max={10} value={skill.manager_score} onChange={e=>updateSkill(skill.id,'manager_score',parseInt(e.target.value)||0)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:SCORE_CLR(skill.manager_score),fontWeight:700,fontSize:13,outline:'none',width:44,textAlign:'center'}} />
                             </div>
                             <div style={{display:'flex',alignItems:'center',gap:4}}>
-                              <input type="number" min={0} max={10} value={skill.target_score} onChange={e=>updateSkill(skill.id,'target_score',parseInt(e.target.value)||0)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:'var(--muted)',fontWeight:700,fontSize:13,outline:'none',width:44,textAlign:'center'}} />
+                              <input type="number" min={0} max={10} value={skill.target_score} onChange={e=>updateSkill(skill.id,'target_score',parseInt(e.target.value)||0)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--muted)',fontWeight:700,fontSize:13,outline:'none',width:44,textAlign:'center'}} />
                             </div>
-                            <input value={skill.notes||''} onChange={e=>updateSkill(skill.id,'notes',e.target.value)} placeholder="Notes…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
+                            <input value={skill.notes||''} onChange={e=>updateSkill(skill.id,'notes',e.target.value)} placeholder="Notes…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
                             <div style={{textAlign:'center',color:skill.target_score > 0 && skill.manager_score < skill.target_score ? '#ef4444' : '#22c55e',fontSize:12,fontWeight:700}}>
                               {skill.target_score > 0 ? (skill.manager_score >= skill.target_score ? '✓' : `-${skill.target_score - skill.manager_score}`) : '–'}
                             </div>
@@ -845,7 +845,7 @@ function TalentMapModule({ id }: { id:string }) {
           {/* Team Tracker sub-tab */}
           {subTab === 'tracker' && (
             <div className="scroll-table" style={{background:'var(--surface)',borderRadius:12,border:'1px solid var(--border)',overflow:'hidden'}}>
-              <div style={{display:'grid',gridTemplateColumns:'1.5fr 1fr repeat(4,100px) 120px',gap:'0 10px',background:'var(--card)',padding:'10px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
+              <div style={{display:'grid',gridTemplateColumns:'1.5fr 0.8fr repeat(4,80px) 140px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
                 <div>Engineer</div><div>Level</div><div>Technical</div><div>Mindset</div><div>Knowledge</div><div>AI Ready</div><div>Overall</div>
               </div>
               {engineers.map((e,i) => {
@@ -860,7 +860,7 @@ function TalentMapModule({ id }: { id:string }) {
                 const aiAvg = getAvg('AI Readiness');
                 const overall = (techAvg+mindAvg+knowAvg+aiAvg)/4;
                 return (
-                  <div key={e.id} style={{display:'grid',gridTemplateColumns:'1.5fr 1fr repeat(4,100px) 120px',gap:'0 10px',padding:'12px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'center'}}>
+                  <div key={e.id} style={{display:'grid',gridTemplateColumns:'1.5fr 0.8fr repeat(4,80px) 140px',gap:'0 12px',padding:'12px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'center'}}>
                     <div style={{color:'var(--fg)',fontSize:13,fontWeight:500}}>{e.name}</div>
                     <div style={{color:'var(--muted)',fontSize:12}}>{e.level||'–'}</div>
                     <div style={{color:SCORE_CLR(techAvg),fontWeight:700,fontSize:13}}>{techAvg.toFixed(1)}</div>
@@ -976,30 +976,30 @@ function SkillsetModule({ id }: { id:string }) {
                   <button onClick={()=>addItem(section,cat)} style={{background:'var(--gold)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Skill</button>
                 </div>}
                 <div className="scroll-table" style={{background:'var(--surface)',borderRadius:cat?'0 0 12px 12px':'12px',overflow:'hidden',border:'1px solid var(--border)'}}>
-                  <div style={{display:'grid',gridTemplateColumns:'2fr 100px 100px 100px 80px 1fr 40px',gap:'0 10px',background:'var(--card)',padding:'8px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
+                  <div style={{display:'grid',gridTemplateColumns:'1.5fr 90px 90px 90px 56px 2fr 36px',gap:'0 12px',background:'var(--card)',padding:'8px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
                     <div>Skill</div><div>Importance</div><div>Required</div><div>Current</div><div>Gap</div><div>Notes</div><div></div>
                   </div>
                   {sectionItems.filter(i=>(i.category||'')===cat).map((item,i)=>(
                     <div key={item.id}>
-                      <div style={{display:'grid',gridTemplateColumns:'2fr 100px 100px 100px 80px 1fr 40px',gap:'0 10px',padding:'10px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'center'}}>
+                      <div style={{display:'grid',gridTemplateColumns:'1.5fr 90px 90px 90px 56px 2fr 36px',gap:'0 12px',padding:'10px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'center'}}>
                         <div style={{display:'flex',alignItems:'center',gap:6}}>
                           {item.description && <button onClick={()=>toggleDetail(item.id)} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:10,padding:0}}>{expanded.has(item.id)?'▼':'▶'}</button>}
                           <input value={item.item_name} onChange={e=>updateItem(item.id,'item_name',e.target.value)} style={{background:'transparent',border:'none',color:'var(--fg)',fontSize:13,outline:'none',width:'100%'}} />
                         </div>
-                        <select value={item.importance||'Important'} onChange={e=>updateItem(item.id,'importance',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:IMPORTANCE_CLR[item.importance]||'var(--fg)',fontWeight:600,fontSize:11,cursor:'pointer',outline:'none'}}>
+                        <select value={item.importance||'Important'} onChange={e=>updateItem(item.id,'importance',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:IMPORTANCE_CLR[item.importance]||'var(--fg)',fontWeight:600,fontSize:11,cursor:'pointer',outline:'none'}}>
                           {['Critical','Important','Nice-to-Have'].map(v=><option key={v}>{v}</option>)}
                         </select>
-                        <select value={item.required_level||''} onChange={e=>updateItem(item.id,'required_level',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:LEVEL_CLR[item.required_level]||'var(--fg)',fontWeight:600,fontSize:11,cursor:'pointer',outline:'none'}}>
+                        <select value={item.required_level||''} onChange={e=>updateItem(item.id,'required_level',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:LEVEL_CLR[item.required_level]||'var(--fg)',fontWeight:600,fontSize:11,cursor:'pointer',outline:'none'}}>
                           {['Basic','Intermediate','Advanced'].map(v=><option key={v}>{v}</option>)}
                         </select>
-                        <select value={item.current_level||''} onChange={e=>updateItem(item.id,'current_level',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:LEVEL_CLR[item.current_level]||'var(--fg)',fontWeight:600,fontSize:11,cursor:'pointer',outline:'none'}}>
+                        <select value={item.current_level||''} onChange={e=>updateItem(item.id,'current_level',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:LEVEL_CLR[item.current_level]||'var(--fg)',fontWeight:600,fontSize:11,cursor:'pointer',outline:'none'}}>
                           <option value="">–</option>
                           {['Basic','Intermediate','Advanced'].map(v=><option key={v}>{v}</option>)}
                         </select>
                         <div style={{fontWeight:700,fontSize:12,color:item.current_level&&item.required_level?(item.current_level===item.required_level||(['Advanced'].includes(item.current_level)&&['Basic','Intermediate'].includes(item.required_level))||(['Intermediate','Advanced'].includes(item.current_level)&&item.required_level==='Basic')?'#22c55e':'#ef4444'):'var(--muted)'}}>
                           {item.current_level ? (item.current_level===item.required_level||(['Advanced'].includes(item.current_level)&&['Basic','Intermediate'].includes(item.required_level))||(['Intermediate','Advanced'].includes(item.current_level)&&item.required_level==='Basic') ? '✓' : 'GAP') : '–'}
                         </div>
-                        <input value={item.notes||''} onChange={e=>updateItem(item.id,'notes',e.target.value)} placeholder="Notes…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 10px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
+                        <input value={item.notes||''} onChange={e=>updateItem(item.id,'notes',e.target.value)} placeholder="Notes…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
                         <button onClick={()=>deleteItem(item.id)} style={{background:'none',border:'none',color:'#ef4444',cursor:'pointer',fontSize:16,padding:4}}>✕</button>
                       </div>
                       {expanded.has(item.id) && item.description && (
