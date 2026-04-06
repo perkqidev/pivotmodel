@@ -753,3 +753,7 @@ input,select,textarea{font-family:inherit}
   .emb-summary{grid-template-columns:1fr}
   .grid-stack{gap:16px!important}
 }
+
+/* ── Talent sub-tabs scrollbar hide ──────────────────────────────── */
+.talent-subtabs::-webkit-scrollbar{display:none}
+.talent-subtabs{-ms-overflow-style:none;scrollbar-width:none}
