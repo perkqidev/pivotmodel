@@ -1201,9 +1201,18 @@ function SkillsetModule({ id }: { id:string }) {
                           <option value="">–</option>
                           {['Basic','Intermediate','Advanced'].map(v=><option key={v}>{v}</option>)}
                         </select>
-                        <div style={{fontWeight:700,fontSize:12,color:item.current_level&&item.required_level?(item.current_level===item.required_level||(['Advanced'].includes(item.current_level)&&['Basic','Intermediate'].includes(item.required_level))||(['Intermediate','Advanced'].includes(item.current_level)&&item.required_level==='Basic')?'#22c55e':'#ef4444'):'var(--muted)'}}>
-                          {item.current_level ? (item.current_level===item.required_level||(['Advanced'].includes(item.current_level)&&['Basic','Intermediate'].includes(item.required_level))||(['Intermediate','Advanced'].includes(item.current_level)&&item.required_level==='Basic') ? '✓' : 'GAP') : '–'}
-                        </div>
+                        {(() => {
+                          const lvls = ['Basic','Intermediate','Advanced'];
+                          const cur = lvls.indexOf(item.current_level);
+                          const req = lvls.indexOf(item.required_level);
+                          const hasBoth = cur >= 0 && req >= 0;
+                          const diff = hasBoth ? cur - req : 0;
+                          return (
+                            <div style={{fontWeight:700,fontSize:14,color:!hasBoth?'var(--muted)':(diff>=0?'#22c55e':'#ef4444')}}>
+                              {!hasBoth ? '–' : (diff>=0 ? '✓' : `${diff}`)}
+                            </div>
+                          );
+                        })()}
                         <input value={item.notes||''} onChange={e=>updateItem(item.id,'notes',e.target.value)} placeholder="How to close the gap, or why acceptable…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
                         {confirmingId===item.id ? (
                           <div style={{display:'flex',gap:2}}>
