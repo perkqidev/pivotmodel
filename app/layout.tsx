@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import './aero-tokens.css';
 import RevealObserver from '@/components/RevealObserver';
+import { ToastProvider } from '@/components/shared/Toast/ToastProvider';
 
 export const metadata: Metadata = {
   title: 'The Pivot Model — Engineering Excellence for the Age of AI',
@@ -26,8 +27,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
-        {children}
-        <RevealObserver />
+        <ToastProvider>
+          {children}
+          <RevealObserver />
+        </ToastProvider>
       </body>
     </html>
   );

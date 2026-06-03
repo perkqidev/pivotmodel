@@ -45,7 +45,7 @@ export default function ChatWidget() {
 
   return (
     <>
-      <button onClick={() => setOpen(o => !o)} style={{ position:'fixed',bottom:24,right:24,width:56,height:56,borderRadius:'50%',background:'var(--gold)',border:'none',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',boxShadow:'0 4px 24px rgba(0,0,0,0.3)',zIndex:1000,fontSize:24 }}>
+      <button onClick={() => setOpen(o => !o)} style={{ position:'fixed',bottom:24,right:24,width:56,height:56,borderRadius:'50%',background:'var(--cream)',border:'none',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',boxShadow:'0 4px 24px rgba(0,0,0,0.3)',zIndex:1000,fontSize:24 }}>
         {open ? '✕' : '💬'}
       </button>
       {open && (
@@ -83,7 +83,7 @@ export default function ChatWidget() {
           </div>
           <div style={{ padding:12,borderTop:'1px solid var(--border)',display:'flex',gap:8 }}>
             <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key==='Enter'&&!e.shiftKey&&send()} placeholder="Ask about the book…" style={{ flex:1,background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'8px 12px',color:'var(--fg)',fontSize:13,outline:'none' }} />
-            <button onClick={send} disabled={loading||!input.trim()} style={{ background:'var(--gold)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,fontSize:13,cursor:'pointer',opacity:loading||!input.trim()?0.5:1 }}>Send</button>
+            <button onClick={send} disabled={loading||!input.trim()} style={{ background:'var(--cream)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,fontSize:13,cursor:'pointer',opacity:loading||!input.trim()?0.5:1 }}>Send</button>
           </div>
         </div>
       )}

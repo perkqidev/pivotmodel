@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Nav from '@/components/Nav';
+import { useToast } from '@/components/shared/Toast/ToastProvider';
 
 type Module = 'emb' | 'drivers' | 'scope' | 'benchmarks' | 'maturity' | 'summary' | 'kra' | 'leadership' | 'talent' | 'skillset';
 
@@ -59,6 +60,7 @@ const STATUS_COLORS: Record<string,string> = { 'on-track':'var(--green)','at-ris
 export default function AssessmentPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
+  const toast = useToast();
   const [activeModule, setActiveModule] = useState<Module>('emb');
   const [assessment, setAssessment] = useState<any>(null);
   const [saving, setSaving] = useState(false);
@@ -114,21 +116,46 @@ export default function AssessmentPage() {
 
   async function addCollaborator() {
     if (!collab.trim()) return;
-    const res = await fetch(`/api/assessments/${id}/collaborators`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ email: collab }) });
-    const d = await res.json();
-    setCollabMsg(d.success ? 'Collaborator added.' : d.error || 'Error');
-    if (d.success) setCollab('');
+    try {
+      const res = await fetch(`/api/assessments/${id}/collaborators`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ email: collab }) });
+      const d = await res.json();
+      if (d.success) {
+        setCollabMsg('Collaborator added.');
+        toast.success(`${collab} invited as collaborator.`);
+        setCollab('');
+      } else {
+        const msg = d.error || 'Could not add collaborator.';
+        setCollabMsg(msg);
+        toast.error(msg);
+      }
+    } catch {
+      const msg = 'Network error. Please try again.';
+      setCollabMsg(msg);
+      toast.error(msg);
+    }
   }
 
   async function exportExcel() {
     window.open(`/api/assessments/${id}/export`, '_blank');
+    toast.info('Preparing Excel export…');
   }
 
   const save = useCallback(async (endpoint: string, rows: unknown[]) => {
     setSaving(true);
-    await fetch(`/api/assessments/${id}/${endpoint}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ rows }) });
-    setSaving(false); setSaveMsg('Saved'); setTimeout(() => setSaveMsg(''), 2000);
-  }, [id]);
+    try {
+      const res = await fetch(`/api/assessments/${id}/${endpoint}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ rows }) });
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}));
+        toast.error(d.error || 'Save failed. Changes may be lost.');
+      } else {
+        setSaveMsg('Saved'); setTimeout(() => setSaveMsg(''), 2000);
+      }
+    } catch {
+      toast.error('Network error. Save failed.');
+    } finally {
+      setSaving(false);
+    }
+  }, [id, toast]);
 
   if (!assessment) return <div style={{minHeight:'100vh',background:'var(--ink)',display:'flex',alignItems:'center',justifyContent:'center',color:'var(--muted)'}}>Loading…</div>;
 
@@ -149,13 +176,13 @@ export default function AssessmentPage() {
             {saving && <span style={{color:'var(--muted)',fontSize:12}}>Saving…</span>}
             {saveMsg && <span style={{color:'var(--green)',fontSize:12}}>{saveMsg}</span>}
             <button onClick={() => setShowCollab(o=>!o)} style={{ background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'6px 14px',color:'var(--fg)',fontSize:13,cursor:'pointer' }}>👥 Collaborators</button>
-            <button onClick={exportExcel} style={{ background:'var(--gold)',border:'none',borderRadius:8,padding:'6px 14px',color:'var(--gold-btn-text)',fontSize:13,fontWeight:700,cursor:'pointer' }}>📊 Export Excel</button>
+            <button onClick={exportExcel} style={{ background:'var(--cream)',border:'none',borderRadius:8,padding:'6px 14px',color:'var(--gold-btn-text)',fontSize:13,fontWeight:700,cursor:'pointer' }}>📊 Export Excel</button>
           </div>
         </div>
         {showCollab && (
           <div style={{ background:'var(--card)',borderBottom:'1px solid var(--border)',padding:'12px 32px',display:'flex',gap:12,alignItems:'center' }}>
             <input value={collab} onChange={e=>setCollab(e.target.value)} placeholder="Collaborator email address" style={{ background:'var(--surface)',border:'1px solid var(--border)',borderRadius:8,padding:'8px 12px',color:'var(--fg)',fontSize:13,width:280,outline:'none' }} />
-            <button onClick={addCollaborator} style={{ background:'var(--gold)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,fontSize:13,cursor:'pointer' }}>Invite</button>
+            <button onClick={addCollaborator} style={{ background:'var(--cream)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,fontSize:13,cursor:'pointer' }}>Invite</button>
             {collabMsg && <span style={{ fontSize:12,color:collabMsg.includes('Error')||collabMsg.includes('error')?'var(--red)':'var(--green)' }}>{collabMsg}</span>}
           </div>
         )}
@@ -274,7 +301,7 @@ function EMBModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Promi
       {nudge && <div style={{ background:'rgba(78,110,142,0.1)',border:'1px solid var(--gold)',borderRadius:12,padding:'12px 16px',marginBottom:24,fontSize:13,color:'var(--fg)' }}>💡 <strong>Intelligence Nudge:</strong> Based on your scores (avg {nudge.avg_score}/3), the computed maturity level is <strong style={{color:'var(--gold)'}}>{nudge.suggested_level}</strong>. Consider adjusting your overall rating.</div>}
       {pillars.map(pillar => (
         <div key={pillar} style={{ marginBottom:32 }}>
-          <div style={{ fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:12,textTransform:'uppercase',letterSpacing:'0.05em',display:'flex',alignItems:'center',justifyContent:'space-between' }}><span>{pillar}</span><button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/emb`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pivot_name:pillar})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,pivot_name:pillar,capability:'New Capability',current_level:'L1',evidence:'',gap_notes:'',sort_order:99}]);}} style={{background:'var(--gold)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Row</button></div>
+          <div style={{ fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:12,textTransform:'uppercase',letterSpacing:'0.05em',display:'flex',alignItems:'center',justifyContent:'space-between' }}><span>{pillar}</span><button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/emb`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pivot_name:pillar})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,pivot_name:pillar,capability:'New Capability',current_level:'L1',evidence:'',gap_notes:'',sort_order:99}]);}} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Row</button></div>
           <div className="scroll-table" style={{ background:'var(--surface)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border)' }}>
             <div style={{ display:'grid',gridTemplateColumns:'1.5fr 100px 2fr 2fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em' }}>
               <div>Capability</div><div>Current Level</div><div>Evidence & Proof</div><div>Improvement Notes</div><div></div>
@@ -337,7 +364,7 @@ function DriversModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>P
       </div>
       {categories.map(cat => (
         <div key={cat} style={{marginBottom:28}}>
-          <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em',display:'flex',alignItems:'center',justifyContent:'space-between'}}><span>{cat}</span><button onClick={()=>addRow(cat)} style={{background:'var(--gold)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Driver</button></div>
+          <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em',display:'flex',alignItems:'center',justifyContent:'space-between'}}><span>{cat}</span><button onClick={()=>addRow(cat)} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Driver</button></div>
           <div className="scroll-table" style={{ background:'var(--surface)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border)' }}>
             <div style={{ display:'grid',gridTemplateColumns:'1.2fr 1.5fr 70px 2.5fr 1.5fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em' }}>
               <div>Driver Name</div><div>What It Means</div><div>Required?</div><div>Key Considerations</div><div>Additional Notes</div><div></div>
@@ -369,7 +396,7 @@ function DriversModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>P
           <div style={{fontSize:32,marginBottom:12}}>📋</div>
           <div style={{color:'var(--fg)',fontWeight:600,fontSize:15,marginBottom:6}}>No business drivers documented yet</div>
           <div style={{color:'var(--muted)',fontSize:13,marginBottom:16}}>Capture cost, scale, and strategic reasons for your engineering team.</div>
-          <button onClick={()=>addRow('Engineering Cost')} style={{background:'var(--gold)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Driver</button>
+          <button onClick={()=>addRow('Engineering Cost')} style={{background:'var(--cream)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Driver</button>
         </div>
       </div>}
     </div>
@@ -406,7 +433,7 @@ function BenchmarksModule({ id, save }: { id:string; save:(e:string,r:unknown[])
               <div key={sub} style={{marginBottom:16}}>
                 {sub && <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(78,110,142,0.08)',borderRadius:'8px 8px 0 0',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
                   <span>{sub}</span>
-                  <button onClick={()=>addRow(pillar,sub)} style={{background:'var(--gold)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add KPI</button>
+                  <button onClick={()=>addRow(pillar,sub)} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add KPI</button>
                 </div>}
                 <div className="scroll-table" style={{background:'var(--surface)',borderRadius:sub?'0 0 12px 12px':'12px',overflow:'hidden',border:'1px solid var(--border)'}}>
                   <div style={{display:'grid',gridTemplateColumns:'1.2fr 50px 60px 70px 100px 110px 2fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
@@ -475,7 +502,7 @@ function ScopeModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Pro
       </div>
       {pillars.map(pillar=>(
         <div key={pillar} style={{marginBottom:28}}>
-          <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em',display:'flex',alignItems:'center',justifyContent:'space-between'}}><span>{pillar}</span><button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/scope`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pillar})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,pillar,activity:'New Activity',required_level:1,current_level:1,gap:0,notes:'',l1_guidance:'',l2_guidance:'',l3_guidance:''}]);}} style={{background:'var(--gold)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Activity</button></div>
+          <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em',display:'flex',alignItems:'center',justifyContent:'space-between'}}><span>{pillar}</span><button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/scope`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pillar})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,pillar,activity:'New Activity',required_level:1,current_level:1,gap:0,notes:'',l1_guidance:'',l2_guidance:'',l3_guidance:''}]);}} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Activity</button></div>
           <div className="scroll-table" style={{background:'var(--surface)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border)'}}>
             <div style={{display:'grid',gridTemplateColumns:'1.2fr 100px 100px 60px 2fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
               <div>Activity</div><div>Target Level</div><div>Current Level</div><div>Gap</div><div>Action Notes</div><div></div>
@@ -564,7 +591,7 @@ function SummaryModule({ id }: { id:string }) {
             <path d={pathFromScores(scopeScores,3)} fill="rgba(78,110,142,0.1)" stroke="var(--blue)" strokeWidth={2} strokeDasharray="4,4" />
           </svg>
           <div style={{display:'flex',gap:16,justifyContent:'center',marginTop:8}}>
-            <div style={{display:'flex',alignItems:'center',gap:6,fontSize:12,color:'var(--muted)'}}><div style={{width:20,height:3,background:'var(--gold)'}}></div>EMB Maturity</div>
+            <div style={{display:'flex',alignItems:'center',gap:6,fontSize:12,color:'var(--muted)'}}><div style={{width:20,height:3,background:'var(--cream)'}}></div>EMB Maturity</div>
             <div style={{display:'flex',alignItems:'center',gap:6,fontSize:12,color:'var(--muted)'}}><div style={{width:20,height:3,background:'var(--blue)',borderTop:'2px dashed var(--blue)'}}></div>Scope Assessment</div>
           </div>
         </div>
@@ -577,7 +604,7 @@ function SummaryModule({ id }: { id:string }) {
                 <div style={{fontSize:12,color:'var(--muted)'}}>{(embScores[i]/3*100).toFixed(0)}%</div>
               </div>
               <div style={{background:'var(--card)',borderRadius:4,height:8,overflow:'hidden'}}>
-                <div style={{width:`${(embScores[i]/3)*100}%`,height:'100%',background:'var(--gold)',borderRadius:4,transition:'width 0.5s'}}></div>
+                <div style={{width:`${(embScores[i]/3)*100}%`,height:'100%',background:'var(--cream)',borderRadius:4,transition:'width 0.5s'}}></div>
               </div>
             </div>
           ))}
@@ -604,7 +631,7 @@ function MaturityModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>
     <div>
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24,gap:12,flexWrap:'wrap' as const}}>
         <div><h2 style={{color:'var(--fg)',margin:0}}>Competency Maturity Levels</h2><p style={{color:'var(--muted)',fontSize:13,margin:'4px 0 0'}}>Assess the key factors that shape your team's overall maturity. For each, select a level and describe current ownership, skill capability, and the business value it delivers.</p></div>
-        <button onClick={addRow} style={{background:'var(--gold)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Factor</button>
+        <button onClick={addRow} style={{background:'var(--cream)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Factor</button>
       </div>
       <div className="scroll-table" style={{background:'var(--surface)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border)'}}>
         <div style={{display:'grid',gridTemplateColumns:'1.2fr 90px 1.5fr 1.5fr 1.5fr 1.2fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
@@ -635,7 +662,7 @@ function MaturityModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>
             <div style={{fontSize:32,marginBottom:12}}>📊</div>
             <div style={{color:'var(--fg)',fontWeight:600,fontSize:15,marginBottom:6}}>No maturity factors yet</div>
             <div style={{color:'var(--muted)',fontSize:13,marginBottom:16}}>Assess ownership, skills, and business value across key areas.</div>
-            <button onClick={addRow} style={{background:'var(--gold)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Factor</button>
+            <button onClick={addRow} style={{background:'var(--cream)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Factor</button>
           </div>
         </div>}
       </div>
@@ -672,7 +699,7 @@ function KRAModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Promi
         const rolePillars = [...new Set(roleRows.map(r=>r.pillar||''))];
         return (
           <div key={role} style={{marginBottom:32}}>
-            <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em',display:'flex',alignItems:'center',justifyContent:'space-between'}}><span>{role}</span><button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/kra`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({role_level:role,pillar:'Operational Excellence'})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,role_level:role,pillar:'Operational Excellence',person_name:'',kra_name:'New KRA',description:'',target:'',current:'',status:'not-started',notes:''}]);}} style={{background:'var(--gold)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add KRA</button></div>
+            <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em',display:'flex',alignItems:'center',justifyContent:'space-between'}}><span>{role}</span><button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/kra`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({role_level:role,pillar:'Operational Excellence'})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,role_level:role,pillar:'Operational Excellence',person_name:'',kra_name:'New KRA',description:'',target:'',current:'',status:'not-started',notes:''}]);}} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add KRA</button></div>
             {rolePillars.map(pillar => (
               <div key={pillar} style={{marginBottom:12}}>
                 {pillar && <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'4px 16px',background:'rgba(78,110,142,0.06)'}}>{pillar}</div>}
@@ -744,7 +771,7 @@ function LeadershipModule({ id, save }: { id:string; save:(e:string,r:unknown[])
         <div style={{display:'flex',gap:8,alignItems:'center'}}>
           <input value={newLeader} onChange={e=>setNewLeader(e.target.value)} placeholder="e.g. Jane Smith" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'8px 12px',color:'var(--fg)',fontSize:13,outline:'none',width:160}} />
           <input value={newRole} onChange={e=>setNewRole(e.target.value)} placeholder="e.g. Sr. Engineering Manager" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'8px 12px',color:'var(--fg)',fontSize:13,outline:'none',width:140}} />
-          <button onClick={addLeader} style={{background:'var(--gold)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Leader</button>
+          <button onClick={addLeader} style={{background:'var(--cream)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Leader</button>
         </div>
       </div>
       {leaders.map(leader=>{
@@ -828,6 +855,7 @@ function LeadershipModule({ id, save }: { id:string; save:(e:string,r:unknown[])
 // ── Module 9: Engineering Talent Map ──────────────────────────────────────────
 type TalentSubTab = 'profile'|'technical'|'mindset'|'knowledge'|'ai'|'tracker';
 function TalentMapModule({ id }: { id:string }) {
+  const toast = useToast();
   const [engineers, setEngineers] = useState<any[]>([]);
   const [selectedEng, setSelectedEng] = useState<number|null>(null);
   const [subTab, setSubTab] = useState<TalentSubTab>('profile');
@@ -851,21 +879,34 @@ function TalentMapModule({ id }: { id:string }) {
 
   async function addEngineer() {
     if (!newName.trim()) return;
-    const res = await fetch(`/api/assessments/${id}/talent`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:newName})});
-    const d = await res.json();
-    if (d.id) {
-      // Refetch to get skills
-      const r2 = await fetch(`/api/assessments/${id}/talent`).then(r=>r.json());
-      setEngineers(r2.engineers||[]);
-      setSelectedEng(d.id);
-      setNewName('');
+    try {
+      const res = await fetch(`/api/assessments/${id}/talent`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:newName})});
+      const d = await res.json();
+      if (d.id) {
+        const r2 = await fetch(`/api/assessments/${id}/talent`).then(r=>r.json());
+        setEngineers(r2.engineers||[]);
+        setSelectedEng(d.id);
+        toast.success(`Engineer "${newName}" added.`);
+        setNewName('');
+      } else {
+        toast.error(d.error || 'Could not add engineer.');
+      }
+    } catch {
+      toast.error('Network error. Please try again.');
     }
   }
 
   async function deleteEngineer(engId: number) {
-    await fetch(`/api/assessments/${id}/talent`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({engineer_id:engId})});
-    setEngineers(prev => prev.filter(e => e.id !== engId));
-    if (selectedEng === engId) setSelectedEng(engineers.find(e => e.id !== engId)?.id || null);
+    const target = engineers.find(e => e.id === engId);
+    try {
+      const res = await fetch(`/api/assessments/${id}/talent`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({engineer_id:engId})});
+      if (!res.ok) { toast.error('Delete failed.'); return; }
+      setEngineers(prev => prev.filter(e => e.id !== engId));
+      if (selectedEng === engId) setSelectedEng(engineers.find(e => e.id !== engId)?.id || null);
+      toast.success(`${target?.name || 'Engineer'} removed.`);
+    } catch {
+      toast.error('Network error. Delete failed.');
+    }
   }
 
   function updateEng(field: string, val: string) {
@@ -905,7 +946,7 @@ function TalentMapModule({ id }: { id:string }) {
           {saving && <span style={{color:'var(--muted)',fontSize:12}}>Saving…</span>}
           {saveMsg && <span style={{color:'var(--green)',fontSize:12}}>{saveMsg}</span>}
           <input value={newName} onChange={e=>setNewName(e.target.value)} placeholder="e.g. John Doe" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'8px 12px',color:'var(--fg)',fontSize:13,outline:'none',width:160}} />
-          <button onClick={addEngineer} style={{background:'var(--gold)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Engineer</button>
+          <button onClick={addEngineer} style={{background:'var(--cream)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Engineer</button>
         </div>
       </div>
 
@@ -1089,6 +1130,7 @@ function TalentMapModule({ id }: { id:string }) {
 
 // ── Module 10: Technical Skillset Requirements ─────────────────────────────────
 function SkillsetModule({ id }: { id:string }) {
+  const toast = useToast();
   const [context, setContext] = useState<any[]>([]);
   const [items, setItems] = useState<any[]>([]);
   const [saving, setSaving] = useState(false);
@@ -1121,13 +1163,27 @@ function SkillsetModule({ id }: { id:string }) {
   }, [context, items]);
 
   async function addItem(section:string, category:string) {
-    const res=await fetch(`/api/assessments/${id}/skillset`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'item',section,category})});
-    const d=await res.json();
-    if(d.id) setItems(prev=>[...prev,{id:d.id,section,category,item_name:'New Skill',description:'',importance:'Important',current_level:'',required_level:'Intermediate',gap:'',notes:''}]);
+    try {
+      const res=await fetch(`/api/assessments/${id}/skillset`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'item',section,category})});
+      const d=await res.json();
+      if(d.id) {
+        setItems(prev=>[...prev,{id:d.id,section,category,item_name:'New Skill',description:'',importance:'Important',current_level:'',required_level:'Intermediate',gap:'',notes:''}]);
+      } else {
+        toast.error(d.error || 'Could not add skill.');
+      }
+    } catch {
+      toast.error('Network error. Please try again.');
+    }
   }
   async function deleteItem(rowId:number) {
-    await fetch(`/api/assessments/${id}/skillset`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'item',row_id:rowId})});
-    setItems(prev=>prev.filter(i=>i.id!==rowId));
+    try {
+      const res = await fetch(`/api/assessments/${id}/skillset`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'item',row_id:rowId})});
+      if (!res.ok) { toast.error('Delete failed.'); return; }
+      setItems(prev=>prev.filter(i=>i.id!==rowId));
+      toast.success('Skill removed.');
+    } catch {
+      toast.error('Network error. Delete failed.');
+    }
   }
 
   function toggleDetail(rowId: number) { setExpanded(prev => { const n = new Set(prev); n.has(rowId) ? n.delete(rowId) : n.add(rowId); return n; }); }
@@ -1178,7 +1234,7 @@ function SkillsetModule({ id }: { id:string }) {
               <div key={cat} style={{marginBottom:16}}>
                 {cat && <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(78,110,142,0.08)',borderRadius:'8px 8px 0 0',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
                   <span>{cat}</span>
-                  <button onClick={()=>addItem(section,cat)} style={{background:'var(--gold)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Skill</button>
+                  <button onClick={()=>addItem(section,cat)} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Skill</button>
                 </div>}
                 <div className="scroll-table" style={{background:'var(--surface)',borderRadius:cat?'0 0 12px 12px':'12px',overflow:'hidden',border:'1px solid var(--border)'}}>
                   <div style={{display:'grid',gridTemplateColumns:'1.5fr 90px 90px 90px 56px 2fr 36px',gap:'0 12px',background:'var(--card)',padding:'8px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>

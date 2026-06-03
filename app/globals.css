@@ -38,6 +38,15 @@
   --font-mono:   'JetBrains Mono',ui-monospace,monospace;
   --section-pad: clamp(64px,8vw,120px);
   --hover-bg:    rgba(21,22,26,0.04);
+  /* Aero aliases — also defined inside .landing-aero with the same values,
+     here as a safety net so var(--base) / var(--accent) etc. never resolve
+     to undefined (which would fall through to inherited color and make
+     light-text buttons render as dark text). */
+  --base:    #F7F7F5;
+  --base-2:  #F0F0EE;
+  --accent:  #4E6E8E;
+  --accent-hi: #6889A8;
+  --line:    #E6E6E2;
 }
 
 /* Dark theme — applied via [data-theme="dark"] on <html> */
@@ -58,6 +67,12 @@ html[data-theme='dark'] {
   --border:  rgba(231,234,239,0.10);
   --border-2:rgba(231,234,239,0.18);
   --hover-bg:rgba(231,234,239,0.05);
+  /* Aero aliases — dark theme */
+  --base:    #0E0F14;
+  --base-2:  #161921;
+  --accent:  #7CA0C7;
+  --accent-hi: #B4CADC;
+  --line:    #1E2128;
 }
 
 /* ── Base ──────────────────────────────────────────────────────────── */

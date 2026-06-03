@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { useToast } from '@/components/shared/Toast/ToastProvider';
 
 type Tab = 'users'|'blog'|'whitepapers'|'chat'|'stats';
 
@@ -41,12 +42,24 @@ export default function AdminPage() {
 }
 
 function UsersTab() {
+  const toast = useToast();
   const [users, setUsers] = useState<any[]>([]);
   const [search, setSearch] = useState('');
   useEffect(()=>{fetch('/api/admin/users').then(r=>r.json()).then(d=>setUsers(d.users||[]));}, []);
   async function action(userId:number, act:string) {
-    await fetch('/api/admin/users',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:act,userId})});
-    fetch('/api/admin/users').then(r=>r.json()).then(d=>setUsers(d.users||[]));
+    try {
+      const res = await fetch('/api/admin/users',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:act,userId})});
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}));
+        toast.error(d.error || `Could not ${act} user.`);
+        return;
+      }
+      const labels: Record<string,string> = { activate:'activated', deactivate:'deactivated', promote:'promoted to admin', demote:'demoted' };
+      toast.success(`User ${labels[act] || 'updated'}.`);
+      fetch('/api/admin/users').then(r=>r.json()).then(d=>setUsers(d.users||[]));
+    } catch {
+      toast.error('Network error. Please try again.');
+    }
   }
   const filtered = users.filter(u=>u.name?.toLowerCase().includes(search.toLowerCase())||u.email?.toLowerCase().includes(search.toLowerCase())||u.company?.toLowerCase().includes(search.toLowerCase()));
   return (
@@ -80,20 +93,37 @@ function UsersTab() {
 }
 
 function BlogTab() {
+  const toast = useToast();
   const [posts, setPosts] = useState<any[]>([]);
   const [editing, setEditing] = useState<any|null>(null);
   useEffect(()=>{fetch('/api/blog?all=1').then(r=>r.json()).then(d=>setPosts(d.posts||[]));}, []);
   async function save() {
     if (!editing) return;
     const method = editing.id ? 'PATCH' : 'POST';
-    await fetch('/api/blog',{method,headers:{'Content-Type':'application/json'},body:JSON.stringify(editing)});
-    fetch('/api/blog?all=1').then(r=>r.json()).then(d=>setPosts(d.posts||[]));
-    setEditing(null);
+    try {
+      const res = await fetch('/api/blog',{method,headers:{'Content-Type':'application/json'},body:JSON.stringify(editing)});
+      if (!res.ok) {
+        const d = await res.json().catch(()=>({}));
+        toast.error(d.error || 'Could not save post.');
+        return;
+      }
+      toast.success(editing.id ? 'Post updated.' : 'Post created.');
+      fetch('/api/blog?all=1').then(r=>r.json()).then(d=>setPosts(d.posts||[]));
+      setEditing(null);
+    } catch {
+      toast.error('Network error. Save failed.');
+    }
   }
   async function del(id:number) {
     if (!confirm('Delete this post?')) return;
-    await fetch('/api/blog',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
-    setPosts(prev=>prev.filter(p=>p.id!==id));
+    try {
+      const res = await fetch('/api/blog',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
+      if (!res.ok) { toast.error('Delete failed.'); return; }
+      setPosts(prev=>prev.filter(p=>p.id!==id));
+      toast.success('Post deleted.');
+    } catch {
+      toast.error('Network error. Delete failed.');
+    }
   }
   if (editing) return (
     <div>
@@ -114,7 +144,7 @@ function BlogTab() {
             <option value="draft">Draft</option><option value="published">Published</option>
           </select>
         </div>
-        <button onClick={save} style={{background:'var(--gold)',border:'none',borderRadius:8,padding:'12px 24px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:14}}>Save Post</button>
+        <button onClick={save} style={{background:'var(--cream)',border:'none',borderRadius:8,padding:'12px 24px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:14}}>Save Post</button>
       </div>
     </div>
   );
@@ -122,7 +152,7 @@ function BlogTab() {
     <div>
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24}}>
         <h2 style={{margin:0,color:'var(--cream)'}}>Blog Posts ({posts.length})</h2>
-        <button onClick={()=>setEditing({title:'',category:'',excerpt:'',body:'',emoji:'📝',read_time:4,status:'draft'})} style={{background:'var(--gold)',border:'none',borderRadius:8,padding:'10px 20px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer'}}>+ New Post</button>
+        <button onClick={()=>setEditing({title:'',category:'',excerpt:'',body:'',emoji:'📝',read_time:4,status:'draft'})} style={{background:'var(--cream)',border:'none',borderRadius:8,padding:'10px 20px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer'}}>+ New Post</button>
       </div>
       <div style={{display:'grid',gap:12}}>
         {posts.map(p=>(
@@ -144,15 +174,36 @@ function BlogTab() {
 }
 
 function WhitepapersTab() {
+  const toast = useToast();
   const [papers, setPapers] = useState<any[]>([]);
   const [editing, setEditing] = useState<any|null>(null);
   useEffect(()=>{fetch('/api/whitepapers?all=1').then(r=>r.json()).then(d=>setPapers(d.whitepapers||[])).catch(()=>{});}, []);
   async function save() {
     if (!editing) return;
     const method = editing.id ? 'PATCH' : 'POST';
-    await fetch('/api/whitepapers',{method,headers:{'Content-Type':'application/json'},body:JSON.stringify(editing)});
-    fetch('/api/whitepapers?all=1').then(r=>r.json()).then(d=>setPapers(d.whitepapers||[])).catch(()=>{});
-    setEditing(null);
+    try {
+      const res = await fetch('/api/whitepapers',{method,headers:{'Content-Type':'application/json'},body:JSON.stringify(editing)});
+      if (!res.ok) {
+        const d = await res.json().catch(()=>({}));
+        toast.error(d.error || 'Could not save whitepaper.');
+        return;
+      }
+      toast.success(editing.id ? 'Whitepaper updated.' : 'Whitepaper added.');
+      fetch('/api/whitepapers?all=1').then(r=>r.json()).then(d=>setPapers(d.whitepapers||[])).catch(()=>{});
+      setEditing(null);
+    } catch {
+      toast.error('Network error. Save failed.');
+    }
+  }
+  async function delPaper(pid:number) {
+    try {
+      const res = await fetch('/api/whitepapers',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:pid})});
+      if (!res.ok) { toast.error('Delete failed.'); return; }
+      setPapers(prev=>prev.filter(x=>x.id!==pid));
+      toast.success('Whitepaper deleted.');
+    } catch {
+      toast.error('Network error. Delete failed.');
+    }
   }
   if (editing) return (
     <div>
@@ -170,7 +221,7 @@ function WhitepapersTab() {
             <option value="public">Public</option><option value="members">Members only</option>
           </select>
         </div>
-        <button onClick={save} style={{background:'var(--gold)',border:'none',borderRadius:8,padding:'12px 24px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:14}}>Save</button>
+        <button onClick={save} style={{background:'var(--cream)',border:'none',borderRadius:8,padding:'12px 24px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:14}}>Save</button>
       </div>
     </div>
   );
@@ -178,7 +229,7 @@ function WhitepapersTab() {
     <div>
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24}}>
         <h2 style={{margin:0,color:'var(--cream)'}}>Whitepapers</h2>
-        <button onClick={()=>setEditing({title:'',category:'',description:'',icon:'📄',pages:1,access:'members',file_url:''})} style={{background:'var(--gold)',border:'none',borderRadius:8,padding:'10px 20px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer'}}>+ Add Whitepaper</button>
+        <button onClick={()=>setEditing({title:'',category:'',description:'',icon:'📄',pages:1,access:'members',file_url:''})} style={{background:'var(--cream)',border:'none',borderRadius:8,padding:'10px 20px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer'}}>+ Add Whitepaper</button>
       </div>
       <div style={{display:'grid',gap:12}}>
         {papers.map(p=>(
@@ -187,7 +238,7 @@ function WhitepapersTab() {
             <div style={{flex:1}}><div style={{fontWeight:700,color:'var(--cream)'}}>{p.title}</div><div style={{fontSize:12,color:'var(--muted)'}}>{p.category} · {p.pages}pp · {p.access}</div></div>
             <div style={{display:'flex',gap:8}}>
               <button onClick={()=>setEditing(p)} style={{background:'none',border:'1px solid var(--border-2)',borderRadius:8,padding:'6px 14px',color:'var(--muted)',cursor:'pointer',fontSize:12}}>Edit</button>
-              <button onClick={async()=>{await fetch('/api/whitepapers',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:p.id})});setPapers(prev=>prev.filter(x=>x.id!==p.id));}} style={{background:'none',border:'1px solid var(--red)',borderRadius:8,padding:'6px 14px',color:'var(--red)',cursor:'pointer',fontSize:12}}>Delete</button>
+              <button onClick={()=>delPaper(p.id)} style={{background:'none',border:'1px solid var(--red)',borderRadius:8,padding:'6px 14px',color:'var(--red)',cursor:'pointer',fontSize:12}}>Delete</button>
             </div>
           </div>
         ))}
@@ -197,14 +248,27 @@ function WhitepapersTab() {
 }
 
 function ChatConfigTab() {
+  const toast = useToast();
   const [config, setConfig] = useState({chat_enabled:'false',chat_api_key:'',chat_system_prompt:'',chat_limit_day:'20',chat_limit_week:'80',chat_limit_month:'200'});
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   useEffect(()=>{fetch('/api/admin/config').then(r=>r.json()).then(d=>{ if(d.settings) setConfig(s=>({...s,...d.settings})); });}, []);
   async function save() {
     setSaving(true);
-    await fetch('/api/admin/config',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(config)});
-    setSaving(false); setSaved(true); setTimeout(()=>setSaved(false),2000);
+    try {
+      const res = await fetch('/api/admin/config',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(config)});
+      if (!res.ok) {
+        const d = await res.json().catch(()=>({}));
+        toast.error(d.error || 'Could not save configuration.');
+      } else {
+        setSaved(true); setTimeout(()=>setSaved(false),2000);
+        toast.success('Chat configuration saved.');
+      }
+    } catch {
+      toast.error('Network error. Save failed.');
+    } finally {
+      setSaving(false);
+    }
   }
   return (
     <div>
@@ -238,7 +302,7 @@ function ChatConfigTab() {
           </div>
           <div style={{fontSize:11,color:'var(--muted)',marginTop:8}}>Limits are enforced server-side using rolling time windows. Changes take effect immediately without a redeploy.</div>
         </div>
-        <button onClick={save} disabled={saving} style={{background:'var(--gold)',border:'none',borderRadius:8,padding:'12px 24px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:14,opacity:saving?0.7:1}}>
+        <button onClick={save} disabled={saving} style={{background:'var(--cream)',border:'none',borderRadius:8,padding:'12px 24px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:14,opacity:saving?0.7:1}}>
           {saving?'Saving…':saved?'✓ Saved':'Save Configuration'}
         </button>
       </div>

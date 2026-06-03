@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { useToast } from '@/components/shared/Toast/ToastProvider';
 
 interface Props { source?: string }
 
@@ -13,6 +14,7 @@ const SVCS = [
 ];
 
 export default function ConsultModal({ source = 'website' }: Props) {
+  const toast = useToast();
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(1);
   const [err, setErr] = useState('');
@@ -64,9 +66,20 @@ export default function ConsultModal({ source = 'website' }: Props) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...f, service: svc, source }),
       });
-      if (res.ok) { setDone(true); }
-      else { const d = await res.json(); setErr(d.error || 'Submission failed.'); }
-    } catch { setErr('Network error. Please try again.'); }
+      if (res.ok) {
+        setDone(true);
+        toast.success('Inquiry received. We’ll be in touch within 24 hours.');
+      } else {
+        const d = await res.json();
+        const msg = d.error || 'Submission failed.';
+        setErr(msg);
+        toast.error(msg);
+      }
+    } catch {
+      const msg = 'Network error. Please try again.';
+      setErr(msg);
+      toast.error(msg);
+    }
     finally { setLoading(false); }
   }
 

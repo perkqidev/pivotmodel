@@ -59,6 +59,7 @@
 .landing-aero *::after {
   box-sizing: border-box;
 }
-.landing-aero a { color: inherit; text-decoration: none; }
+.landing-aero a { text-decoration: none; }
+.landing-aero a:not([class]) { color: inherit; }
 .landing-aero img { display: block; max-width: 100%; }
 .landing-aero ::selection { background: var(--accent); color: var(--base); }

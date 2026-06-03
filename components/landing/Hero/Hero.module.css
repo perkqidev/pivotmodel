@@ -74,13 +74,27 @@
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  background: var(--ink);
-  color: var(--base);
+  background: #15161A;
+  color: #FFFFFF !important;
   padding: 14px 28px;
-  border: 1px solid var(--ink);
+  border: 1px solid #15161A;
   transition: background 0.3s var(--ease), border-color 0.3s var(--ease), color 0.3s var(--ease);
 }
-.btnPrimary:hover { background: var(--accent); border-color: var(--accent); }
+.btnPrimary:hover {
+  background: #4E6E8E;
+  border-color: #4E6E8E;
+  color: #FFFFFF !important;
+}
+:global([data-theme='dark']) .btnPrimary {
+  background: #E7EAEF;
+  color: #0E0F14 !important;
+  border-color: #E7EAEF;
+}
+:global([data-theme='dark']) .btnPrimary:hover {
+  background: #7CA0C7;
+  border-color: #7CA0C7;
+  color: #0E0F14 !important;
+}
 
 .btnGhost {
   font-family: var(--font-mono);

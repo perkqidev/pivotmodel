@@ -24,9 +24,11 @@
          color: var(--ink-2); line-height: 1.75; margin-bottom: 18px; }
 .cta { display: inline-flex; align-items: center; gap: 11px; margin-top: 18px;
        font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
-       color: var(--ink); padding: 16px 28px; border: 1px solid var(--ink);
+       color: #15161A !important; padding: 16px 28px; border: 1px solid #15161A;
        transition: background 0.3s var(--ease), color 0.3s var(--ease); }
-.cta:hover { background: var(--ink); color: var(--base); }
+.cta:hover { background: #15161A; color: #FFFFFF !important; }
+:global([data-theme='dark']) .cta { color: #E7EAEF !important; border-color: #E7EAEF; }
+:global([data-theme='dark']) .cta:hover { background: #E7EAEF; color: #0E0F14 !important; }
 .cta .ar { transition: transform 0.25s; } .cta:hover .ar { transform: translateX(5px); }
 @media (max-width: 960px) {
   .wrap { padding: 0 28px; }

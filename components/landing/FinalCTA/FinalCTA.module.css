@@ -15,9 +15,9 @@
         color: rgba(255,255,255,0.72); max-width: 60ch; margin: 0 auto 44px; }
 .cta { display: inline-flex; align-items: center; gap: 12px;
        font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
-       background: var(--accent-hi); color: var(--ink); padding: 22px 44px;
-       border: 1px solid var(--accent-hi); transition: background 0.3s var(--ease), color 0.3s var(--ease); }
-.cta:hover { background: var(--base); color: var(--ink); border-color: var(--base); }
+       background: #6889A8; color: #FFFFFF !important; padding: 22px 44px;
+       border: 1px solid #6889A8; transition: background 0.3s var(--ease), color 0.3s var(--ease); }
+.cta:hover { background: #F7F7F5; color: #15161A !important; border-color: #F7F7F5; }
 .cta .ar { transition: transform 0.25s; } .cta:hover .ar { transform: translateX(6px); }
 .note { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em;
         text-transform: uppercase; color: rgba(255,255,255,0.4); margin-top: 28px; }

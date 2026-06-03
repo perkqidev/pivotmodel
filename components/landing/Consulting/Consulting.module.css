@@ -32,11 +32,11 @@
         letter-spacing: -0.02em; color: var(--accent-hi); margin-bottom: 6px; }
 .figL { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.1em;
         text-transform: uppercase; color: rgba(255,255,255,0.55); line-height: 1.4; }
-.cta { display: block; width: 100%; text-align: center; background: var(--accent); color: var(--base);
+.cta { display: block; width: 100%; text-align: center; background: #F7F7F5; color: #15161A !important;
        font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
-       padding: 18px 24px; border: 1px solid var(--accent); cursor: pointer;
-       transition: background 0.3s var(--ease), color 0.3s var(--ease); }
-.cta:hover { background: var(--accent-hi); border-color: var(--accent-hi); color: var(--ink); }
+       padding: 18px 24px; border: 1px solid #F7F7F5; cursor: pointer;
+       transition: background 0.3s var(--ease), color 0.3s var(--ease), border-color 0.3s var(--ease); }
+.cta:hover { background: #6889A8; border-color: #6889A8; color: #FFFFFF !important; }
 .note { text-align: center; font-family: var(--font-mono); font-size: 10px;
         letter-spacing: 0.1em; color: rgba(255,255,255,0.5); margin-top: 16px; }
 @media (max-width: 960px) {
