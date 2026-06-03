@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Pivot Model — 3D Flagship</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Fraunces:ital,opsz,wght@1,9..144,400;1,9..144,500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#07070A; --bg-2:#0D0E13; --surf:#14161D; --surf-2:#1B1E27;
+    --fg:#F2EFE8; --fg-2:#9D9B92; --fg-3:#6A6860;
+    --line:rgba(242,239,232,.09); --line-2:rgba(242,239,232,.16);
+    --accent:#E8954A; --accent-l:#F6B978; --cool:#7FB0FF;
+    --disp:'Sora',system-ui,sans-serif; --sans:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',monospace; --serif:'Fraunces',Georgia,serif;
+    --ease:cubic-bezier(.16,1,.3,1);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html,body{overflow-x:hidden}
+  body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--accent);color:#07070A}
+  img{display:block;max-width:100%}
+
+  /* fixed 3D canvas */
+  #gl{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;pointer-events:none;opacity:0;transition:opacity 1.2s ease}
+  #gl.ready{opacity:1}
+  /* progress bar */
+  .prog{position:fixed;top:0;left:0;height:2px;width:100%;transform:scaleX(0);transform-origin:0 50%;background:linear-gradient(90deg,var(--accent-l),var(--accent));z-index:800}
+  /* grain */
+  .grain{position:fixed;inset:-50%;z-index:700;pointer-events:none;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:gr 7s steps(5) infinite}
+  @keyframes gr{0%{transform:translate(0,0)}25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(3%,1%)}100%{transform:translate(0,0)}}
+  .cursor{position:fixed;top:0;left:0;width:8px;height:8px;border-radius:50%;background:var(--accent);z-index:9999;pointer-events:none;transform:translate(-50%,-50%);transition:width .3s,height .3s,background .3s,opacity .3s}
+  .cursor.big{width:54px;height:54px;background:rgba(232,149,74,.14);border:1px solid var(--accent)}
+  @media(hover:none){.cursor{display:none}}
+  .loader{position:fixed;inset:0;z-index:9500;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;transition:opacity .8s ease,visibility .8s}
+  .loader.done{opacity:0;visibility:hidden}
+  .loader .mk{color:var(--accent);font-size:24px;letter-spacing:.5em;animation:sp 2.4s linear infinite}
+  .loader .l{font-family:var(--mono);font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--fg-3)}
+  .loader .l b{color:var(--fg);font-weight:400}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .back{position:fixed;left:16px;bottom:16px;z-index:600;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--fg-2);background:rgba(13,14,19,.8);backdrop-filter:blur(8px);border:1px solid var(--line-2);border-radius:30px;padding:8px 14px;transition:.25s}
+  .back:hover{color:var(--accent-l);border-color:var(--accent)}
+
+  .wrap{max-width:1240px;margin:0 auto;padding:0 48px}
+  .label{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-l)}
+  section{position:relative;z-index:2}
+
+  nav.site{position:fixed;top:0;left:0;right:0;z-index:300;padding:22px 0;transition:padding .4s var(--ease),background .4s,border-color .4s;border-bottom:1px solid transparent}
+  nav.site.solid{padding:13px 0;background:rgba(7,7,10,.6);backdrop-filter:blur(18px);border-bottom-color:var(--line)}
+  .nav-in{max-width:1240px;margin:0 auto;padding:0 48px;display:flex;align-items:center;justify-content:space-between}
+  .brand{font-family:var(--disp);font-weight:700;font-size:19px;letter-spacing:-.01em}
+  .brand b{color:var(--accent)}
+  .nav-links{display:flex;align-items:center;gap:32px}
+  .nav-links a{font-size:13.5px;color:var(--fg-2);transition:color .25s}
+  .nav-links a:hover{color:var(--fg)}
+  .nav-cta{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line-2);border-radius:30px;padding:10px 18px!important;transition:.25s}
+  .nav-cta:hover{background:var(--accent);color:#07070A!important;border-color:var(--accent)}
+  .burger{display:none;background:none;border:1px solid var(--line-2);border-radius:8px;color:var(--fg);padding:9px 12px;cursor:pointer}
+
+  /* hero */
+  .hero{min-height:100vh;display:flex;align-items:center;padding:140px 0 80px;position:relative}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:30px;align-items:center;width:100%}
+  .hk{display:flex;align-items:center;gap:14px;margin-bottom:28px}
+  .hk .ln{width:52px;height:1px;background:var(--accent)}
+  h1.htitle{font-family:var(--disp);font-weight:800;font-size:clamp(54px,8.6vw,128px);line-height:.9;letter-spacing:-.04em;margin-bottom:30px}
+  .ln-mask{display:block;overflow:hidden;padding-bottom:.04em}
+  .ln-mask>span{display:block}
+  h1 em{font-style:normal;background:linear-gradient(100deg,var(--accent-l),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero-desc{font-size:clamp(17px,1.5vw,21px);line-height:1.6;color:var(--fg-2);max-width:33ch;margin-bottom:36px}
+  .hero-desc b{color:var(--fg);font-weight:600}
+  .hero-actions{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:10px;font-size:14.5px;font-weight:600;padding:15px 28px;border-radius:34px;cursor:pointer;transition:background .28s,border-color .28s,box-shadow .28s;border:1px solid transparent}
+  .btn-em{background:linear-gradient(100deg,var(--accent-l),var(--accent));color:#07070A;box-shadow:0 12px 36px -10px rgba(232,149,74,.5)}
+  .btn-ghost{border-color:var(--line-2);color:var(--fg)}.btn-ghost:hover{border-color:var(--fg);background:rgba(242,239,232,.05)}
+  .btn-ghost .ar{transition:transform .25s}.btn-ghost:hover .ar{transform:translateX(5px)}
+  .hero-r{position:relative;height:74vh;min-height:480px}
+  /* CSS fallback book (only when no WebGL) */
+  .fallback-book{display:none}
+  body.no3d #gl,body.no3d .loader{display:none}
+  body.no3d .fallback-book{display:flex;align-items:center;justify-content:center;height:100%}
+  .fb{width:260px;height:374px;border-radius:3px 8px 8px 3px;background:linear-gradient(155deg,#241a12,#100c08);box-shadow:inset 0 0 0 1px rgba(246,185,120,.25),0 40px 80px -28px #000,0 0 80px -16px rgba(232,149,74,.4);display:flex;flex-direction:column;justify-content:space-between;padding:34px 28px;color:var(--fg);text-align:center;transform:rotate(-4deg)}
+  .fb .mk{color:var(--accent-l);font-size:14px;letter-spacing:.4em}
+  .fb h2{font-family:var(--disp);font-weight:700;font-size:30px;line-height:1}
+  .fb .s{font-family:var(--mono);font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--fg-2)}
+  .hint{position:absolute;left:0;bottom:6%;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--fg-3)}
+  .scrollcue{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;z-index:3;opacity:.5}
+  .scrollcue .ln{width:1px;height:42px;background:rgba(242,239,232,.2);position:relative;overflow:hidden}
+  .scrollcue .ln::after{content:"";position:absolute;top:-42px;left:0;width:1px;height:42px;background:var(--accent);animation:cue 2.1s infinite}
+  @keyframes cue{to{top:42px}}
+  .scrollcue span{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--fg-2)}
+
+  .mq{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:13px 0;white-space:nowrap;background:var(--bg-2)}
+  .mq .tk{display:inline-flex;gap:40px}
+  .mq span{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--fg-2)}
+  .mq b{color:var(--accent)}
+
+  .blk{background:var(--bg);padding:130px 0}
+  .blk.alt{background:var(--bg-2)}
+  .stats{padding:90px 0;background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .stats-in{display:grid;grid-template-columns:repeat(4,1fr)}
+  .stat{padding:0 34px;border-right:1px solid var(--line)}
+  .stat:first-child{padding-left:0}.stat:last-child{border-right:0}
+  .stat .n{font-family:var(--disp);font-weight:300;font-size:clamp(46px,5.6vw,78px);line-height:1;letter-spacing:-.02em;background:linear-gradient(120deg,var(--accent-l),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stat .l{font-size:13px;color:var(--fg-2);margin-top:14px;line-height:1.5;max-width:22ch}
+
+  .mani-grid{display:grid;grid-template-columns:1fr .66fr;gap:64px;align-items:center}
+  .mani .lbl{margin-bottom:28px}
+  .mani h2{font-family:var(--disp);font-weight:700;font-size:clamp(28px,3.8vw,50px);line-height:1.12;letter-spacing:-.025em;max-width:18ch}
+  .mani h2 em{font-style:normal;background:linear-gradient(100deg,var(--accent-l),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .mani .body{margin-top:24px;font-size:16px;color:var(--fg-2);line-height:1.72;max-width:46ch}
+  .mani-img{height:520px;border-radius:14px;overflow:hidden;position:relative}
+  .mani-img img{width:100%;height:100%;object-fit:cover;filter:grayscale(.7) contrast(1.1) brightness(.6)}
+  .mani-img .duo{position:absolute;inset:0;background:linear-gradient(140deg,rgba(232,149,74,.28),rgba(7,7,10,.6));mix-blend-mode:multiply}
+
+  .pv-top{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;margin-bottom:48px}
+  .pv-top h2{font-family:var(--disp);font-weight:700;font-size:clamp(30px,4vw,54px);line-height:1.02;letter-spacing:-.025em}
+  .pv-top h2 em{font-style:normal;background:linear-gradient(100deg,var(--accent-l),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .pv-top p{font-size:15px;color:var(--fg-2);max-width:34ch}
+  .pv-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+  .pv{position:relative;background:linear-gradient(165deg,var(--surf),var(--bg-2));border:1px solid var(--line);border-radius:18px;padding:36px;overflow:hidden;transition:transform .45s var(--ease),border-color .45s,box-shadow .45s}
+  .pv::after{content:"";position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(232,149,74,.16),transparent 60%);right:-120px;top:-120px;opacity:0;transition:opacity .5s}
+  .pv:hover{transform:translateY(-6px);border-color:var(--line-2);box-shadow:0 40px 70px -44px #000}
+  .pv:hover::after{opacity:1}
+  .pv .pn{position:relative;font-family:var(--disp);font-weight:300;font-size:54px;line-height:1;color:transparent;-webkit-text-stroke:1px var(--line-2);transition:.4s}
+  .pv:hover .pn{-webkit-text-stroke:1px var(--accent);color:rgba(232,149,74,.08)}
+  .pv .tg{position:absolute;top:36px;right:36px;font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--fg-3)}
+  .pv h3{position:relative;font-family:var(--disp);font-weight:600;font-size:23px;margin:18px 0 12px;letter-spacing:-.01em}
+  .pv p{position:relative;font-size:14.5px;color:var(--fg-2);line-height:1.62;max-width:42ch}
+
+  .quote{position:relative;text-align:left;overflow:hidden}
+  .quote .gl{position:absolute;top:-30%;left:50%;transform:translateX(-50%);width:900px;height:600px;background:radial-gradient(circle,rgba(232,149,74,.16),transparent 60%);pointer-events:none}
+  .quote blockquote{position:relative;font-family:var(--serif);font-weight:400;font-style:italic;font-size:clamp(30px,4.8vw,66px);line-height:1.12;letter-spacing:-.01em;max-width:18ch}
+  .quote blockquote em{font-style:italic;background:linear-gradient(100deg,var(--accent-l),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .quote cite{display:block;font-family:var(--mono);font-style:normal;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--fg-2);margin-top:36px}
+
+  .ladder-grid{display:grid;grid-template-columns:.82fr 1.18fr;gap:60px;align-items:center}
+  .ladder h2{font-family:var(--disp);font-weight:700;font-size:clamp(30px,4vw,52px);line-height:1.04;letter-spacing:-.025em;margin-bottom:20px}
+  .ladder h2 em{font-style:normal;background:linear-gradient(100deg,var(--accent-l),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .ladder .lead{font-size:16px;color:var(--fg-2);line-height:1.7}
+  .lv{display:grid;grid-template-columns:62px 1fr;gap:24px;align-items:center;padding:24px 26px;border:1px solid var(--line);border-radius:14px;background:var(--surf);margin-bottom:13px;transition:.4s var(--ease)}
+  .lv:hover{transform:translateX(5px);border-color:var(--line-2)}
+  .lv .c{font-family:var(--disp);font-weight:300;font-size:30px;color:var(--fg-3)}
+  .lv h4{font-family:var(--disp);font-weight:600;font-size:20px;margin-bottom:4px}
+  .lv p{font-size:14px;color:var(--fg-2);line-height:1.5}
+  .lv.on{background:linear-gradient(120deg,rgba(232,149,74,.16),rgba(127,176,255,.05));border-color:rgba(232,149,74,.4)}
+  .lv.on .c{background:linear-gradient(120deg,var(--accent-l),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+  .author-grid{display:grid;grid-template-columns:.7fr 1.3fr;gap:60px;align-items:center}
+  .author-img{height:500px;border-radius:14px;overflow:hidden;position:relative}
+  .author-img img{width:100%;height:100%;object-fit:cover;filter:grayscale(.7) contrast(1.1) brightness(.62)}
+  .author-img .duo{position:absolute;inset:0;background:linear-gradient(140deg,rgba(232,149,74,.26),rgba(7,7,10,.55));mix-blend-mode:multiply}
+  .author .q{font-family:var(--serif);font-weight:500;font-style:italic;font-size:clamp(24px,2.8vw,36px);line-height:1.32;margin-bottom:26px}
+  .author .body p{font-size:15.5px;color:var(--fg-2);line-height:1.7;margin-bottom:15px;max-width:54ch}
+  .author .sig{font-family:var(--serif);font-style:italic;font-size:22px;margin-top:8px;color:var(--accent-l)}
+
+  .cta{position:relative;text-align:center;overflow:hidden;padding:150px 0}
+  .cta .gl{position:absolute;bottom:-44%;left:50%;transform:translateX(-50%);width:1000px;height:740px;background:radial-gradient(circle,rgba(232,149,74,.16),transparent 60%)}
+  .cta h2{position:relative;font-family:var(--disp);font-weight:700;font-size:clamp(38px,6.2vw,90px);line-height:.98;letter-spacing:-.03em;margin-bottom:26px}
+  .cta h2 em{font-style:normal;background:linear-gradient(100deg,var(--accent-l),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .cta p{position:relative;font-size:18px;color:var(--fg-2);max-width:50ch;margin:0 auto 38px;line-height:1.7}
+  .cta .note{position:relative;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--fg-3);margin-top:22px}
+
+  footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:48px 0 70px;background:var(--bg)}
+  .foot{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+  .foot .brand{font-family:var(--disp);font-weight:700;font-size:18px}
+  .foot .tg{font-size:13px;color:var(--fg-2);margin-top:5px}
+  .foot-links{display:flex;gap:26px;font-size:13.5px;color:var(--fg-2)}
+  .foot-links a:hover{color:var(--accent-l)}
+
+  @media(max-width:980px){
+    .wrap,.nav-in{padding-left:24px;padding-right:24px}
+    .nav-links{display:none}.burger{display:block}
+    .hero-grid{grid-template-columns:1fr;gap:30px}.hero-r{height:52vh;order:-1}
+    .stats-in{grid-template-columns:1fr 1fr;gap:34px}.stat{border-right:0;padding:0}
+    .mani-grid,.ladder-grid,.author-grid{grid-template-columns:1fr;gap:40px}.mani-img,.author-img{height:380px}
+    .pv-grid{grid-template-columns:1fr}
+  }
+  @media(prefers-reduced-motion:reduce){.grain,.cursor{display:none}.scrollcue .ln::after{animation:none}}
+</style>
+</head>
+<body>
+<div class="loader" id="loader"><div class="mk">◆</div><div class="l">THE <b>PIVOT</b> MODEL</div></div>
+<canvas id="gl"></canvas>
+<div class="prog" id="prog"></div>
+<div class="grain"></div>
+<div class="cursor" id="cursor"></div>
+<a href="index.html" class="back">← all directions</a>
+
+<nav class="site" id="nav"><div class="nav-in">
+  <a href="#" class="brand magnetic">The Pivot <b>Model</b></a>
+  <div class="nav-links">
+    <a href="#mani">The Book</a>
+    <a href="#framework">Framework</a>
+    <a href="#author">Author</a>
+    <a href="#" class="nav-cta magnetic">Get access</a>
+  </div>
+  <button class="burger">Menu</button>
+</div></nav>
+
+<!-- HERO -->
+<header class="hero"><div class="wrap hero-grid">
+  <div class="hero-l">
+    <div class="hk reveal-hero"><span class="ln"></span><span class="label">Engineering excellence · for the age of AI</span></div>
+    <h1 class="htitle">
+      <span class="ln-mask"><span class="word">The Pivot</span></span>
+      <span class="ln-mask"><span class="word"><em>Model</em></span></span>
+    </h1>
+    <p class="hero-desc reveal-hero">A battle-tested framework for offshore engineering teams that don't just cut costs — they become a <b>strategic advantage.</b></p>
+    <div class="hero-actions reveal-hero">
+      <a href="#" class="btn btn-em magnetic">Get access + join</a>
+      <a href="#framework" class="btn btn-ghost magnetic">The framework <span class="ar">→</span></a>
+    </div>
+  </div>
+  <div class="hero-r">
+    <div class="fallback-book"><div class="fb"><div class="mk">◆</div><div><h2>THE<br>PIVOT<br>MODEL</h2></div><div class="s">Four Pivots · Three Levels</div></div></div>
+    <div class="hint reveal-hero">↺ Drag / move cursor — the book responds</div>
+  </div>
+</div>
+  <div class="scrollcue"><span>Scroll</span><div class="ln"></div></div>
+</header>
+
+<div class="mq"><div class="tk" id="mq">
+  <span>Operational Excellence</span><span class="b">◆</span><span>Pace of Product Evolution</span><span class="b">◆</span><span>Collaboration &amp; Alignment</span><span class="b">◆</span><span>Business Results</span><span class="b">◆</span><span>People &amp; Talent</span><span class="b">◆</span>
+</div></div>
+
+<!-- STATS -->
+<section class="stats"><div class="wrap stats-in">
+  <div class="stat rv"><div class="n"><span class="count" data-to="25">0</span>+</div><div class="l">Years of offshore engineering experience distilled</div></div>
+  <div class="stat rv"><div class="n"><span class="count" data-to="4">0</span></div><div class="l">Core pivot pillars for operational excellence</div></div>
+  <div class="stat rv"><div class="n"><span class="count" data-to="3">0</span></div><div class="l">Maturity levels with clear, measurable benchmarks</div></div>
+  <div class="stat rv"><div class="n">∞</div><div class="l">Potential unlocked when offshore teams truly thrive</div></div>
+</div></section>
+
+<!-- MANIFESTO -->
+<section class="blk mani" id="mani"><div class="wrap mani-grid">
+  <div>
+    <div class="lbl label rv">What this book is about</div>
+    <h2 class="rv">Offshore teams fail for <em>predictable</em> reasons — and that's exactly why they can be fixed.</h2>
+    <p class="body rv">Most companies set up offshore teams to cut costs and end up with exactly what they paid for. The Pivot Model reframes the conversation entirely — built on 25+ years building world-class product engineering across India, the US and Europe.</p>
+  </div>
+  <div class="mani-img rv"><img src="https://picsum.photos/seed/flag3dmani/900/1100?grayscale" alt="" /><span class="duo"></span></div>
+</div></section>
+
+<!-- PIVOTS -->
+<section class="blk alt" id="framework"><div class="wrap">
+  <div class="pv-top"><h2 class="rv">Four pivots. <em>One transformation.</em></h2><p class="rv">Master them in sequence — or diagnose exactly where your team struggles today.</p></div>
+  <div class="pv-grid">
+    <div class="pv rv"><span class="tg">Foundation</span><div class="pn">01</div><h3>Operational Excellence</h3><p>Predictable delivery, quality ownership and engineering discipline — the non-negotiable foundation of any high-performance team.</p></div>
+    <div class="pv rv"><span class="tg">Velocity</span><div class="pn">02</div><h3>Pace of Product Evolution</h3><p>Speed matters. Build the capabilities that accelerate time-to-market without sacrificing quality or accruing debt.</p></div>
+    <div class="pv rv"><span class="tg">Alignment</span><div class="pn">03</div><h3>Collaboration &amp; Alignment</h3><p>Bridging the distance — cultural, temporal and organisational — between offshore teams and the business they serve.</p></div>
+    <div class="pv rv"><span class="tg">Impact</span><div class="pn">04</div><h3>Business Results</h3><p>Engineering exists to drive outcomes, not output. Connect engineering KRAs directly to top-line business impact.</p></div>
+  </div>
+</div></section>
+
+<!-- QUOTE -->
+<section class="blk quote"><div class="gl"></div><div class="wrap">
+  <div class="label rv">Why this book is urgent now</div>
+  <blockquote class="rv" style="margin-top:22px">AI doesn't replace engineering maturity. <em>It demands it.</em></blockquote>
+  <cite class="rv">The teams that thrive in the age of AI will be the ones with the highest maturity — not the best tools.</cite>
+</div></section>
+
+<!-- LADDER -->
+<section class="blk alt"><div class="wrap ladder-grid">
+  <div>
+    <div class="label rv" style="margin-bottom:18px">The maturity ladder</div>
+    <h2 class="ladder-h rv" style="font-family:var(--disp);font-weight:700">Where is your team <em>on the journey?</em></h2>
+    <p class="lead rv">Three engineering maturity levels — each with clear competency benchmarks, performance KRAs and a concrete path forward. Stop guessing. Start measuring.</p>
+  </div>
+  <div class="ladder">
+    <div class="lv rv"><div class="c">L1</div><div><h4>Execution Layer</h4><p>Task-focused delivery. Dependent on direction. Building basic engineering habits.</p></div></div>
+    <div class="lv rv"><div class="c">L2</div><div><h4>Engineering Ownership</h4><p>Self-directed quality. Proactive communication. Beginning to shape the product.</p></div></div>
+    <div class="lv on rv"><div class="c">L3</div><div><h4>Strategic Partnership</h4><p>Business-aware engineering. Thought leadership. Driving innovation from offshore.</p></div></div>
+  </div>
+</div></section>
+
+<!-- AUTHOR -->
+<section class="blk author" id="author"><div class="wrap author-grid">
+  <div class="author-img rv"><img src="https://picsum.photos/seed/flag3dauthor/800/1000?grayscale" alt="" /><span class="duo"></span></div>
+  <div>
+    <div class="label rv" style="margin-bottom:18px">About the author</div>
+    <div class="q rv">“Intuition-based engineering is injurious to software quality.”</div>
+    <div class="body">
+      <p class="rv">A career spanning some of the finest engineering environments across India and the global stage — from Verifone in the 1990s, widely considered one of India's premier product engineering cultures, to the Vista Equity Partners ecosystem and numerous global transformations.</p>
+      <p class="rv">The Pivot Model is the distillation of those decades — rigorous, practical, and unwilling to accept “good enough.”</p>
+    </div>
+    <div class="sig rv">— The Pivot Model</div>
+  </div>
+</div></section>
+
+<!-- CTA -->
+<section class="cta"><div class="gl"></div><div class="wrap">
+  <h2 class="rv">Your team's AI future<br>starts with <em>maturity.</em></h2>
+  <p class="rv">Join the community. Get the frameworks, the assessment tool, and the playbooks. Start building the foundation today.</p>
+  <div class="rv"><a href="#" class="btn btn-em magnetic" style="font-size:16px;padding:17px 36px">Get started — it's free</a></div>
+  <div class="note rv">No payment required. Just a passion for engineering excellence.</div>
+</div></section>
+
+<footer><div class="wrap foot">
+  <div><div class="brand">The Pivot <span style="color:var(--accent)">Model</span></div><div class="tg">Engineering excellence, offshore.</div></div>
+  <div class="foot-links"><a href="#">The Book</a><a href="#">Community</a><a href="#">Assessment Tool</a><a href="#">Consulting</a></div>
+</div></footer>
+
+<!-- libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script>
+const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+const isTouch = matchMedia('(hover:none)').matches;
+const hasGSAP = !!window.gsap;
+
+/* ---------- custom cursor ---------- */
+const cur=document.getElementById('cursor');
+if(!reduce && !isTouch){
+  let cx=innerWidth/2,cy=innerHeight/2,tx=cx,ty=cy;
+  addEventListener('mousemove',e=>{tx=e.clientX;ty=e.clientY});
+  (function l(){cx+=(tx-cx)*.2;cy+=(ty-cy)*.2;cur.style.left=cx+'px';cur.style.top=cy+'px';requestAnimationFrame(l)})();
+  document.addEventListener('mouseover',e=>{if(e.target.closest('a,button,.magnetic,.pv,.lv'))cur.classList.add('big')});
+  document.addEventListener('mouseout',e=>{if(e.target.closest('a,button,.magnetic,.pv,.lv'))cur.classList.remove('big')});
+}else cur.style.display='none';
+
+/* ---------- nav solidify ---------- */
+const nav=document.getElementById('nav');
+addEventListener('scroll',()=>nav.classList.toggle('solid',scrollY>50),{passive:true});
+
+/* ---------- magnetic buttons ---------- */
+if(!reduce && !isTouch && hasGSAP){
+  document.querySelectorAll('.magnetic').forEach(el=>{
+    el.addEventListener('mousemove',e=>{const r=el.getBoundingClientRect();const mx=e.clientX-r.left-r.width/2,my=e.clientY-r.top-r.height/2;gsap.to(el,{x:mx*.3,y:my*.4,duration:.5,ease:'power3.out'})});
+    el.addEventListener('mouseleave',()=>gsap.to(el,{x:0,y:0,duration:.6,ease:'elastic.out(1,.4)'}));
+  });
+}
+
+/* ---------- WebGL 3D book ---------- */
+let renderer,scene,camera,book,parts,mouseX=0,mouseY=0,webglOK=false;
+function makeCoverTexture(){
+  const c=document.createElement('canvas');c.width=512;c.height=735;const x=c.getContext('2d');
+  const g=x.createLinearGradient(0,0,512,735);g.addColorStop(0,'#241a12');g.addColorStop(.5,'#16100a');g.addColorStop(1,'#0d0906');
+  x.fillStyle=g;x.fillRect(0,0,512,735);
+  x.strokeStyle='rgba(246,185,120,.55)';x.lineWidth=2;x.strokeRect(34,34,512-68,735-68);
+  x.fillStyle='#F6B978';x.textAlign='center';
+  x.font='700 26px "JetBrains Mono",monospace';x.fillText('◆',256,150);
+  x.font='800 64px Sora, sans-serif';x.fillStyle='#F4EEE2';
+  x.fillText('THE',256,300);x.fillText('PIVOT',256,372);x.fillText('MODEL',256,444);
+  x.strokeStyle='rgba(246,185,120,.6)';x.lineWidth=1.5;x.beginPath();x.moveTo(216,486);x.lineTo(296,486);x.stroke();
+  x.fillStyle='rgba(242,239,232,.66)';x.font='500 15px "JetBrains Mono",monospace';
+  x.fillText('FOUR PIVOTS · THREE LEVELS',256,530);
+  x.fillStyle='rgba(246,185,120,.7)';x.font='500 13px "JetBrains Mono",monospace';
+  x.fillText('A FIELD GUIDE FOR',256,648);x.fillText('ENGINEERING LEADERS',256,672);
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=8;return t;
+}
+function makeSpineTexture(){
+  const c=document.createElement('canvas');c.width=110;c.height=735;const x=c.getContext('2d');
+  const g=x.createLinearGradient(0,0,110,0);g.addColorStop(0,'#0d0906');g.addColorStop(1,'#1c140d');
+  x.fillStyle=g;x.fillRect(0,0,110,735);
+  x.save();x.translate(55,368);x.rotate(-Math.PI/2);
+  x.fillStyle='#F6B978';x.textAlign='center';x.font='700 22px Sora, sans-serif';
+  x.fillText('THE PIVOT MODEL',0,8);x.restore();
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;return t;
+}
+function makePagesTexture(){
+  const c=document.createElement('canvas');c.width=64;c.height=735;const x=c.getContext('2d');
+  x.fillStyle='#efe9db';x.fillRect(0,0,64,735);
+  x.strokeStyle='rgba(150,140,120,.5)';x.lineWidth=1;
+  for(let i=0;i<64;i+=2){x.beginPath();x.moveTo(i,0);x.lineTo(i,735);x.stroke();}
+  return new THREE.CanvasTexture(c);
+}
+function initThree(){
+  const canvas=document.getElementById('gl');
+  try{
+    renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  }catch(e){return false;}
+  if(!renderer)return false;
+  renderer.setSize(innerWidth,innerHeight);
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.outputEncoding=THREE.sRGBEncoding;
+  scene=new THREE.Scene();
+  camera=new THREE.PerspectiveCamera(36,innerWidth/innerHeight,0.1,100);
+  camera.position.set(0,0,9.4);
+  scene.add(new THREE.AmbientLight(0xffffff,.55));
+  const key=new THREE.DirectionalLight(0xffffff,1.15);key.position.set(-5,7,6);scene.add(key);
+  const warm=new THREE.PointLight(0xE8954A,1.7,42);warm.position.set(6,-1,5);scene.add(warm);
+  const cool=new THREE.PointLight(0x7FB0FF,.6,42);cool.position.set(-6,3,3);scene.add(cool);
+  const cover=makeCoverTexture(),spine=makeSpineTexture(),pages=makePagesTexture();
+  const matCover=new THREE.MeshStandardMaterial({map:cover,roughness:.52,metalness:.18});
+  const matSpine=new THREE.MeshStandardMaterial({map:spine,roughness:.5,metalness:.2});
+  const matPages=new THREE.MeshStandardMaterial({map:pages,roughness:.9,metalness:0});
+  const matBack=new THREE.MeshStandardMaterial({color:0x140e09,roughness:.6,metalness:.15});
+  // [px right=pages, nx left=spine, py top=pages, ny bottom=pages, pz front=cover, nz back]
+  const mats=[matPages,matSpine,matPages,matPages,matCover,matBack];
+  const geo=new THREE.BoxGeometry(3.05,4.35,0.52);
+  book=new THREE.Mesh(geo,mats);
+  book.position.set(2.2,0,0);book.rotation.set(.16,-0.5,0);
+  scene.add(book);
+  // particles
+  const N=620,pos=new Float32Array(N*3);
+  for(let i=0;i<N;i++){const r=6+Math.random()*12,th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
+    pos[i*3]=r*Math.sin(ph)*Math.cos(th);pos[i*3+1]=r*Math.sin(ph)*Math.sin(th);pos[i*3+2]=r*Math.cos(ph)-4;}
+  const pg=new THREE.BufferGeometry();pg.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  const pm=new THREE.PointsMaterial({color:0xE8954A,size:.035,transparent:true,opacity:.55,sizeAttenuation:true});
+  parts=new THREE.Points(pg,pm);scene.add(parts);
+  webglOK=true;
+  addEventListener('resize',onResize);
+  return true;
+}
+function onResize(){if(!renderer)return;camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);}
+let t0=performance.now();
+function render(now){
+  if(!webglOK)return;
+  const t=(now-t0)/1000;
+  const heroP=Math.min(1,(scrollY||0)/Math.max(1,innerHeight));
+  const targY=-0.5 + mouseX*0.5 + heroP*1.4;
+  const targX=0.16 + mouseY*0.3 + Math.sin(t*.6)*.04;
+  book.rotation.y += (targY-book.rotation.y)*.06;
+  book.rotation.x += (targX-book.rotation.x)*.06;
+  book.position.y = Math.sin(t*.8)*.12 - heroP*1.2;
+  book.position.x = 2.2 - heroP*0.6;
+  book.scale.setScalar(1+heroP*0.05);
+  const fade = 1-Math.min(1,Math.max(0,(heroP-0.35)/0.5));
+  book.visible = fade>0.02;
+  for(const m of book.material){ m.opacity=fade; }
+  parts.rotation.y += .0009; parts.rotation.x = mouseY*.1;
+  parts.material.opacity = 0.55*(0.4+0.6*fade);
+  renderer.render(scene,camera);
+}
+/* set all book materials transparent so opacity fade works */
+function setBookFade(){ if(!book)return; book.material.forEach(m=>{m.transparent=true;}); }
+
+/* ---------- boot ---------- */
+function startLoop(lenis){
+  if(window.gsap){
+    if(window.ScrollTrigger){gsap.registerPlugin(ScrollTrigger); if(lenis){lenis.on('scroll',ScrollTrigger.update);} }
+    gsap.ticker.add((time)=>{ if(lenis) lenis.raf(time*1000); render(performance.now()); });
+    gsap.ticker.lagSmoothing(0);
+  }else{
+    function loop(t){ if(lenis)lenis.raf(t); render(t); requestAnimationFrame(loop);} requestAnimationFrame(loop);
+  }
+}
+function initReveals(){
+  if(!window.gsap||!window.ScrollTrigger)return;
+  // hero
+  const tl=gsap.timeline({delay:.15});
+  tl.from('.htitle .word',{yPercent:115,duration:1.05,ease:'power4.out',stagger:.12})
+    .from('.reveal-hero',{y:24,opacity:0,duration:.9,ease:'power3.out',stagger:.12},'-=.7');
+  // sections
+  gsap.utils.toArray('.rv').forEach(el=>{
+    gsap.from(el,{y:34,opacity:0,duration:1,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 86%'}});
+  });
+  // progress bar
+  gsap.to('#prog',{scaleX:1,ease:'none',scrollTrigger:{trigger:document.body,start:'top top',end:'bottom bottom',scrub:.3}});
+}
+function noGsapReveals(){
+  // ensure everything visible + simple IO fade
+  const io=new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){e.target.style.opacity=1;e.target.style.transform='none';o.unobserve(e.target)}}),{threshold:.12});
+  document.querySelectorAll('.rv').forEach(el=>{el.style.transition='opacity .8s,transform .8s';io.observe(el)});
+}
+function countUp(){
+  const cio=new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){const el=e.target,to=+el.dataset.to;let n=0;const st=Math.max(1,Math.round(to/26));const t=setInterval(()=>{n+=st;if(n>=to){n=to;clearInterval(t)}el.textContent=n},30);o.unobserve(el)}}),{threshold:.6});
+  document.querySelectorAll('.count').forEach(el=>cio.observe(el));
+}
+
+window.addEventListener('load',()=>{
+  // mouse for 3D
+  if(!isTouch){addEventListener('mousemove',e=>{mouseX=(e.clientX/innerWidth-.5);mouseY=(e.clientY/innerHeight-.5);});}
+  // marquee duplicate for seamless loop
+  const mq=document.getElementById('mq'); if(mq) mq.innerHTML+=mq.innerHTML;
+  if(window.gsap){ gsap.to('#mq',{xPercent:-50,duration:26,ease:'none',repeat:-1}); }
+
+  // 3D
+  let ok=false;
+  if(!reduce){ try{ ok=initThree(); if(ok){setBookFade();} }catch(e){ ok=false; } }
+  if(ok){ document.getElementById('gl').classList.add('ready'); }
+  else { document.body.classList.add('no3d'); }
+
+  // smooth scroll
+  let lenis=null;
+  if(!reduce && window.Lenis){
+    try{ lenis=new Lenis({duration:1.15,easing:t=>Math.min(1,1.001-Math.pow(2,-10*t)),smoothWheel:true}); }catch(e){ lenis=null; }
+  }
+  startLoop(lenis);
+
+  if(window.gsap && window.ScrollTrigger){ initReveals(); } else { noGsapReveals(); }
+  countUp();
+
+  setTimeout(()=>document.getElementById('loader').classList.add('done'),650);
+});
+</script>
+</body>
+</html>

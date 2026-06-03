@@ -1,0 +1,22 @@
+.toggle {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 600;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  background: color-mix(in srgb, var(--base) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  padding: 9px 16px;
+  cursor: pointer;
+  transition: color 0.25s, border-color 0.25s, background 0.25s;
+}
+.toggle:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}

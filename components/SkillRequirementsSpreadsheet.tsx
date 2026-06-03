@@ -28,8 +28,8 @@ interface SkillProfile {
 }
 
 const IMPORTANCE_COLOR: Record<string, string> = {
-  'Critical':      '#e88b7e',
-  'High':          '#C9A84C',
+  'Critical':      'var(--red)',
+  'High':          'var(--gold)',
   'Standard':      '#7eb6e8',
   'Nice to Have':  '#9e9e9e',
 };
@@ -138,7 +138,7 @@ function InlineEdit({ value, onSave, placeholder = 'Click to edit', multiline = 
 
 // ── Score pill ────────────────────────────────────────────────────────────────
 function ScorePill({ value, onChange, label }: { value: number; onChange: (v: number) => void; label: string }) {
-  const color = value <= 3 ? '#e88b7e' : value <= 6 ? '#C9A84C' : '#7ee8a2';
+  const color = value <= 3 ? 'var(--red)' : value <= 6 ? 'var(--gold)' : 'var(--green)';
   return (
     <div style={{ textAlign: 'center' }}>
       <div style={{ fontSize: 10, color: 'var(--muted)', marginBottom: 3 }}>{label}</div>
@@ -383,7 +383,7 @@ export default function SkillRequirementsSpreadsheet({ userId }: { userId: numbe
           {saving && <span style={{ fontSize: 12, color: 'var(--muted)' }}>Saving…</span>}
           <button className="btn-ghost" style={{ fontSize: 12 }} onClick={downloadExcel}>⬇ Download Excel</button>
           <button className="btn-primary" style={{ fontSize: 12 }} onClick={() => doSave()}>Save</button>
-          <button onClick={deleteProfile} style={{ background: 'none', border: 'none', color: '#e88b7e', cursor: 'pointer', fontSize: 18, lineHeight: 1, padding: '0 4px' }} title="Delete profile">🗑</button>
+          <button onClick={deleteProfile} style={{ background: 'none', border: 'none', color: 'var(--red)', cursor: 'pointer', fontSize: 18, lineHeight: 1, padding: '0 4px' }} title="Delete profile">🗑</button>
         </div>
       </div>
 
@@ -421,7 +421,7 @@ export default function SkillRequirementsSpreadsheet({ userId }: { userId: numbe
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 18 }}>
             {SECTIONS.map(s => (
               <button key={s} onClick={() => setActiveSection(s)}
-                style={{ background: activeSection === s ? 'rgba(201,168,76,.18)' : 'var(--ink-2)', border: `1px solid ${activeSection === s ? 'var(--gold-d)' : 'var(--ink-3)'}`,
+                style={{ background: activeSection === s ? 'rgba(78,110,142,.18)' : 'var(--ink-2)', border: `1px solid ${activeSection === s ? 'var(--gold-d)' : 'var(--ink-3)'}`,
                   color: activeSection === s ? 'var(--gold)' : 'var(--muted)', borderRadius: 20, padding: '5px 14px', fontSize: 12, cursor: 'pointer', fontFamily: 'inherit', fontWeight: activeSection === s ? 600 : 400 }}>
                 {s.split('. ')[1]} <span style={{ opacity: .6 }}>({rows.filter(r => r.section === s).length})</span>
               </button>
@@ -458,7 +458,7 @@ export default function SkillRequirementsSpreadsheet({ userId }: { userId: numbe
                     <td style={{ padding: '9px 8px' }}>
                       <input type="number" min={1} max={10} value={row.ideal_level}
                         onChange={e => updateRow(row.id, { ideal_level: +e.target.value })}
-                        style={{ width: 40, textAlign: 'center', background: 'var(--ink-2)', border: '1px solid var(--ink-3)', color: '#7ee8a2', borderRadius: 6, padding: '3px 0', outline: 'none', fontFamily: 'inherit' }} />
+                        style={{ width: 40, textAlign: 'center', background: 'var(--ink-2)', border: '1px solid var(--ink-3)', color: 'var(--green)', borderRadius: 6, padding: '3px 0', outline: 'none', fontFamily: 'inherit' }} />
                     </td>
                     <td style={{ padding: '9px 10px', minWidth: 70 }}>
                       <InlineEdit value={row.depth} onSave={v => updateRow(row.id, { depth: v })} />
@@ -478,7 +478,7 @@ export default function SkillRequirementsSpreadsheet({ userId }: { userId: numbe
                     <td style={{ padding: '9px 8px' }}>
                       {confirmDel?.rowId === row.id ? (
                         <span style={{ display: 'flex', gap: 4 }}>
-                          <button onClick={() => deleteRow(row.id)} style={{ background: '#e88b7e22', border: '1px solid #e88b7e', color: '#e88b7e', borderRadius: 4, padding: '2px 8px', fontSize: 11, cursor: 'pointer' }}>Del</button>
+                          <button onClick={() => deleteRow(row.id)} style={{ background: 'var(--red)22', border: '1px solid var(--red)', color: 'var(--red)', borderRadius: 4, padding: '2px 8px', fontSize: 11, cursor: 'pointer' }}>Del</button>
                           <button onClick={() => setConfirmDel(null)} style={{ background: 'none', border: '1px solid var(--ink-3)', color: 'var(--muted)', borderRadius: 4, padding: '2px 8px', fontSize: 11, cursor: 'pointer' }}>✕</button>
                         </span>
                       ) : (
@@ -492,7 +492,7 @@ export default function SkillRequirementsSpreadsheet({ userId }: { userId: numbe
             </table>
           </div>
           <button onClick={() => addRow(activeSection)}
-            style={{ marginTop: 12, background: 'rgba(201,168,76,.08)', border: '1px dashed var(--gold-d)', color: 'var(--gold)', borderRadius: 8, padding: '7px 18px', fontSize: 12, cursor: 'pointer', fontFamily: 'inherit' }}>
+            style={{ marginTop: 12, background: 'rgba(78,110,142,.08)', border: '1px dashed var(--gold-d)', color: 'var(--gold)', borderRadius: 8, padding: '7px 18px', fontSize: 12, cursor: 'pointer', fontFamily: 'inherit' }}>
             ＋ Add skill to {activeSection.split('. ')[1]}
           </button>
         </div>

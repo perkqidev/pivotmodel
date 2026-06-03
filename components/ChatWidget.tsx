@@ -78,7 +78,7 @@ export default function ChatWidget() {
                 <div style={{ padding:'10px 14px',borderRadius:'16px 16px 16px 4px',background:'var(--card)',color:'var(--muted)',fontSize:13 }}>Thinking…</div>
               </div>
             )}
-            {error && <div style={{ color:'#ef4444',fontSize:12,textAlign:'center' }}>{error}</div>}
+            {error && <div style={{ color:'var(--red)',fontSize:12,textAlign:'center' }}>{error}</div>}
             <div ref={bottomRef} />
           </div>
           <div style={{ padding:12,borderTop:'1px solid var(--border)',display:'flex',gap:8 }}>

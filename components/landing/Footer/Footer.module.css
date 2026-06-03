@@ -1,0 +1,22 @@
+.footer { background: var(--base); border-top: 1px solid var(--line); padding: 64px 0 36px; position: relative; z-index: 2; }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 0 56px; }
+.cols { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 56px;
+        padding-bottom: 48px; border-bottom: 1px solid var(--line); margin-bottom: 28px; }
+.brand h4 { font-family: var(--font-disp); font-weight: 300; font-size: 20px;
+            letter-spacing: -0.01em; color: var(--ink); margin-bottom: 10px; }
+.brand p { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.16em;
+           text-transform: uppercase; color: var(--muted); }
+.col h5 { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em;
+          text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+.col a { display: block; font-family: var(--font-disp); font-size: 14px; font-weight: 300;
+         color: var(--ink-2); padding: 6px 0; transition: color 0.25s, padding 0.25s; }
+.col a:hover { color: var(--accent); padding-left: 4px; }
+.row { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap;
+       font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em;
+       text-transform: uppercase; color: var(--muted); }
+.row a { color: var(--muted); transition: color 0.25s; }
+.row a:hover { color: var(--accent); }
+@media (max-width: 960px) {
+  .wrap { padding: 0 28px; }
+  .cols { grid-template-columns: 1fr 1fr; gap: 36px; }
+}

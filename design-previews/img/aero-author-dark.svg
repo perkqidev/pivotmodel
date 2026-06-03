@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 980" font-family="Manrope,sans-serif"><defs>
+<linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#161921"/><stop offset="100%" stop-color="#0E0F14"/></linearGradient>
+<linearGradient id="bgDark" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#0a0b0f"/><stop offset="100%" stop-color="#0E0F14"/></linearGradient>
+<linearGradient id="node" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#B4CADC"/><stop offset="100%" stop-color="#7CA0C7"/></linearGradient>
+<linearGradient id="nodeDark" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7CA0C7"/><stop offset="100%" stop-color="#3a546e"/></linearGradient>
+<linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#7CA0C7"/><stop offset="100%" stop-color="#B4CADC"/></linearGradient>
+<linearGradient id="step1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#1c2029"/><stop offset="100%" stop-color="#171a22"/></linearGradient>
+<linearGradient id="step2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#222632"/><stop offset="100%" stop-color="#1c2029"/></linearGradient>
+<linearGradient id="step3" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#B4CADC"/><stop offset="100%" stop-color="#7CA0C7"/></linearGradient>
+<radialGradient id="centerGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#7CA0C7" stop-opacity="0.4"/><stop offset="100%" stop-color="#7CA0C7" stop-opacity="0"/></radialGradient>
+<radialGradient id="softGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#B4CADC" stop-opacity="0.35"/><stop offset="100%" stop-color="#B4CADC" stop-opacity="0"/></radialGradient>
+<filter id="dropShadow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation="4"/><feOffset dx="0" dy="6"/><feComponentTransfer><feFuncA type="linear" slope="0.5"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation="2"/><feOffset dx="0" dy="3"/><feComponentTransfer><feFuncA type="linear" slope="0.4"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<filter id="glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="3"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<pattern id="dotgrid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.8" fill="#E7EAEF" opacity="0.06"/></pattern>
+</defs>
+<rect width="760" height="980" fill="url(#bgDark)"/>
+<radialGradient id="authorGlow" cx="50%" cy="40%" r="50%"><stop offset="0%" stop-color="#7CA0C7" stop-opacity="0.4"/><stop offset="100%" stop-color="#7CA0C7" stop-opacity="0"/></radialGradient>
+<rect width="760" height="980" fill="url(#authorGlow)"/>
+<rect x="40" y="40" width="680" height="900" fill="none" stroke="#7CA0C7" stroke-width="1"/>
+<rect x="56" y="56" width="648" height="868" fill="none" stroke="#7CA0C7" opacity="0.35"/>
+<g transform="translate(380,420)">
+<text x="0" y="0" text-anchor="middle" font-size="250" font-weight="200" fill="#B4CADC" letter-spacing="-12" filter="url(#glow)">PM</text>
+</g>
+<g transform="translate(380,560)">
+<line x1="-110" y1="0" x2="-15" y2="0" stroke="#7CA0C7" stroke-width="1"/>
+<circle cx="0" cy="0" r="6" fill="none" stroke="#7CA0C7" stroke-width="1"/>
+<text x="0" y="3" text-anchor="middle" font-size="8" fill="#7CA0C7" font-family="JetBrains Mono,monospace">◆</text>
+<line x1="15" y1="0" x2="110" y2="0" stroke="#7CA0C7" stroke-width="1"/>
+</g>
+<text x="380" y="620" text-anchor="middle" font-size="13" letter-spacing="6" fill="#B4CADC" font-family="JetBrains Mono,monospace">THE PIVOT MODEL</text>
+<text x="380" y="650" text-anchor="middle" font-size="10" letter-spacing="3" fill="#6B707A" font-family="JetBrains Mono,monospace">A FIELD GUIDE</text>
+<g transform="translate(380,820)">
+<line x1="-180" y1="0" x2="-50" y2="0" stroke="#7CA0C7" opacity="0.5" stroke-width="0.6"/>
+<line x1="50" y1="0" x2="180" y2="0" stroke="#7CA0C7" opacity="0.5" stroke-width="0.6"/>
+<text x="0" y="4" text-anchor="middle" font-size="10" letter-spacing="3" fill="#B4CADC" font-family="JetBrains Mono,monospace">25+ YEARS</text>
+</g>
+<text x="380" y="880" text-anchor="middle" font-size="9" letter-spacing="3" fill="#6B707A" font-family="JetBrains Mono,monospace">INDIA · UNITED STATES · EUROPE</text>
+</svg>

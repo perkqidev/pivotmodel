@@ -8,7 +8,7 @@ export default function Nav() {
   const [menuOpen, setMenuOpen]   = useState(false);
   const [user, setUser]           = useState<NavUser | null>(null);
   const [dropOpen, setDropOpen]   = useState(false);
-  const [theme, setTheme]         = useState('dark');
+  const [theme, setTheme]         = useState('light');
   const dropRef                   = useRef<HTMLDivElement>(null);
 
   /* scroll effect */
@@ -20,15 +20,17 @@ export default function Nav() {
 
   /* load theme */
   useEffect(() => {
-    const saved = localStorage.getItem('theme') || 'dark';
+    const saved = localStorage.getItem('theme') || 'light';
     setTheme(saved);
-    document.documentElement.setAttribute('data-theme', saved);
+    if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    else document.documentElement.removeAttribute('data-theme');
   }, []);
 
   function toggleTheme() {
     const next = theme === 'dark' ? 'light' : 'dark';
     setTheme(next);
-    document.documentElement.setAttribute('data-theme', next);
+    if (next === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    else document.documentElement.removeAttribute('data-theme');
     localStorage.setItem('theme', next);
   }
 

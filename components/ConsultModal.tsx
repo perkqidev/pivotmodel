@@ -83,7 +83,7 @@ export default function ConsultModal({ source = 'website' }: Props) {
       <div className="modal-overlay" onClick={e => { if (e.target === e.currentTarget) close(); }}>
         <div className="modal-box" style={{ maxWidth: 680 }}>
           {/* Header */}
-          <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', background: 'linear-gradient(135deg,rgba(201,168,76,.08),rgba(122,170,197,.03))' }}>
+          <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', background: 'linear-gradient(135deg,rgba(78,110,142,.08),rgba(78,110,142,.03))' }}>
             <div>
               <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.15em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 5 }}>Direct Access · 25+ Years Experience</div>
               <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--cream)', fontFamily: 'var(--font-display)' }}>Book a Consulting Session</div>

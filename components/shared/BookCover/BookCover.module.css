@@ -1,0 +1,126 @@
+.drift {
+  position: absolute;
+  right: 24%;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.2s 0.6s var(--ease);
+  animation: bookDrift 18s ease-in-out infinite;
+}
+.drift[data-shown='true'] { opacity: 1; }
+
+@keyframes bookDrift {
+  0%   { transform: translateY(calc(-50% - 6px)) translateX(0); }
+  50%  { transform: translateY(calc(-50% + 6px)) translateX(-14px); }
+  100% { transform: translateY(calc(-50% - 6px)) translateX(0); }
+}
+
+.scene { perspective: 2400px; }
+
+.book {
+  position: relative;
+  width: 252px;
+  height: 362px;
+  transform-style: preserve-3d;
+  transform: rotateY(-22deg) rotateX(5deg);
+  transition: transform 0.4s ease-out;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* inside page (revealed when the cover opens) */
+.inside {
+  position: absolute;
+  inset: 0;
+  border-radius: 2px 9px 9px 2px;
+  background: linear-gradient(160deg, #F4F2EB, #E6E3D8);
+  box-shadow: inset 0 0 44px rgba(21, 22, 26, 0.09),
+              0 50px 90px -34px rgba(21, 22, 26, 0.4);
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  text-align: center; padding: 34px 30px;
+}
+.imk { color: var(--accent); font-size: 13px; letter-spacing: 0.5em; margin-bottom: 16px; }
+.ittl { font-family: var(--font-disp); font-weight: 600; font-size: 21px; color: var(--ink);
+        letter-spacing: -0.01em; line-height: 1.12; margin-bottom: 14px; }
+.iln { width: 26px; height: 1px; background: var(--accent); margin: 0 auto 16px; }
+.inside p { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.14em;
+            text-transform: uppercase; color: var(--ink-2); line-height: 2.1; }
+.icta { margin-top: 20px; font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.16em;
+        text-transform: uppercase; color: var(--accent); }
+
+/* the cover — hinged on the left, swings open on hover */
+.cover {
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
+  transform: translateZ(2px) rotateY(0deg);
+  transition: transform 1.15s var(--ease);
+  transform-style: preserve-3d;
+}
+.book:hover .cover { transform: translateZ(2px) rotateY(-152deg); }
+
+.face {
+  position: absolute;
+  inset: 0;
+  border-radius: 2px 9px 9px 2px;
+  backface-visibility: hidden;
+  overflow: hidden;
+}
+.front {
+  background: linear-gradient(160deg, #1A1D24, #0E1016);
+  box-shadow: inset 0 0 0 1px rgba(78, 110, 142, 0.18);
+  display: flex; flex-direction: column;
+  justify-content: space-between;
+  padding: 34px 28px;
+}
+.front::before {
+  content: '';
+  position: absolute;
+  left: 19px; top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(transparent, rgba(78, 110, 142, 0.3), transparent);
+}
+.back {
+  transform: rotateY(180deg);
+  background: linear-gradient(160deg, #E9E6DC, #D9D6CB);
+  box-shadow: inset 0 0 0 1px rgba(21, 22, 26, 0.06);
+}
+
+.top {
+  font-family: var(--font-mono); font-size: 7.5px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: rgba(105, 137, 168, 0.8); text-align: center; line-height: 2;
+}
+.mid { text-align: center; }
+.mark { color: rgba(105, 137, 168, 0.7); font-size: 13px; letter-spacing: 0.5em; margin-bottom: 14px; }
+.title { font-family: var(--font-disp); font-weight: 200; font-size: 30px;
+         line-height: 0.95; color: #E8EAED; letter-spacing: 0.02em; }
+.title strong { display: block; font-weight: 600; color: #9BB5CC; }
+.rule { width: 30px; height: 1px; background: rgba(105, 137, 168, 0.45); margin: 16px auto; }
+.sub { font-family: var(--font-mono); font-size: 7.5px; letter-spacing: 0.14em;
+       text-transform: uppercase; color: rgba(232, 234, 237, 0.42); line-height: 1.9; }
+.bot { font-family: var(--font-mono); font-size: 7px; letter-spacing: 0.18em;
+       text-transform: uppercase; color: rgba(105, 137, 168, 0.55); text-align: center; }
+
+.spine {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 27px;
+  transform: translateX(-26px) rotateY(90deg);
+  transform-origin: right;
+  background: linear-gradient(#0d1017, #090c12);
+  z-index: -1;
+}
+.hint {
+  position: absolute; bottom: -30px; left: 50%;
+  transform: translateX(-50%); white-space: nowrap;
+  font-family: var(--font-mono); font-size: 8.5px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--muted); opacity: 0.7; transition: opacity 0.3s;
+}
+.book:hover .hint { opacity: 0; }
+
+@media (max-width: 960px) { .drift { display: none; } }

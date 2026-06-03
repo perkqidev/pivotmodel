@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 380" font-family="Manrope,sans-serif"><defs>
+<linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="100%" stop-color="#F0F0EE"/></linearGradient>
+<linearGradient id="bgDark" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#1d1f24"/><stop offset="100%" stop-color="#15161A"/></linearGradient>
+<linearGradient id="node" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6889A8"/><stop offset="100%" stop-color="#4E6E8E"/></linearGradient>
+<linearGradient id="nodeDark" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#2c2f36"/><stop offset="100%" stop-color="#15161A"/></linearGradient>
+<linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#4E6E8E"/><stop offset="100%" stop-color="#9BB5CC"/></linearGradient>
+<linearGradient id="step1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="100%" stop-color="#F0F0EE"/></linearGradient>
+<linearGradient id="step2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#F0F0EE"/><stop offset="100%" stop-color="#E2E2DD"/></linearGradient>
+<linearGradient id="step3" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2D3036"/><stop offset="100%" stop-color="#15161A"/></linearGradient>
+<radialGradient id="centerGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#4E6E8E" stop-opacity="0.22"/><stop offset="100%" stop-color="#4E6E8E" stop-opacity="0"/></radialGradient>
+<radialGradient id="softGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#9BB5CC" stop-opacity="0.35"/><stop offset="100%" stop-color="#9BB5CC" stop-opacity="0"/></radialGradient>
+<filter id="dropShadow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation="4"/><feOffset dx="0" dy="6"/><feComponentTransfer><feFuncA type="linear" slope="0.18"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation="2"/><feOffset dx="0" dy="3"/><feComponentTransfer><feFuncA type="linear" slope="0.15"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<filter id="glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="3"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<pattern id="dotgrid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#E6E6E2"/></pattern>
+</defs>
+<rect width="560" height="380" fill="url(#bg)"/>
+<rect width="560" height="380" fill="url(#dotgrid)" opacity="0.5"/>
+<text x="30" y="46" font-size="10" letter-spacing="2.5" fill="#4E6E8E" font-family="JetBrains Mono,monospace">01 · EMB TEMPLATES</text>
+<g transform="translate(30,80)" filter="url(#dropShadow)">
+<rect x="0" y="0" width="500" height="200" fill="#FFFFFF" stroke="#E6E6E2"/>
+<rect x="0" y="0" width="500" height="30" fill="url(#bgDark)"/>
+<text x="14" y="20" font-size="10" fill="#9BB5CC" font-family="JetBrains Mono,monospace">CAPABILITY</text>
+<text x="220" y="20" font-size="10" fill="#9BB5CC" font-family="JetBrains Mono,monospace">L1</text>
+<text x="290" y="20" font-size="10" fill="#9BB5CC" font-family="JetBrains Mono,monospace">L2</text>
+<text x="360" y="20" font-size="10" fill="#9BB5CC" font-family="JetBrains Mono,monospace">L3</text>
+<text x="440" y="20" font-size="10" fill="#9BB5CC" font-family="JetBrains Mono,monospace">SCORE</text>
+<g font-family="Manrope,sans-serif" font-size="11" fill="#15161A">
+<rect x="0" y="34" width="500" height="32" fill="#FFFFFF"/>
+<text x="14" y="55">Code Quality &amp; Review</text>
+<rect x="216" y="46" width="14" height="14" fill="#E6E6E2"/>
+<rect x="286" y="46" width="14" height="14" fill="#4E6E8E" filter="url(#glow)"/>
+<rect x="356" y="46" width="14" height="14" fill="#E6E6E2"/>
+<text x="440" y="55" fill="#4E6E8E" font-weight="500">L2</text>
+<rect x="0" y="68" width="500" height="32" fill="#FAFAF8"/>
+<text x="14" y="89">Testing Discipline</text>
+<rect x="216" y="80" width="14" height="14" fill="#4E6E8E" filter="url(#glow)"/>
+<rect x="286" y="80" width="14" height="14" fill="#E6E6E2"/>
+<rect x="356" y="80" width="14" height="14" fill="#E6E6E2"/>
+<text x="440" y="89" fill="#4E6E8E" font-weight="500">L1</text>
+<rect x="0" y="102" width="500" height="32" fill="#FFFFFF"/>
+<text x="14" y="123">CI/CD Pipeline</text>
+<rect x="216" y="114" width="14" height="14" fill="#E6E6E2"/>
+<rect x="286" y="114" width="14" height="14" fill="#E6E6E2"/>
+<rect x="356" y="114" width="14" height="14" fill="#4E6E8E" filter="url(#glow)"/>
+<text x="440" y="123" fill="#4E6E8E" font-weight="500">L3</text>
+<rect x="0" y="136" width="500" height="32" fill="#FAFAF8"/>
+<text x="14" y="157">Documentation</text>
+<rect x="216" y="148" width="14" height="14" fill="#E6E6E2"/>
+<rect x="286" y="148" width="14" height="14" fill="#4E6E8E" filter="url(#glow)"/>
+<rect x="356" y="148" width="14" height="14" fill="#E6E6E2"/>
+<text x="440" y="157" fill="#4E6E8E" font-weight="500">L2</text>
+<rect x="0" y="170" width="500" height="30" fill="url(#accentGrad)" opacity="0.08"/>
+<text x="14" y="190" font-family="JetBrains Mono,monospace" font-size="10" letter-spacing="1.5" fill="#4E6E8E">AVG · L2 · NEXT MOVE: TESTING DISCIPLINE</text>
+</g>
+</g>
+<text x="30" y="340" font-size="10" letter-spacing="1.5" fill="#8B8F96" font-family="JetBrains Mono,monospace">21 CAPABILITIES · 5 PILLARS · YOURS TO ADAPT</text>
+</svg>

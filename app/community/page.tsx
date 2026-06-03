@@ -62,7 +62,7 @@ function Sidebar({ panel, setPanel, user, setUser }: any) {
         {user.isAdmin && <div style={{ fontSize:11,color:'var(--gold)',marginTop:4,fontWeight:700 }}>ADMIN</div>}
       </div>
       {items.map(item => (
-        <button key={item.id} onClick={() => setPanel(item.id)} style={{ textAlign:'left',padding:'10px 20px',background:panel===item.id?'rgba(201,168,76,0.1)':'none',border:'none',borderLeft:panel===item.id?'3px solid var(--gold)':'3px solid transparent',color:panel===item.id?'var(--gold)':'var(--muted)',fontSize:13,cursor:'pointer',fontWeight:panel===item.id?600:400 }}>
+        <button key={item.id} onClick={() => setPanel(item.id)} style={{ textAlign:'left',padding:'10px 20px',background:panel===item.id?'rgba(78,110,142,0.1)':'none',border:'none',borderLeft:panel===item.id?'3px solid var(--gold)':'3px solid transparent',color:panel===item.id?'var(--gold)':'var(--muted)',fontSize:13,cursor:'pointer',fontWeight:panel===item.id?600:400 }}>
           {item.label}
         </button>
       ))}
@@ -71,7 +71,7 @@ function Sidebar({ panel, setPanel, user, setUser }: any) {
           🔧 Admin Panel
         </a>
       )}
-      <button onClick={logout} style={{ textAlign:'left',padding:'10px 20px',background:'none',border:'none',borderLeft:'3px solid transparent',color:'#ef4444',fontSize:13,cursor:'pointer',marginTop:'auto' }}>
+      <button onClick={logout} style={{ textAlign:'left',padding:'10px 20px',background:'none',border:'none',borderLeft:'3px solid transparent',color:'var(--red)',fontSize:13,cursor:'pointer',marginTop:'auto' }}>
         ← Sign out
       </button>
     </div>
@@ -233,7 +233,7 @@ function AccountPanel({ user, setUser }: any) {
         <div style={{ marginBottom:16 }}><div style={{ fontSize:12,color:'var(--muted)',marginBottom:4 }}>Name</div><div style={{ color:'var(--fg)',fontWeight:600 }}>{user.name}</div></div>
         <div style={{ marginBottom:16 }}><div style={{ fontSize:12,color:'var(--muted)',marginBottom:4 }}>Email</div><div style={{ color:'var(--fg)' }}>{user.email}</div></div>
         {user.linkedin && <div style={{ marginBottom:16 }}><div style={{ fontSize:12,color:'var(--muted)',marginBottom:4 }}>LinkedIn</div><a href={user.linkedin} target="_blank" style={{ color:'var(--gold)',fontSize:13 }}>{user.linkedin}</a></div>}
-        <button onClick={logout} style={{ background:'none',border:'1px solid #ef4444',borderRadius:8,padding:'10px 20px',color:'#ef4444',cursor:'pointer',fontWeight:600 }}>Sign out</button>
+        <button onClick={logout} style={{ background:'none',border:'1px solid var(--red)',borderRadius:8,padding:'10px 20px',color:'var(--red)',cursor:'pointer',fontWeight:600 }}>Sign out</button>
       </div>
     </div>
   );
@@ -295,7 +295,7 @@ function AuthScreen({ onLogin }: { onLogin:(u:any)=>void }) {
               <div style={{ fontSize:12,color:'var(--muted)',marginBottom:4,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.05em' }}>Email address</div>
               <input type="email" value={form.email} onChange={e=>setForm(p=>({...p,email:e.target.value}))} style={{ width:'100%',background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'10px 14px',color:'var(--fg)',fontSize:14,outline:'none',boxSizing:'border-box' }} />
             </div>
-            {error && <div style={{ color:'#ef4444',fontSize:13,marginBottom:12 }}>{error}</div>}
+            {error && <div style={{ color:'var(--red)',fontSize:13,marginBottom:12 }}>{error}</div>}
             <button onClick={handleSubmit} disabled={loading} style={{ width:'100%',background:'var(--gold)',border:'none',borderRadius:10,padding:'12px',color:'var(--gold-btn-text)',fontWeight:700,fontSize:15,cursor:'pointer',marginBottom:16,opacity:loading?0.7:1 }}>{loading?'Sending…':'Send verification code'}</button>
             <div style={{ textAlign:'center',fontSize:13,color:'var(--muted)' }}>
               {mode==='login' ? <>No account? <button onClick={()=>{setMode('register');setError('');}} style={{ background:'none',border:'none',color:'var(--gold)',cursor:'pointer',fontWeight:600,fontSize:13 }}>Register</button></> : <>Have an account? <button onClick={()=>{setMode('login');setError('');}} style={{ background:'none',border:'none',color:'var(--gold)',cursor:'pointer',fontWeight:600,fontSize:13 }}>Sign in</button></>}
@@ -306,7 +306,7 @@ function AuthScreen({ onLogin }: { onLogin:(u:any)=>void }) {
           <>
             <p style={{ color:'var(--muted)',fontSize:14,textAlign:'center',marginBottom:24 }}>Enter the 6-digit code sent to <strong style={{ color:'var(--fg)' }}>{form.email}</strong></p>
             <input value={otp} onChange={e=>setOtp(e.target.value)} maxLength={6} placeholder="000000" style={{ width:'100%',background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'14px',color:'var(--fg)',fontSize:24,textAlign:'center',letterSpacing:'0.3em',outline:'none',boxSizing:'border-box',marginBottom:16 }} />
-            {error && <div style={{ color:'#ef4444',fontSize:13,marginBottom:12,textAlign:'center' }}>{error}</div>}
+            {error && <div style={{ color:'var(--red)',fontSize:13,marginBottom:12,textAlign:'center' }}>{error}</div>}
             <button onClick={handleOtp} disabled={loading||otp.length!==6} style={{ width:'100%',background:'var(--gold)',border:'none',borderRadius:10,padding:'12px',color:'var(--gold-btn-text)',fontWeight:700,fontSize:15,cursor:'pointer',opacity:loading||otp.length!==6?0.7:1 }}>{loading?'Verifying…':'Verify & Sign in'}</button>
             <button onClick={()=>{setStep('form');setOtp('');setError('');}} style={{ width:'100%',background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:13,marginTop:12 }}>← Back</button>
           </>

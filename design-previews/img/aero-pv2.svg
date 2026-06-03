@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 240" font-family="Manrope,sans-serif"><defs>
+<linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="100%" stop-color="#F0F0EE"/></linearGradient>
+<linearGradient id="bgDark" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#1d1f24"/><stop offset="100%" stop-color="#15161A"/></linearGradient>
+<linearGradient id="node" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6889A8"/><stop offset="100%" stop-color="#4E6E8E"/></linearGradient>
+<linearGradient id="nodeDark" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#2c2f36"/><stop offset="100%" stop-color="#15161A"/></linearGradient>
+<linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#4E6E8E"/><stop offset="100%" stop-color="#9BB5CC"/></linearGradient>
+<linearGradient id="step1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="100%" stop-color="#F0F0EE"/></linearGradient>
+<linearGradient id="step2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#F0F0EE"/><stop offset="100%" stop-color="#E2E2DD"/></linearGradient>
+<linearGradient id="step3" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2D3036"/><stop offset="100%" stop-color="#15161A"/></linearGradient>
+<radialGradient id="centerGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#4E6E8E" stop-opacity="0.22"/><stop offset="100%" stop-color="#4E6E8E" stop-opacity="0"/></radialGradient>
+<radialGradient id="softGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#9BB5CC" stop-opacity="0.35"/><stop offset="100%" stop-color="#9BB5CC" stop-opacity="0"/></radialGradient>
+<filter id="dropShadow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation="4"/><feOffset dx="0" dy="6"/><feComponentTransfer><feFuncA type="linear" slope="0.18"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation="2"/><feOffset dx="0" dy="3"/><feComponentTransfer><feFuncA type="linear" slope="0.15"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<filter id="glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="3"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<pattern id="dotgrid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#E6E6E2"/></pattern>
+</defs>
+<rect width="360" height="240" fill="url(#bgDark)"/>
+<ellipse cx="180" cy="125" rx="160" ry="60" fill="url(#softGlow)"/>
+<text x="20" y="28" font-size="9" letter-spacing="2" fill="#9BB5CC" font-family="JetBrains Mono,monospace">02 · VELOCITY</text>
+<g transform="translate(60,135)" filter="url(#glow)">
+<path d="M 0 0 Q 60 -15 120 0 Q 180 15 230 0" fill="none" stroke="#9BB5CC" stroke-width="2.5" stroke-linecap="round"/>
+<polygon points="232,-9 250,0 232,9" fill="#9BB5CC"/>
+<circle cx="0" cy="0" r="6" fill="#9BB5CC"/>
+<circle cx="80" cy="-6" r="5" fill="#9BB5CC"/>
+<circle cx="160" cy="6" r="5" fill="#9BB5CC"/>
+</g>
+<text x="20" y="216" font-size="11" font-weight="500" fill="#FFFFFF">Pace of Product Evolution</text>
+</svg>
