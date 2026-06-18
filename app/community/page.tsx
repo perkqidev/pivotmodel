@@ -135,7 +135,7 @@ function AssessmentsPanel({ user }: any) {
           <div style={{ display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:16,marginBottom:16 }}>
             {[['Team name','team_name','text','e.g. Platform Engineering'],['Industry','industry','text','e.g. FinTech'],['Date','assessment_date','date','']].map(([label,field,type,ph])=>(
               <div key={field as string}>
-                <div style={{ fontSize:12,color:'var(--muted)',marginBottom:6,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.05em' }}>{label as string}</div>
+                <div style={{ fontSize:12,color:'var(--muted)',marginBottom:6,fontWeight:600,textTransform:'none',letterSpacing:'0.01em' }}>{label as string}</div>
                 <input type={type as string} value={(form as any)[field as string]} onChange={e=>setForm(p=>({...p,[field as string]:e.target.value}))} placeholder={ph as string} style={{ width:'100%',background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'10px 14px',color:'var(--fg)',fontSize:14,outline:'none',boxSizing:'border-box' }} />
               </div>
             ))}
@@ -157,7 +157,7 @@ function AssessmentList({ title, assessments, onDuplicate }: { title:string; ass
   if (!assessments.length) return null;
   return (
     <div style={{ marginBottom:32 }}>
-      <div style={{ fontWeight:600,color:'var(--muted)',fontSize:12,textTransform:'uppercase',letterSpacing:'0.05em',marginBottom:12 }}>{title}</div>
+      <div style={{ fontWeight:600,color:'var(--muted)',fontSize:12,textTransform:'none',letterSpacing:'0.01em',marginBottom:12 }}>{title}</div>
       <div style={{ display:'grid',gap:12 }}>
         {assessments.map(a=>(
           <div key={a.id} style={{ background:'var(--surface)',border:'1px solid var(--border)',borderRadius:12,padding:'16px 20px',display:'flex',alignItems:'center',justifyContent:'space-between' }}>
@@ -295,7 +295,7 @@ function AuthScreen({ onLogin }: { onLogin:(u:any)=>void }) {
     <div style={{ minHeight:'100vh',background:'var(--ink)',display:'flex',alignItems:'center',justifyContent:'center',padding:24 }}>
       <div style={{ width:'100%',maxWidth:440,background:'var(--surface)',border:'1px solid var(--border)',borderRadius:20,padding:40 }}>
         <div style={{ textAlign:'center',marginBottom:32 }}>
-          <div style={{ fontSize:13,fontWeight:700,letterSpacing:'0.1em',color:'var(--gold)',marginBottom:8 }}>THE PIVOT MODEL</div>
+          <div style={{ fontSize:13,fontWeight:700,letterSpacing:'0.01em',color:'var(--gold)',marginBottom:8 }}>THE PIVOT MODEL</div>
           <h2 style={{ color:'var(--fg)',margin:0 }}>{step==='otp'?'Enter verification code':mode==='login'?'Sign in':'Join the community'}</h2>
         </div>
         {step==='form' && (
@@ -304,19 +304,19 @@ function AuthScreen({ onLogin }: { onLogin:(u:any)=>void }) {
               <>
                 {[['Full name','name','text'],['Company','company','text'],['Role','role','text'],['Industry','industry','text'],['Team size','team_size','text']].map(([label,field,type])=>(
                   <div key={field} style={{ marginBottom:12 }}>
-                    <div style={{ fontSize:12,color:'var(--muted)',marginBottom:4,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.05em' }}>{label}</div>
+                    <div style={{ fontSize:12,color:'var(--muted)',marginBottom:4,fontWeight:600,textTransform:'none',letterSpacing:'0.01em' }}>{label}</div>
                     <input type={type} value={(form as any)[field]} onChange={e=>setForm(p=>({...p,[field]:e.target.value}))} style={{ width:'100%',background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'10px 14px',color:'var(--fg)',fontSize:14,outline:'none',boxSizing:'border-box' }} />
                   </div>
                 ))}
                 <div style={{ marginBottom:12 }}>
-                  <div style={{ fontSize:12,color:'var(--muted)',marginBottom:4,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.05em' }}>LinkedIn URL *</div>
+                  <div style={{ fontSize:12,color:'var(--muted)',marginBottom:4,fontWeight:600,textTransform:'none',letterSpacing:'0.01em' }}>LinkedIn URL *</div>
                   <input type="text" value={form.linkedin} onChange={e=>setForm(p=>({...p,linkedin:e.target.value}))} placeholder="https://linkedin.com/in/yourprofile" style={{ width:'100%',background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'10px 14px',color:'var(--fg)',fontSize:14,outline:'none',boxSizing:'border-box' }} />
                   <div style={{ fontSize:11,color:'var(--muted)',marginTop:4 }}>Required. Used instead of corporate email verification.</div>
                 </div>
               </>
             )}
             <div style={{ marginBottom:16 }}>
-              <div style={{ fontSize:12,color:'var(--muted)',marginBottom:4,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.05em' }}>Email address</div>
+              <div style={{ fontSize:12,color:'var(--muted)',marginBottom:4,fontWeight:600,textTransform:'none',letterSpacing:'0.01em' }}>Email address</div>
               <input type="email" value={form.email} onChange={e=>setForm(p=>({...p,email:e.target.value}))} style={{ width:'100%',background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'10px 14px',color:'var(--fg)',fontSize:14,outline:'none',boxSizing:'border-box' }} />
             </div>
             {error && <div style={{ color:'var(--red)',fontSize:13,marginBottom:12 }}>{error}</div>}
@@ -329,7 +329,7 @@ function AuthScreen({ onLogin }: { onLogin:(u:any)=>void }) {
         {step==='otp' && (
           <>
             <p style={{ color:'var(--muted)',fontSize:14,textAlign:'center',marginBottom:24 }}>Enter the 6-digit code sent to <strong style={{ color:'var(--fg)' }}>{form.email}</strong></p>
-            <input value={otp} onChange={e=>setOtp(e.target.value)} maxLength={6} placeholder="000000" style={{ width:'100%',background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'14px',color:'var(--fg)',fontSize:24,textAlign:'center',letterSpacing:'0.3em',outline:'none',boxSizing:'border-box',marginBottom:16 }} />
+            <input value={otp} onChange={e=>setOtp(e.target.value)} maxLength={6} placeholder="000000" style={{ width:'100%',background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'14px',color:'var(--fg)',fontSize:24,textAlign:'center',letterSpacing:'0.01em',outline:'none',boxSizing:'border-box',marginBottom:16 }} />
             {error && <div style={{ color:'var(--red)',fontSize:13,marginBottom:12,textAlign:'center' }}>{error}</div>}
             <button onClick={handleOtp} disabled={loading||otp.length!==6} style={{ width:'100%',background:'var(--cream)',border:'none',borderRadius:10,padding:'12px',color:'var(--gold-btn-text)',fontWeight:700,fontSize:15,cursor:'pointer',opacity:loading||otp.length!==6?0.7:1 }}>{loading?'Verifying…':'Verify & Sign in'}</button>
             <button onClick={()=>{setStep('form');setOtp('');setError('');}} style={{ width:'100%',background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:13,marginTop:12 }}>← Back</button>

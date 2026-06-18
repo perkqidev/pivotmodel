@@ -98,7 +98,7 @@ export default function ConsultModal({ source = 'website' }: Props) {
           {/* Header */}
           <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', background: 'linear-gradient(135deg,rgba(18,135,106,.08),rgba(18,135,106,.03))' }}>
             <div>
-              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.15em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 5 }}>Direct Access · 25+ Years Experience</div>
+              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.15em', textTransform:'none', color: 'var(--gold)', marginBottom: 5 }}>Direct Access · 25+ Years Experience</div>
               <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--cream)', fontFamily: 'var(--font-display)' }}>Book a Consulting Session</div>
               <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 3 }}>Tell us about your situation — we respond within 24 hours</div>
             </div>

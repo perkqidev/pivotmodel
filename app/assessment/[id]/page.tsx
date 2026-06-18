@@ -201,7 +201,7 @@ export default function AssessmentPage() {
               return (
                 <div style={{ padding:'8px 16px 14px',borderBottom:'1px solid var(--border)',marginBottom:8 }}>
                   <div style={{ display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:6 }}>
-                    <span style={{ fontSize:11,fontWeight:700,color:'var(--fg)',letterSpacing:'0.03em' }}>Progress {startedCount}/{total}</span>
+                    <span style={{ fontSize:11,fontWeight:700,color:'var(--fg)',letterSpacing:'0.01em' }}>Progress {startedCount}/{total}</span>
                   </div>
                   <div style={{ background:'var(--card)',borderRadius:4,height:6,overflow:'hidden',marginBottom:4 }}>
                     <div style={{ width:`${pct}%`,height:'100%',background:'var(--green)',borderRadius:4,transition:'width 0.5s' }} />
@@ -218,7 +218,7 @@ export default function AssessmentPage() {
                   <div style={{ padding:'10px 16px',borderLeft:`3px solid ${groupActive ? sec.accent : 'transparent'}` }}>
                     <div style={{ display:'flex',alignItems:'center',gap:8 }}>
                       <span style={{ fontSize:16 }}>{sec.icon}</span>
-                      <span style={{ fontWeight:700,fontSize:12,color:groupActive ? 'var(--fg)' : 'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em' }}>{sec.title}</span>
+                      <span style={{ fontWeight:700,fontSize:12,color:groupActive ? 'var(--fg)' : 'var(--muted)',textTransform:'none',letterSpacing:'0.01em' }}>{sec.title}</span>
                     </div>
                     <div style={{ fontSize:10,color:'var(--muted)',opacity:0.8,marginTop:2,paddingLeft:24 }}>{sec.description}</div>
                   </div>
@@ -301,9 +301,9 @@ function EMBModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Promi
       {nudge && <div style={{ background:'rgba(18,135,106,0.1)',border:'1px solid var(--gold)',borderRadius:12,padding:'12px 16px',marginBottom:24,fontSize:13,color:'var(--fg)' }}>💡 <strong>Intelligence Nudge:</strong> Based on your scores (avg {nudge.avg_score}/3), the computed maturity level is <strong style={{color:'var(--gold)'}}>{nudge.suggested_level}</strong>. Consider adjusting your overall rating.</div>}
       {pillars.map(pillar => (
         <div key={pillar} style={{ marginBottom:32 }}>
-          <div style={{ fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:12,textTransform:'uppercase',letterSpacing:'0.05em',display:'flex',alignItems:'center',justifyContent:'space-between' }}><span>{pillar}</span><button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/emb`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pivot_name:pillar})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,pivot_name:pillar,capability:'New Capability',current_level:'L1',evidence:'',gap_notes:'',sort_order:99}]);}} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Row</button></div>
+          <div style={{ fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:12,textTransform:'none',letterSpacing:'0.01em',display:'flex',alignItems:'center',justifyContent:'space-between' }}><span>{pillar}</span><button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/emb`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pivot_name:pillar})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,pivot_name:pillar,capability:'New Capability',current_level:'L1',evidence:'',gap_notes:'',sort_order:99}]);}} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Row</button></div>
           <div className="scroll-table" style={{ background:'var(--surface)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border)' }}>
-            <div style={{ display:'grid',gridTemplateColumns:'1.5fr 100px 2fr 2fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em' }}>
+            <div style={{ display:'grid',gridTemplateColumns:'1.5fr 100px 2fr 2fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'none',letterSpacing:'0.01em' }}>
               <div>Capability</div><div>Current Level</div><div>Evidence & Proof</div><div>Improvement Notes</div><div></div>
             </div>
             {rows.filter(r=>r.pivot_name===pillar).map((row,i) => (
@@ -364,9 +364,9 @@ function DriversModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>P
       </div>
       {categories.map(cat => (
         <div key={cat} style={{marginBottom:28}}>
-          <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em',display:'flex',alignItems:'center',justifyContent:'space-between'}}><span>{cat}</span><button onClick={()=>addRow(cat)} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Driver</button></div>
+          <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'none',letterSpacing:'0.01em',display:'flex',alignItems:'center',justifyContent:'space-between'}}><span>{cat}</span><button onClick={()=>addRow(cat)} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Driver</button></div>
           <div className="scroll-table" style={{ background:'var(--surface)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border)' }}>
-            <div style={{ display:'grid',gridTemplateColumns:'1.2fr 1.5fr 70px 2.5fr 1.5fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em' }}>
+            <div style={{ display:'grid',gridTemplateColumns:'1.2fr 1.5fr 70px 2.5fr 1.5fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'none',letterSpacing:'0.01em' }}>
               <div>Driver Name</div><div>What It Means</div><div>Required?</div><div>Key Considerations</div><div>Additional Notes</div><div></div>
             </div>
             {rows.filter(r=>r.category===cat).map((row,i) => (
@@ -428,7 +428,7 @@ function BenchmarksModule({ id, save }: { id:string; save:(e:string,r:unknown[])
         const subCats = [...new Set(pillarRows.map(r=>r.sub_category||''))];
         return (
           <div key={pillar} style={{marginBottom:28}}>
-            <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em'}}>{pillar}</div>
+            <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'none',letterSpacing:'0.01em'}}>{pillar}</div>
             {subCats.map(sub => (
               <div key={sub} style={{marginBottom:16}}>
                 {sub && <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(18,135,106,0.08)',borderRadius:'8px 8px 0 0',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
@@ -436,7 +436,7 @@ function BenchmarksModule({ id, save }: { id:string; save:(e:string,r:unknown[])
                   <button onClick={()=>addRow(pillar,sub)} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add KPI</button>
                 </div>}
                 <div className="scroll-table" style={{background:'var(--surface)',borderRadius:sub?'0 0 12px 12px':'12px',overflow:'hidden',border:'1px solid var(--border)'}}>
-                  <div style={{display:'grid',gridTemplateColumns:'1.2fr 50px 60px 70px 100px 110px 2fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
+                  <div style={{display:'grid',gridTemplateColumns:'1.2fr 50px 60px 70px 100px 110px 2fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'none',letterSpacing:'0.01em'}}>
                     <div>KPI Name</div><div>Weight</div><div>Unit</div><div>Target</div><div>Actual</div><div>Status</div><div>Notes</div><div></div>
                   </div>
                   {pillarRows.filter(r=>(r.sub_category||'')===sub).map((row,i)=>(
@@ -502,9 +502,9 @@ function ScopeModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Pro
       </div>
       {pillars.map(pillar=>(
         <div key={pillar} style={{marginBottom:28}}>
-          <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em',display:'flex',alignItems:'center',justifyContent:'space-between'}}><span>{pillar}</span><button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/scope`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pillar})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,pillar,activity:'New Activity',required_level:1,current_level:1,gap:0,notes:'',l1_guidance:'',l2_guidance:'',l3_guidance:''}]);}} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Activity</button></div>
+          <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'none',letterSpacing:'0.01em',display:'flex',alignItems:'center',justifyContent:'space-between'}}><span>{pillar}</span><button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/scope`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pillar})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,pillar,activity:'New Activity',required_level:1,current_level:1,gap:0,notes:'',l1_guidance:'',l2_guidance:'',l3_guidance:''}]);}} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Activity</button></div>
           <div className="scroll-table" style={{background:'var(--surface)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border)'}}>
-            <div style={{display:'grid',gridTemplateColumns:'1.2fr 100px 100px 60px 2fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
+            <div style={{display:'grid',gridTemplateColumns:'1.2fr 100px 100px 60px 2fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'none',letterSpacing:'0.01em'}}>
               <div>Activity</div><div>Target Level</div><div>Current Level</div><div>Gap</div><div>Action Notes</div><div></div>
             </div>
             {rows.filter(r=>r.pillar===pillar).map((row,i)=>(
@@ -634,7 +634,7 @@ function MaturityModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>
         <button onClick={addRow} style={{background:'var(--cream)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Factor</button>
       </div>
       <div className="scroll-table" style={{background:'var(--surface)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border)'}}>
-        <div style={{display:'grid',gridTemplateColumns:'1.2fr 90px 1.5fr 1.5fr 1.5fr 1.2fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
+        <div style={{display:'grid',gridTemplateColumns:'1.2fr 90px 1.5fr 1.5fr 1.5fr 1.2fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'none',letterSpacing:'0.01em'}}>
           <div>Factor Name</div><div>Maturity Level</div><div>Who Owns This</div><div>Skill Capability</div><div>Business Impact</div><div>Notes</div><div></div>
         </div>
         {rows.map((row,i)=>(
@@ -699,7 +699,7 @@ function KRAModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Promi
         const rolePillars = [...new Set(roleRows.map(r=>r.pillar||''))];
         return (
           <div key={role} style={{marginBottom:32}}>
-            <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em',display:'flex',alignItems:'center',justifyContent:'space-between'}}><span>{role}</span><button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/kra`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({role_level:role,pillar:'Operational Excellence'})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,role_level:role,pillar:'Operational Excellence',person_name:'',kra_name:'New KRA',description:'',target:'',current:'',status:'not-started',notes:''}]);}} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add KRA</button></div>
+            <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'none',letterSpacing:'0.01em',display:'flex',alignItems:'center',justifyContent:'space-between'}}><span>{role}</span><button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/kra`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({role_level:role,pillar:'Operational Excellence'})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,role_level:role,pillar:'Operational Excellence',person_name:'',kra_name:'New KRA',description:'',target:'',current:'',status:'not-started',notes:''}]);}} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add KRA</button></div>
             {rolePillars.map(pillar => (
               <div key={pillar} style={{marginBottom:12}}>
                 {pillar && <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'4px 16px',background:'rgba(18,135,106,0.06)'}}>{pillar}</div>}
@@ -803,7 +803,7 @@ function LeadershipModule({ id, save }: { id:string; save:(e:string,r:unknown[])
               const catRows = leaderRows.filter(r=>(r.skill_category||'')===cat);
               return (
                 <div key={cat} style={{marginBottom:16}}>
-                  {cat && <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(18,135,106,0.08)',borderRadius:'8px 8px 0 0',textTransform:'uppercase',letterSpacing:'0.05em'}}>{cat}</div>}
+                  {cat && <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(18,135,106,0.08)',borderRadius:'8px 8px 0 0',textTransform:'none',letterSpacing:'0.01em'}}>{cat}</div>}
                   <div className="scroll-table" style={{background:'var(--surface)',borderRadius:cat?'0 0 12px 12px':'12px',overflow:'hidden',border:'1px solid var(--border)'}}>
                     {catRows.map((row,i)=>(
                       <div key={row.id}>
@@ -1032,9 +1032,9 @@ function TalentMapModule({ id }: { id:string }) {
                 const categories = [...new Set(sectionSkills.map((s:any) => s.category))] as string[];
                 return categories.map((cat) => (
                   <div key={cat} style={{marginBottom:20}}>
-                    <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(18,135,106,0.08)',borderRadius:'8px 8px 0 0',textTransform:'uppercase',letterSpacing:'0.05em'}}>{cat}</div>
+                    <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(18,135,106,0.08)',borderRadius:'8px 8px 0 0',textTransform:'none',letterSpacing:'0.01em'}}>{cat}</div>
                     <div className="scroll-table" style={{background:'var(--surface)',borderRadius:'0 0 12px 12px',overflow:'hidden',border:'1px solid var(--border)'}}>
-                      <div style={{display:'grid',gridTemplateColumns:'1.2fr 64px 64px 64px 2fr 40px',gap:'0 12px',background:'var(--card)',padding:'8px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
+                      <div style={{display:'grid',gridTemplateColumns:'1.2fr 64px 64px 64px 2fr 40px',gap:'0 12px',background:'var(--card)',padding:'8px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'none',letterSpacing:'0.01em'}}>
                         <div>Skill</div><div>Self Score</div><div>Mgr Score</div><div>Target</div><div>Notes</div><div></div>
                       </div>
                       {sectionSkills.filter((s:any)=>s.category===cat).map((skill:any,i:number)=>(
@@ -1075,7 +1075,7 @@ function TalentMapModule({ id }: { id:string }) {
           {/* Team Tracker sub-tab */}
           {subTab === 'tracker' && (
             <div className="scroll-table" style={{background:'var(--surface)',borderRadius:12,border:'1px solid var(--border)',overflow:'hidden'}}>
-              <div style={{display:'grid',gridTemplateColumns:'1.5fr 0.8fr repeat(4,80px) 140px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
+              <div style={{display:'grid',gridTemplateColumns:'1.5fr 0.8fr repeat(4,80px) 140px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'none',letterSpacing:'0.01em'}}>
                 <div>Engineer</div><div>Level</div><div>Technical</div><div>Mindset</div><div>Knowledge</div><div>AI Ready</div><div>Overall</div>
               </div>
               {engineers.map((e,i) => {
@@ -1205,7 +1205,7 @@ function SkillsetModule({ id }: { id:string }) {
 
       {/* Product Context */}
       <div style={{marginBottom:28}}>
-        <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em'}}>Product Context</div>
+        <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'none',letterSpacing:'0.01em'}}>Product Context</div>
         {groups.map(group => (
           <div key={group} style={{marginBottom:12}}>
             <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(18,135,106,0.08)',borderRadius:'8px 8px 0 0',textTransform:'capitalize'}}>{group}</div>
@@ -1229,7 +1229,7 @@ function SkillsetModule({ id }: { id:string }) {
         const cats = [...new Set(sectionItems.map(i=>i.category||''))];
         return (
           <div key={section} style={{marginBottom:28}}>
-            <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em'}}>{section}</div>
+            <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'none',letterSpacing:'0.01em'}}>{section}</div>
             {cats.map(cat => (
               <div key={cat} style={{marginBottom:16}}>
                 {cat && <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(18,135,106,0.08)',borderRadius:'8px 8px 0 0',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
@@ -1237,7 +1237,7 @@ function SkillsetModule({ id }: { id:string }) {
                   <button onClick={()=>addItem(section,cat)} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Skill</button>
                 </div>}
                 <div className="scroll-table" style={{background:'var(--surface)',borderRadius:cat?'0 0 12px 12px':'12px',overflow:'hidden',border:'1px solid var(--border)'}}>
-                  <div style={{display:'grid',gridTemplateColumns:'1.5fr 90px 90px 90px 56px 2fr 36px',gap:'0 12px',background:'var(--card)',padding:'8px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
+                  <div style={{display:'grid',gridTemplateColumns:'1.5fr 90px 90px 90px 56px 2fr 36px',gap:'0 12px',background:'var(--card)',padding:'8px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'none',letterSpacing:'0.01em'}}>
                     <div>Skill Name</div><div>Priority</div><div>Required</div><div>Current</div><div>Gap</div><div>Action Notes</div><div></div>
                   </div>
                   {sectionItems.filter(i=>(i.category||'')===cat).map((item,i)=>(
@@ -1296,7 +1296,7 @@ function SkillsetModule({ id }: { id:string }) {
       {/* Gap Analysis Summary */}
       {items.length > 0 && (
         <div style={{marginBottom:28}}>
-          <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em'}}>Gap Analysis Summary</div>
+          <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'none',letterSpacing:'0.01em'}}>Gap Analysis Summary</div>
           <div style={{background:'var(--surface)',borderRadius:12,border:'1px solid var(--border)',padding:24}}>
             <div className="grid-stack" style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:16}}>
               {(() => {
@@ -1340,7 +1340,7 @@ function SkillsetModule({ id }: { id:string }) {
               if (!criticalGaps.length) return null;
               return (
                 <div style={{marginTop:16,padding:16,background:'rgba(239,68,68,0.08)',borderRadius:8,border:'1px solid rgba(239,68,68,0.2)'}}>
-                  <div style={{fontSize:12,fontWeight:700,color:'var(--red)',marginBottom:8,textTransform:'uppercase'}}>Critical Gaps</div>
+                  <div style={{fontSize:12,fontWeight:700,color:'var(--red)',marginBottom:8,textTransform:'none'}}>Critical Gaps</div>
                   {criticalGaps.map(g => (
                     <div key={g.id} style={{fontSize:13,color:'var(--fg)',marginBottom:4}}>
                       <strong>{g.item_name}</strong> <span style={{color:'var(--muted)'}}>({g.section} / {g.category})</span> — Current: {g.current_level}, Required: {g.required_level}

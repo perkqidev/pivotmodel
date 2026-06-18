@@ -13,25 +13,25 @@
 .matPh { height: 244px; background: var(--base-2); }
 .matPh img { width: 100%; height: 100%; object-fit: cover; }
 .matIn { padding: 30px 30px 36px; flex: 1; display: flex; flex-direction: column; }
-.mn { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+.mn { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.01em; text-transform: none;
       color: var(--accent); margin-bottom: 14px; }
 .mat h4 { font-family: var(--font-disp); font-weight: 500; font-size: 18px;
           letter-spacing: -0.01em; margin-bottom: 10px; color: var(--ink); }
 .mat p { font-size: 16px; font-weight: 400; color: var(--ink-2); line-height: 1.6; flex: 1; }
-.lock { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+.lock { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.01em; text-transform: none;
         color: var(--muted); margin-top: 18px; }
 .cta { text-align: center; padding-top: 56px; padding-bottom: 8px; }
 .bigBtn { display: inline-flex; align-items: center; gap: 11px;
-          font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.16em;
-          text-transform: uppercase; background: #15161A; color: #FFFFFF !important;
+          font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.01em;
+          text-transform: none; background: #15161A; color: #FFFFFF !important;
           padding: 18px 36px; border: 1px solid #15161A; transition: background 0.3s var(--ease), border-color 0.3s var(--ease), color 0.3s var(--ease); }
 .bigBtn:hover { background: #12876A; border-color: #12876A; color: #FFFFFF !important; }
 :global([data-theme='dark']) .bigBtn { background: #E7EAEF; color: #0E0F14 !important; border-color: #E7EAEF; }
 :global([data-theme='dark']) .bigBtn:hover { background: #46C79E; border-color: #46C79E; color: #0E0F14 !important; }
 .bigBtn .ar { transition: transform 0.25s; }
 .bigBtn:hover .ar { transform: translateX(5px); }
-.note { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.1em;
-        text-transform: uppercase; color: var(--muted); margin-top: 20px; }
+.note { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.01em;
+        text-transform: none; color: var(--muted); margin-top: 20px; }
 @media (max-width: 960px) {
   .wrap { padding: 0 28px; }
   .grid { grid-template-columns: 1fr 1fr; }

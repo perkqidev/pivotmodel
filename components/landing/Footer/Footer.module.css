@@ -4,16 +4,16 @@
         padding-bottom: 48px; border-bottom: 1px solid var(--line); margin-bottom: 28px; }
 .brand h4 { font-family: var(--font-disp); font-weight: 400; font-size: 20px;
             letter-spacing: -0.01em; color: var(--ink); margin-bottom: 10px; }
-.brand p { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.16em;
-           text-transform: uppercase; color: var(--muted); }
-.col h5 { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.18em;
-          text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+.brand p { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.01em;
+           text-transform: none; color: var(--muted); }
+.col h5 { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.01em;
+          text-transform: none; color: var(--accent); margin-bottom: 16px; }
 .col a { display: block; font-family: var(--font-disp); font-size: 16px; font-weight: 400;
          color: var(--ink-2); padding: 6px 0; transition: color 0.25s, padding 0.25s; }
 .col a:hover { color: var(--accent); padding-left: 4px; }
 .row { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap;
-       font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em;
-       text-transform: uppercase; color: var(--muted); }
+       font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.01em;
+       text-transform: none; color: var(--muted); }
 .row a { color: var(--muted); transition: color 0.25s; }
 .row a:hover { color: var(--accent); }
 @media (max-width: 960px) {

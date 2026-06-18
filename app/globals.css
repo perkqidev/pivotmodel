@@ -177,7 +177,7 @@ input,select,textarea{font-family:inherit}
   display:inline-flex;align-items:center;gap:10px;
   padding:14px 26px;border-radius:0;font-size:12px;
   font-weight:500;font-family:var(--font-mono);
-  letter-spacing:0.14em;text-transform:uppercase;
+  letter-spacing: 0.01em;text-transform: none;
   border:1px solid transparent;cursor:pointer;
   transition:background .25s var(--ease,cubic-bezier(.16,1,.3,1)),border-color .25s,color .25s;
   text-decoration:none;
@@ -196,7 +196,7 @@ input,select,textarea{font-family:inherit}
 .section-label{
   font-family:var(--font-mono);
   font-size:10px;font-weight:500;letter-spacing:.22em;
-  text-transform:uppercase;color:var(--gold);margin-bottom:18px;
+  text-transform: none;color:var(--gold);margin-bottom:18px;
 }
 .section-title{
   font-family:var(--font-display);font-size:clamp(28px,4vw,52px);
@@ -245,7 +245,7 @@ input,select,textarea{font-family:inherit}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.2)}}
 .hero-eyebrow{
   font-size:13px;font-weight:600;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--muted);margin-bottom:16px;
+  text-transform: none;color:var(--muted);margin-bottom:16px;
 }
 .hero-title{
   font-family:var(--font-display);
@@ -284,7 +284,7 @@ input,select,textarea{font-family:inherit}
 .book-ornament{color:var(--gold);font-size:18px;margin-bottom:16px}
 .book-tag{
   font-size:9px;font-weight:700;letter-spacing:.2em;
-  text-transform:uppercase;color:var(--gold);margin-bottom:12px;
+  text-transform: none;color:var(--gold);margin-bottom:12px;
 }
 .book-title-small{
   font-family:var(--font-display);font-size:22px;font-weight:900;
@@ -304,7 +304,7 @@ input,select,textarea{font-family:inherit}
 .book-spine span{
   writing-mode:vertical-rl;transform:rotate(180deg);
   font-size:9px;font-weight:700;letter-spacing:.15em;
-  color:var(--gold);text-transform:uppercase;
+  color:var(--gold);text-transform: none;
 }
 .book-side{
   position:absolute;right:-16px;top:6px;bottom:6px;width:16px;
@@ -348,7 +348,7 @@ input,select,textarea{font-family:inherit}
   background:var(--ink-3);border:1px solid var(--border);
   border-radius:8px;padding:22px;margin-bottom:14px;
 }
-.ai-phase-num{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.ai-phase-num{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform: none;color:var(--gold);margin-bottom:8px}
 .ai-phase-card h4{font-size:15px;font-weight:700;color:var(--cream);margin-bottom:8px}
 .ai-phase-card p{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:12px}
 .ai-phase-status{font-size:11px;font-weight:700;padding:3px 10px;border-radius:12px;display:inline-block}
@@ -381,7 +381,7 @@ input,select,textarea{font-family:inherit}
 .pivot-card p{font-size:13px;color:var(--muted);line-height:1.6}
 .pivot-tag{
   position:absolute;top:20px;right:20px;
-  font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  font-size:9px;font-weight:700;letter-spacing:.12em;text-transform: none;
   color:var(--muted-2);
 }
 
@@ -454,7 +454,7 @@ input,select,textarea{font-family:inherit}
 }
 .blog-preview-item:hover .blog-item-title{color:var(--gold)}
 .blog-item-emoji{font-size:24px;width:44px;flex-shrink:0}
-.blog-item-cat{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.blog-item-cat{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform: none;color:var(--gold);margin-bottom:4px}
 .blog-item-title{font-size:14px;font-weight:700;color:var(--cream);line-height:1.35;margin-bottom:4px;transition:color .2s}
 .blog-item-meta{font-size:12px;color:var(--muted)}
 .wp-preview-item{
@@ -478,7 +478,7 @@ input,select,textarea{font-family:inherit}
   background:var(--ink-2);border:1px solid var(--border);
   border-top:3px solid var(--gold);border-radius:10px;padding:28px;
 }
-.consult-card-tag{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.consult-card-tag{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform: none;color:var(--gold);margin-bottom:10px}
 .consult-card-title{font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--cream);margin-bottom:10px}
 .consult-card-sub{font-size:14px;color:var(--muted);line-height:1.65;margin-bottom:20px}
 .consult-highlights{display:flex;flex-direction:column;gap:8px;margin-bottom:22px;padding:16px;background:rgba(18,135,106,.06);border-radius:6px;border:1px solid rgba(18,135,106,.15)}
@@ -505,7 +505,7 @@ input,select,textarea{font-family:inherit}
 /* ── Community layout ──────────────────────────────────────────────── */
 .comm-layout{display:flex;min-height:calc(100vh - 64px);padding-top:64px}
 .sidebar{width:220px;background:var(--ink-2);border-right:1px solid var(--border);flex-shrink:0;padding:16px 0;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto}
-.s-label{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2);padding:0 16px 5px;margin-top:10px}
+.s-label{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform: none;color:var(--muted-2);padding:0 16px 5px;margin-top:10px}
 .s-item{display:flex;align-items:center;gap:10px;padding:9px 16px;font-size:13px;color:var(--muted);cursor:pointer;transition:all .15s;border-left:2px solid transparent;border:none;background:none;font-family:inherit;width:100%;text-align:left}
 .s-item:hover{color:var(--cream);background:rgba(21,22,26,.03)}
 .s-item.active{color:var(--gold);background:var(--gold-bg);border-left:2px solid var(--gold)}
@@ -533,7 +533,7 @@ input,select,textarea{font-family:inherit}
 /* ── Forms ─────────────────────────────────────────────────────────── */
 .field{margin-bottom:14px}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.lbl{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2);margin-bottom:4px;display:block}
+.lbl{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform: none;color:var(--muted-2);margin-bottom:4px;display:block}
 .req{color:var(--red);margin-left:2px}
 .inp{width:100%;background:var(--ink-3);border:1px solid var(--border-2);color:var(--cream);padding:9px 12px;border-radius:4px;font-family:inherit;font-size:13px;outline:none;transition:border-color .2s}
 .inp:focus{border-color:var(--gold-d)}
@@ -561,7 +561,7 @@ input,select,textarea{font-family:inherit}
 .emb-table{width:100%;border-collapse:collapse;font-size:13px}
 .emb-table th{
   background:var(--ink-3);color:var(--muted-2);font-size:11px;font-weight:600;
-  text-transform:uppercase;letter-spacing:.06em;padding:9px 12px;
+  text-transform: none;letter-spacing:.06em;padding:9px 12px;
   border:1px solid var(--border);text-align:left;white-space:nowrap;
 }
 .emb-table td{
@@ -573,7 +573,7 @@ input,select,textarea{font-family:inherit}
   background:rgba(18,135,106,.05);
   border-color:rgba(18,135,106,.2);
   font-weight:700;color:var(--gold);font-size:12px;
-  letter-spacing:.06em;text-transform:uppercase;
+  letter-spacing:.06em;text-transform: none;
 }
 .emb-select,.emb-input,.emb-textarea{
   width:100%;background:transparent;border:none;color:var(--cream);

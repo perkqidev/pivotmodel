@@ -402,7 +402,7 @@ export default function SkillRequirementsSpreadsheet({ userId }: { userId: numbe
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
           {CONTEXT_FIELDS.map(f => (
             <div key={f.key}>
-              <label style={{ display: 'block', fontSize: 11, color: 'var(--muted)', marginBottom: 5, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{f.label}</label>
+              <label style={{ display: 'block', fontSize: 11, color: 'var(--muted)', marginBottom: 5, textTransform:'none', letterSpacing:'0.01em' }}>{f.label}</label>
               <input value={context[f.key] || ''} onChange={e => updateContext(f.key, e.target.value)}
                 placeholder={f.placeholder}
                 style={{ width: '100%', background: 'var(--ink-2)', border: '1px solid var(--ink-3)', color: 'var(--cream)', borderRadius: 8, padding: '9px 12px', fontSize: 13, outline: 'none', boxSizing: 'border-box',

@@ -17,8 +17,8 @@
   margin-bottom: 40px;
   font-family: var(--font-mono);
   font-size: 12px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  text-transform: none;
   color: var(--muted);
 }
 .label::before { content: ''; height: 1px; width: 32px; background: var(--line); }
@@ -41,8 +41,8 @@
   margin-top: 30px;
   font-family: var(--font-mono);
   font-size: 12px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  text-transform: none;
   color: var(--accent);
   border-bottom: 1px solid var(--accent);
   padding-bottom: 3px;

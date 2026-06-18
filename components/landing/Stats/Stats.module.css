@@ -27,8 +27,8 @@
 .l {
   font-family: var(--font-mono);
   font-size: 12px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  text-transform: none;
   color: rgba(247, 247, 245, 0.45);
   margin-top: 16px;
   line-height: 1.7;

@@ -27,8 +27,8 @@
 .label {
   font-family: var(--font-mono);
   font-size: 12px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  text-transform: none;
   color: var(--muted);
 }
 
@@ -72,8 +72,8 @@
 .btnPrimary {
   font-family: var(--font-mono);
   font-size: 12px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  text-transform: none;
   background: #15161A;
   color: #FFFFFF !important;
   padding: 14px 28px;
@@ -99,8 +99,8 @@
 .btnGhost {
   font-family: var(--font-mono);
   font-size: 12px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  text-transform: none;
   color: var(--muted);
   display: flex; align-items: center; gap: 10px;
   border-bottom: 1px solid var(--line);
@@ -119,8 +119,8 @@
   display: flex; align-items: center; gap: 12px;
   font-family: var(--font-mono);
   font-size: 12px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  text-transform: none;
   color: var(--muted);
   opacity: 0;
   transition: opacity 1s 1.1s var(--ease);

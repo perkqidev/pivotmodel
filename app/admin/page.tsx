@@ -24,7 +24,7 @@ export default function AdminPage() {
   return (
     <div style={{minHeight:'100vh',background:'var(--ink)',color:'var(--cream)'}}>
       <div style={{background:'var(--ink-2)',borderBottom:'1px solid var(--border-2)',padding:'0 32px',display:'flex',alignItems:'center',gap:32}}>
-        <div style={{padding:'16px 0',fontWeight:700,fontSize:16,color:'var(--gold)',letterSpacing:'0.05em'}}>PIVOT MODEL · ADMIN</div>
+        <div style={{padding:'16px 0',fontWeight:700,fontSize:16,color:'var(--gold)',letterSpacing:'0.01em'}}>Pivot Model · Admin</div>
         <div style={{display:'flex',gap:4,flex:1}}>
           {TABS.map(t=><button key={t.id} onClick={()=>setTab(t.id)} style={{padding:'16px 20px',background:'none',border:'none',borderBottom:`3px solid ${tab===t.id?'var(--gold)':'transparent'}`,color:tab===t.id?'var(--gold)':'var(--muted)',fontSize:13,fontWeight:tab===t.id?700:400,cursor:'pointer'}}>{t.label}</button>)}
         </div>
@@ -69,7 +69,7 @@ function UsersTab() {
         <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search users…" style={{background:'var(--ink-2)',border:'1px solid var(--border-2)',borderRadius:8,padding:'8px 14px',color:'var(--cream)',fontSize:13,outline:'none',width:240}} />
       </div>
       <div style={{background:'var(--ink-2)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border-2)'}}>
-        <div style={{display:'grid',gridTemplateColumns:'2fr 2fr 1.5fr 1fr 80px 100px 100px 200px',padding:'10px 16px',background:'var(--ink)',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
+        <div style={{display:'grid',gridTemplateColumns:'2fr 2fr 1.5fr 1fr 80px 100px 100px 200px',padding:'10px 16px',background:'var(--ink)',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'none',letterSpacing:'0.01em'}}>
           <div>Name</div><div>Email</div><div>Company</div><div>Assessments</div><div>Status</div><div>Admin</div><div>Chat (30d)</div><div>Actions</div>
         </div>
         {filtered.map((u,i)=>(
@@ -134,12 +134,12 @@ function BlogTab() {
       <div style={{background:'var(--ink-2)',border:'1px solid var(--border-2)',borderRadius:16,padding:24,display:'grid',gap:16}}>
         {[['Title','title','input',''],['Category','category','input',''],['Excerpt','excerpt','textarea',''],['Body','body','textarea',''],['Emoji','emoji','input',''],['Read time (min)','read_time','input','']].map(([label,field,type,ph])=>(
           <div key={field as string}>
-            <div style={{fontSize:12,color:'var(--muted)',marginBottom:6,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.05em'}}>{label as string}</div>
+            <div style={{fontSize:12,color:'var(--muted)',marginBottom:6,fontWeight:600,textTransform:'none',letterSpacing:'0.01em'}}>{label as string}</div>
             {type==='textarea' ? <textarea value={editing[field as string]||''} onChange={e=>setEditing((p:any)=>({...p,[field as string]:e.target.value}))} rows={6} style={{width:'100%',background:'var(--ink)',border:'1px solid var(--border-2)',borderRadius:8,padding:'10px 14px',color:'var(--cream)',fontSize:13,outline:'none',resize:'vertical',boxSizing:'border-box'}} /> : <input value={editing[field as string]||''} onChange={e=>setEditing((p:any)=>({...p,[field as string]:e.target.value}))} style={{width:'100%',background:'var(--ink)',border:'1px solid var(--border-2)',borderRadius:8,padding:'10px 14px',color:'var(--cream)',fontSize:13,outline:'none',boxSizing:'border-box'}} />}
           </div>
         ))}
         <div>
-          <div style={{fontSize:12,color:'var(--muted)',marginBottom:6,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.05em'}}>Status</div>
+          <div style={{fontSize:12,color:'var(--muted)',marginBottom:6,fontWeight:600,textTransform:'none',letterSpacing:'0.01em'}}>Status</div>
           <select value={editing.status||'draft'} onChange={e=>setEditing((p:any)=>({...p,status:e.target.value}))} style={{background:'var(--ink)',border:'1px solid var(--border-2)',borderRadius:8,padding:'10px 14px',color:'var(--cream)',fontSize:13,cursor:'pointer',outline:'none'}}>
             <option value="draft">Draft</option><option value="published">Published</option>
           </select>
@@ -211,12 +211,12 @@ function WhitepapersTab() {
       <div style={{background:'var(--ink-2)',border:'1px solid var(--border-2)',borderRadius:16,padding:24,display:'grid',gap:16}}>
         {[['Title','title','input'],['Category','category','input'],['Description','description','textarea'],['Icon (emoji)','icon','input'],['Pages','pages','input'],['File URL','file_url','input']].map(([label,field,type])=>(
           <div key={field as string}>
-            <div style={{fontSize:12,color:'var(--muted)',marginBottom:6,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.05em'}}>{label as string}</div>
+            <div style={{fontSize:12,color:'var(--muted)',marginBottom:6,fontWeight:600,textTransform:'none',letterSpacing:'0.01em'}}>{label as string}</div>
             {type==='textarea' ? <textarea value={editing[field as string]||''} onChange={e=>setEditing((p:any)=>({...p,[field as string]:e.target.value}))} rows={3} style={{width:'100%',background:'var(--ink)',border:'1px solid var(--border-2)',borderRadius:8,padding:'10px 14px',color:'var(--cream)',fontSize:13,outline:'none',resize:'vertical',boxSizing:'border-box'}} /> : <input value={editing[field as string]||''} onChange={e=>setEditing((p:any)=>({...p,[field as string]:e.target.value}))} style={{width:'100%',background:'var(--ink)',border:'1px solid var(--border-2)',borderRadius:8,padding:'10px 14px',color:'var(--cream)',fontSize:13,outline:'none',boxSizing:'border-box'}} />}
           </div>
         ))}
         <div>
-          <div style={{fontSize:12,color:'var(--muted)',marginBottom:6,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.05em'}}>Access</div>
+          <div style={{fontSize:12,color:'var(--muted)',marginBottom:6,fontWeight:600,textTransform:'none',letterSpacing:'0.01em'}}>Access</div>
           <select value={editing.access||'members'} onChange={e=>setEditing((p:any)=>({...p,access:e.target.value}))} style={{background:'var(--ink)',border:'1px solid var(--border-2)',borderRadius:8,padding:'10px 14px',color:'var(--cream)',fontSize:13,cursor:'pointer',outline:'none'}}>
             <option value="public">Public</option><option value="members">Members only</option>
           </select>
@@ -276,22 +276,22 @@ function ChatConfigTab() {
       <p style={{color:'var(--muted)',fontSize:13,marginBottom:28}}>Configure the AI chatbot that allows members to query The Pivot Model book. API key is stored in the database.</p>
       <div style={{background:'var(--ink-2)',border:'1px solid var(--border-2)',borderRadius:16,padding:28,maxWidth:640}}>
         <div style={{marginBottom:20}}>
-          <div style={{fontSize:12,color:'var(--muted)',marginBottom:6,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.05em'}}>Chat Enabled</div>
+          <div style={{fontSize:12,color:'var(--muted)',marginBottom:6,fontWeight:600,textTransform:'none',letterSpacing:'0.01em'}}>Chat Enabled</div>
           <div style={{display:'flex',gap:8}}>
             {['true','false'].map(v=><button key={v} onClick={()=>setConfig(p=>({...p,chat_enabled:v}))} style={{padding:'8px 20px',background:config.chat_enabled===v?'var(--gold)':'var(--ink)',border:'1px solid var(--border-2)',borderRadius:8,color:config.chat_enabled===v?'var(--gold-btn-text)':'var(--muted)',fontWeight:config.chat_enabled===v?700:400,cursor:'pointer',fontSize:13}}>{v==='true'?'Enabled':'Disabled'}</button>)}
           </div>
         </div>
         <div style={{marginBottom:20}}>
-          <div style={{fontSize:12,color:'var(--muted)',marginBottom:6,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.05em'}}>Anthropic API Key</div>
+          <div style={{fontSize:12,color:'var(--muted)',marginBottom:6,fontWeight:600,textTransform:'none',letterSpacing:'0.01em'}}>Anthropic API Key</div>
           <input type="password" value={config.chat_api_key} onChange={e=>setConfig(p=>({...p,chat_api_key:e.target.value}))} placeholder="sk-ant-…" style={{width:'100%',background:'var(--ink)',border:'1px solid var(--border-2)',borderRadius:8,padding:'10px 14px',color:'var(--cream)',fontSize:13,outline:'none',fontFamily:'inherit',boxSizing:'border-box'}} />
           <div style={{fontSize:11,color:'var(--muted)',marginTop:4}}>Stored in the database. Never exposed to users or client-side code.</div>
         </div>
         <div style={{marginBottom:20}}>
-          <div style={{fontSize:12,color:'var(--muted)',marginBottom:6,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.05em'}}>System Prompt (book context)</div>
+          <div style={{fontSize:12,color:'var(--muted)',marginBottom:6,fontWeight:600,textTransform:'none',letterSpacing:'0.01em'}}>System Prompt (book context)</div>
           <textarea value={config.chat_system_prompt} onChange={e=>setConfig(p=>({...p,chat_system_prompt:e.target.value}))} rows={6} style={{width:'100%',background:'var(--ink)',border:'1px solid var(--border-2)',borderRadius:8,padding:'10px 14px',color:'var(--cream)',fontSize:13,outline:'none',resize:'vertical',boxSizing:'border-box'}} />
         </div>
         <div style={{marginBottom:24}}>
-          <div style={{fontSize:12,color:'var(--muted)',marginBottom:12,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.05em'}}>Usage Limits (per user)</div>
+          <div style={{fontSize:12,color:'var(--muted)',marginBottom:12,fontWeight:600,textTransform:'none',letterSpacing:'0.01em'}}>Usage Limits (per user)</div>
           <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:16}}>
             {[['Daily limit','chat_limit_day'],['Weekly limit','chat_limit_week'],['Monthly limit','chat_limit_month']].map(([label,field])=>(
               <div key={field}>

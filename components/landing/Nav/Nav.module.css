@@ -22,7 +22,7 @@
   font-family: var(--font-disp);
   font-weight: 400;
   font-size: 18px;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
   color: var(--ink);
 }
 .brand em { font-style: normal; font-weight: 600; color: var(--accent); }
@@ -30,8 +30,8 @@
 .links a {
   font-family: var(--font-mono);
   font-size: 12px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  text-transform: none;
   color: var(--muted);
   transition: color 0.25s;
 }

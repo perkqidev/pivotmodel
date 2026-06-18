@@ -339,11 +339,11 @@ export default function EMBSpreadsheet({ userId }: { userId: number }) {
       <div style={{ display: 'flex', gap: 10, marginBottom: 18, flexWrap: 'wrap' }}>
         <div style={{ background: 'var(--ink-3)', border: `1px solid ${LEVEL_COLOR[overallLevel] || 'var(--border)'}22`, borderRadius: 6, padding: '10px 16px', textAlign: 'center', minWidth: 90 }}>
           <div style={{ fontSize: 26, fontWeight: 900, color: LEVEL_COLOR[overallLevel] || 'var(--gold)', fontFamily: 'var(--font-display)', lineHeight: 1 }}>{overallLevel}</div>
-          <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 3, textTransform: 'uppercase', letterSpacing: '.06em' }}>Overall</div>
+          <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 3, textTransform:'none', letterSpacing: '.06em' }}>Overall</div>
         </div>
         <div style={{ background: 'var(--ink-3)', border: '1px solid var(--border)', borderRadius: 6, padding: '10px 16px', textAlign: 'center', minWidth: 70 }}>
           <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--gold)', fontFamily: 'var(--font-display)', lineHeight: 1 }}>{avgScore}</div>
-          <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 3, textTransform: 'uppercase', letterSpacing: '.06em' }}>Avg Score</div>
+          <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 3, textTransform:'none', letterSpacing: '.06em' }}>Avg Score</div>
         </div>
         {pivotNums.map(pNum => {
           const pRows = byPivot[pNum] || [];
@@ -384,7 +384,7 @@ export default function EMBSpreadsheet({ userId }: { userId: number }) {
                 <InlineEdit
                   value={pivotName}
                   onSave={name => renamePivot(pNum, name)}
-                  style={{ color: 'var(--gold)', fontWeight: 700, fontSize: 13, textTransform: 'uppercase', letterSpacing: '.07em' }}
+                  style={{ color: 'var(--gold)', fontWeight: 700, fontSize: 13, textTransform:'none', letterSpacing: '.07em' }}
                 />
               </div>
               <span style={{ fontSize: 11, color: 'var(--muted)', flexShrink: 0 }}>Avg {pAvg} · {l3Count}/{pRows.length} at L3</span>
@@ -397,7 +397,7 @@ export default function EMBSpreadsheet({ userId }: { userId: number }) {
             {/* Column headers */}
             <div style={{ display: 'grid', gridTemplateColumns: '26px 1fr 86px 52px 1fr 1fr 56px', background: 'var(--ink-3)', borderLeft: '1px solid var(--border)', borderRight: '1px solid var(--border)', borderBottom: '1px solid rgba(255,255,255,.08)' }}>
               {['', 'Capability', 'Level', 'Score', 'Evidence', 'Notes', ''].map((h, i) => (
-                <div key={i} style={{ padding: '5px 10px', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.08em', color: 'var(--muted-2)', textAlign: i === 3 ? 'center' : 'left' }}>{h}</div>
+                <div key={i} style={{ padding: '5px 10px', fontSize: 10, fontWeight: 700, textTransform:'none', letterSpacing: '.08em', color: 'var(--muted-2)', textAlign: i === 3 ? 'center' : 'left' }}>{h}</div>
               ))}
             </div>
 
@@ -498,11 +498,11 @@ export default function EMBSpreadsheet({ userId }: { userId: number }) {
                   {/* Criteria expand — fixed benchmarks, read only */}
                   {expandedRow === row.id && (row.l1_criteria || row.l2_criteria || row.l3_criteria) && (
                     <div style={{ background: 'rgba(18,135,106,.04)', borderBottom: '1px solid rgba(18,135,106,.1)', borderLeft: '3px solid rgba(18,135,106,.25)', padding: '12px 14px' }}>
-                      <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: '.1em', marginBottom: 10 }}>Benchmark Criteria — {row.capability}</div>
+                      <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--gold)', textTransform:'none', letterSpacing: '.1em', marginBottom: 10 }}>Benchmark Criteria — {row.capability}</div>
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14 }}>
                         {[{ level: 'L1', text: row.l1_criteria }, { level: 'L2', text: row.l2_criteria }, { level: 'L3', text: row.l3_criteria }].map(lc => (
                           <div key={lc.level}>
-                            <div style={{ fontWeight: 700, color: LEVEL_COLOR[lc.level], fontSize: 10, marginBottom: 5, textTransform: 'uppercase', letterSpacing: '.08em' }}>{lc.level}</div>
+                            <div style={{ fontWeight: 700, color: LEVEL_COLOR[lc.level], fontSize: 10, marginBottom: 5, textTransform:'none', letterSpacing: '.08em' }}>{lc.level}</div>
                             <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.65 }}>{lc.text || '—'}</div>
                           </div>
                         ))}

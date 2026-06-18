@@ -5,8 +5,8 @@
   z-index: 600;
   font-family: var(--font-mono);
   font-size: 10.5px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  text-transform: none;
   color: var(--ink-2);
   background: color-mix(in srgb, var(--base) 88%, transparent);
   backdrop-filter: blur(8px);
