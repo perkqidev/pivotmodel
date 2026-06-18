@@ -41,10 +41,12 @@
   margin-bottom: 40px;
   color: var(--ink);
 }
-.titleLine { display: block; overflow: hidden; padding-bottom: 0.03em; }
+/* padding gives Newsreader's tall caps room inside the reveal mask;
+   the matching negative margin keeps line position/spacing unchanged */
+.titleLine { display: block; overflow: hidden; padding: 0.18em 0; margin: -0.18em 0; }
 .titleLine > span {
   display: block;
-  transform: translateY(108%);
+  transform: translateY(130%);
   transition: transform 1.2s var(--ease);
 }
 .titleLine[data-shown='true'] > span { transform: translateY(0); }
