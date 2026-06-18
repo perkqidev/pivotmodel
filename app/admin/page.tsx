@@ -283,7 +283,7 @@ function ChatConfigTab() {
         </div>
         <div style={{marginBottom:20}}>
           <div style={{fontSize:12,color:'var(--muted)',marginBottom:6,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.05em'}}>Anthropic API Key</div>
-          <input type="password" value={config.chat_api_key} onChange={e=>setConfig(p=>({...p,chat_api_key:e.target.value}))} placeholder="sk-ant-…" style={{width:'100%',background:'var(--ink)',border:'1px solid var(--border-2)',borderRadius:8,padding:'10px 14px',color:'var(--cream)',fontSize:13,outline:'none',fontFamily:'monospace',boxSizing:'border-box'}} />
+          <input type="password" value={config.chat_api_key} onChange={e=>setConfig(p=>({...p,chat_api_key:e.target.value}))} placeholder="sk-ant-…" style={{width:'100%',background:'var(--ink)',border:'1px solid var(--border-2)',borderRadius:8,padding:'10px 14px',color:'var(--cream)',fontSize:13,outline:'none',fontFamily:'inherit',boxSizing:'border-box'}} />
           <div style={{fontSize:11,color:'var(--muted)',marginTop:4}}>Stored in the database. Never exposed to users or client-side code.</div>
         </div>
         <div style={{marginBottom:20}}>

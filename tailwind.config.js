@@ -26,9 +26,10 @@ module.exports = {
         },
       },
       fontFamily: {
-        display: ['Playfair Display', 'Georgia', 'serif'],
-        body: ['Lora', 'Georgia', 'serif'],
-        ui: ['DM Sans', 'system-ui', 'sans-serif'],
+        sans: ['Geist', 'system-ui', 'sans-serif'],
+        display: ['Geist', 'system-ui', 'sans-serif'],
+        body: ['Geist', 'system-ui', 'sans-serif'],
+        ui: ['Geist', 'system-ui', 'sans-serif'],
       },
     },
   },

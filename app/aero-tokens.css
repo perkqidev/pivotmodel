@@ -3,7 +3,7 @@
  * with the legacy globals.css :root tokens used by /community, /assessment, /admin.
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,300;1,6..72,400;1,6..72,500;1,6..72,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap');
 
 .landing-aero {
   --base: #F7F7F5;
@@ -19,9 +19,9 @@
   --accent-hi: #2FA98A;
   --accent-bg: rgba(18,135,106, 0.06);
 
-  --font-disp: 'Newsreader', Georgia, 'Times New Roman', serif;  /* editorial serif — headlines, titles, pull-quotes */
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;  /* body, leads, links */
-  --font-mono: 'JetBrains Mono', monospace;                    /* small labels / eyebrows */
+  --font-disp: 'Geist', system-ui, -apple-system, sans-serif;  /* headlines, titles, numbers */
+  --font-sans: 'Geist', system-ui, -apple-system, sans-serif;  /* body, leads, links */
+  --font-mono: 'Geist', system-ui, -apple-system, sans-serif;  /* labels / eyebrows (unified) */
 
   /* Normalized type scale — whole-pixel steps, no half-pixel one-offs.
      Section headings share one clamp; display roles (hero, stats) stay distinct. */

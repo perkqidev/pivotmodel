@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -32,10 +32,10 @@
   --border:  rgba(21,22,26,0.08);
   --border-2:rgba(21,22,26,0.14);
   /* type */
-  --font-display:'Manrope',system-ui,sans-serif;
-  --font-body:   'Manrope',system-ui,sans-serif;
-  --font-ui:     'Manrope',system-ui,sans-serif;
-  --font-mono:   'JetBrains Mono',ui-monospace,monospace;
+  --font-display:'Geist',system-ui,sans-serif;
+  --font-body:   'Geist',system-ui,sans-serif;
+  --font-ui:     'Geist',system-ui,sans-serif;
+  --font-mono:   'Geist',system-ui,sans-serif;
   --section-pad: clamp(64px,8vw,120px);
   --hover-bg:    rgba(21,22,26,0.04);
   /* Aero aliases — also defined inside .landing-aero with the same values,
