@@ -21,7 +21,7 @@
 .brand {
   font-family: var(--font-disp);
   font-weight: 400;
-  font-size: 18px;
+  font-size: 19px;
   letter-spacing: 0.01em;
   color: var(--ink);
 }
@@ -29,7 +29,7 @@
 .links { display: flex; align-items: center; gap: 38px; }
 .links a {
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 14px;
   letter-spacing: 0.01em;
   text-transform: none;
   color: var(--muted);

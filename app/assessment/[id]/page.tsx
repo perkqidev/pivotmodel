@@ -166,24 +166,24 @@ export default function AssessmentPage() {
         {/* Header */}
         <div className="assess-header" style={{ background:'var(--surface)',borderBottom:'1px solid var(--border)',padding:'16px 32px',display:'flex',alignItems:'center',justifyContent:'space-between',gap:16,flexWrap:'wrap' }}>
           <div style={{ display:'flex',alignItems:'center',gap:16 }}>
-            <button onClick={() => router.push('/community')} style={{ background:'none',border:'1px solid var(--border)',borderRadius:8,padding:'6px 12px',color:'var(--muted)',fontSize:12,cursor:'pointer' }}>← Back</button>
+            <button onClick={() => router.push('/community')} style={{ background:'none',border:'1px solid var(--border)',borderRadius:8,padding:'6px 12px',color:'var(--muted)',fontSize:14,cursor:'pointer' }}>← Back</button>
             <div>
-              <div style={{ fontWeight:700,color:'var(--fg)',fontSize:18 }}>{assessment.team_name}</div>
-              <div style={{ color:'var(--muted)',fontSize:12 }}>{assessment.industry} · {assessment.assessment_date?.slice(0,10)||'No date'}</div>
+              <div style={{ fontWeight:700,color:'var(--fg)',fontSize:19 }}>{assessment.team_name}</div>
+              <div style={{ color:'var(--muted)',fontSize:14 }}>{assessment.industry} · {assessment.assessment_date?.slice(0,10)||'No date'}</div>
             </div>
           </div>
           <div style={{ display:'flex',gap:8,alignItems:'center' }}>
-            {saving && <span style={{color:'var(--muted)',fontSize:12}}>Saving…</span>}
-            {saveMsg && <span style={{color:'var(--green)',fontSize:12}}>{saveMsg}</span>}
-            <button onClick={() => setShowCollab(o=>!o)} style={{ background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'6px 14px',color:'var(--fg)',fontSize:13,cursor:'pointer' }}>👥 Collaborators</button>
-            <button onClick={exportExcel} style={{ background:'var(--cream)',border:'none',borderRadius:8,padding:'6px 14px',color:'var(--gold-btn-text)',fontSize:13,fontWeight:700,cursor:'pointer' }}>📊 Export Excel</button>
+            {saving && <span style={{color:'var(--muted)',fontSize:14}}>Saving…</span>}
+            {saveMsg && <span style={{color:'var(--green)',fontSize:14}}>{saveMsg}</span>}
+            <button onClick={() => setShowCollab(o=>!o)} style={{ background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'6px 14px',color:'var(--fg)',fontSize:15,cursor:'pointer' }}>👥 Collaborators</button>
+            <button onClick={exportExcel} style={{ background:'var(--cream)',border:'none',borderRadius:8,padding:'6px 14px',color:'var(--gold-btn-text)',fontSize:15,fontWeight:700,cursor:'pointer' }}>📊 Export Excel</button>
           </div>
         </div>
         {showCollab && (
           <div style={{ background:'var(--card)',borderBottom:'1px solid var(--border)',padding:'12px 32px',display:'flex',gap:12,alignItems:'center' }}>
-            <input value={collab} onChange={e=>setCollab(e.target.value)} placeholder="Collaborator email address" style={{ background:'var(--surface)',border:'1px solid var(--border)',borderRadius:8,padding:'8px 12px',color:'var(--fg)',fontSize:13,width:280,outline:'none' }} />
-            <button onClick={addCollaborator} style={{ background:'var(--cream)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,fontSize:13,cursor:'pointer' }}>Invite</button>
-            {collabMsg && <span style={{ fontSize:12,color:collabMsg.includes('Error')||collabMsg.includes('error')?'var(--red)':'var(--green)' }}>{collabMsg}</span>}
+            <input value={collab} onChange={e=>setCollab(e.target.value)} placeholder="Collaborator email address" style={{ background:'var(--surface)',border:'1px solid var(--border)',borderRadius:8,padding:'8px 12px',color:'var(--fg)',fontSize:15,width:280,outline:'none' }} />
+            <button onClick={addCollaborator} style={{ background:'var(--cream)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,fontSize:15,cursor:'pointer' }}>Invite</button>
+            {collabMsg && <span style={{ fontSize:14,color:collabMsg.includes('Error')||collabMsg.includes('error')?'var(--red)':'var(--green)' }}>{collabMsg}</span>}
           </div>
         )}
         {/* Sidebar + Content */}
@@ -201,12 +201,12 @@ export default function AssessmentPage() {
               return (
                 <div style={{ padding:'8px 16px 14px',borderBottom:'1px solid var(--border)',marginBottom:8 }}>
                   <div style={{ display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:6 }}>
-                    <span style={{ fontSize:11,fontWeight:700,color:'var(--fg)',letterSpacing:'0.01em' }}>Progress {startedCount}/{total}</span>
+                    <span style={{ fontSize:13,fontWeight:700,color:'var(--fg)',letterSpacing:'0.01em' }}>Progress {startedCount}/{total}</span>
                   </div>
                   <div style={{ background:'var(--card)',borderRadius:4,height:6,overflow:'hidden',marginBottom:4 }}>
                     <div style={{ width:`${pct}%`,height:'100%',background:'var(--green)',borderRadius:4,transition:'width 0.5s' }} />
                   </div>
-                  <div style={{ fontSize:10,color:'var(--muted)' }}>{label}</div>
+                  <div style={{ fontSize:13,color:'var(--muted)' }}>{label}</div>
                 </div>
               );
             })()}
@@ -217,10 +217,10 @@ export default function AssessmentPage() {
                   {/* Group header */}
                   <div style={{ padding:'10px 16px',borderLeft:`3px solid ${groupActive ? sec.accent : 'transparent'}` }}>
                     <div style={{ display:'flex',alignItems:'center',gap:8 }}>
-                      <span style={{ fontSize:16 }}>{sec.icon}</span>
-                      <span style={{ fontWeight:700,fontSize:12,color:groupActive ? 'var(--fg)' : 'var(--muted)',textTransform:'none',letterSpacing:'0.01em' }}>{sec.title}</span>
+                      <span style={{ fontSize:18 }}>{sec.icon}</span>
+                      <span style={{ fontWeight:700,fontSize:14,color:groupActive ? 'var(--fg)' : 'var(--muted)',textTransform:'none',letterSpacing:'0.01em' }}>{sec.title}</span>
                     </div>
-                    <div style={{ fontSize:10,color:'var(--muted)',opacity:0.8,marginTop:2,paddingLeft:24 }}>{sec.description}</div>
+                    <div style={{ fontSize:13,color:'var(--muted)',opacity:0.8,marginTop:2,paddingLeft:24 }}>{sec.description}</div>
                   </div>
                   {/* Module items */}
                   {sec.tabs.map(tab => {
@@ -232,7 +232,7 @@ export default function AssessmentPage() {
                         onClick={() => { setActiveModule(tab.id); setSidebarOpen(false); }}
                         style={{
                           padding:'8px 16px 8px 32px',
-                          fontSize:13,
+                          fontSize:15,
                           color: isActive ? sec.accent : 'var(--muted)',
                           fontWeight: isActive ? 600 : 400,
                           background: isActive ? `${sec.accent}14` : 'transparent',
@@ -247,7 +247,7 @@ export default function AssessmentPage() {
                           <span style={{ width:6,height:6,borderRadius:'50%',background:hasData?'var(--green)':'var(--muted)',flexShrink:0 }} />
                           {tab.label}
                         </div>
-                        <div style={{ fontSize:10,color:'var(--muted)',opacity:0.8,marginTop:1,paddingLeft:12 }}>{tab.hint}</div>
+                        <div style={{ fontSize:13,color:'var(--muted)',opacity:0.8,marginTop:1,paddingLeft:12 }}>{tab.hint}</div>
                       </div>
                     );
                   })}
@@ -296,42 +296,42 @@ function EMBModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Promi
   return (
     <div>
       <div style={{ display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24,gap:12,flexWrap:'wrap' as const }}>
-        <div><h2 style={{color:'var(--fg)',margin:0}}>Engineering Maturity Benchmark</h2><p style={{color:'var(--muted)',fontSize:13,margin:'4px 0 0'}}>Evaluate your engineering team's maturity across 5 pillars. For each capability, select your current level (L1 / L2 / L3) and record evidence to support your rating. Changes save automatically.</p></div>
+        <div><h2 style={{color:'var(--fg)',margin:0}}>Engineering Maturity Benchmark</h2><p style={{color:'var(--muted)',fontSize:15,margin:'4px 0 0'}}>Evaluate your engineering team's maturity across 5 pillars. For each capability, select your current level (L1 / L2 / L3) and record evidence to support your rating. Changes save automatically.</p></div>
       </div>
-      {nudge && <div style={{ background:'rgba(18,135,106,0.1)',border:'1px solid var(--gold)',borderRadius:12,padding:'12px 16px',marginBottom:24,fontSize:13,color:'var(--fg)' }}>💡 <strong>Intelligence Nudge:</strong> Based on your scores (avg {nudge.avg_score}/3), the computed maturity level is <strong style={{color:'var(--gold)'}}>{nudge.suggested_level}</strong>. Consider adjusting your overall rating.</div>}
+      {nudge && <div style={{ background:'rgba(18,135,106,0.1)',border:'1px solid var(--gold)',borderRadius:12,padding:'12px 16px',marginBottom:24,fontSize:15,color:'var(--fg)' }}>💡 <strong>Intelligence Nudge:</strong> Based on your scores (avg {nudge.avg_score}/3), the computed maturity level is <strong style={{color:'var(--gold)'}}>{nudge.suggested_level}</strong>. Consider adjusting your overall rating.</div>}
       {pillars.map(pillar => (
         <div key={pillar} style={{ marginBottom:32 }}>
-          <div style={{ fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:12,textTransform:'none',letterSpacing:'0.01em',display:'flex',alignItems:'center',justifyContent:'space-between' }}><span>{pillar}</span><button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/emb`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pivot_name:pillar})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,pivot_name:pillar,capability:'New Capability',current_level:'L1',evidence:'',gap_notes:'',sort_order:99}]);}} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Row</button></div>
+          <div style={{ fontWeight:700,color:'var(--gold)',fontSize:16,marginBottom:12,textTransform:'none',letterSpacing:'0.01em',display:'flex',alignItems:'center',justifyContent:'space-between' }}><span>{pillar}</span><button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/emb`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pivot_name:pillar})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,pivot_name:pillar,capability:'New Capability',current_level:'L1',evidence:'',gap_notes:'',sort_order:99}]);}} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Row</button></div>
           <div className="scroll-table" style={{ background:'var(--surface)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border)' }}>
-            <div style={{ display:'grid',gridTemplateColumns:'1.5fr 100px 2fr 2fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'none',letterSpacing:'0.01em' }}>
+            <div style={{ display:'grid',gridTemplateColumns:'1.5fr 100px 2fr 2fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:13,fontWeight:600,color:'var(--muted)',textTransform:'none',letterSpacing:'0.01em' }}>
               <div>Capability</div><div>Current Level</div><div>Evidence & Proof</div><div>Improvement Notes</div><div></div>
             </div>
             {rows.filter(r=>r.pivot_name===pillar).map((row,i) => (
               <div key={row.id}>
                 <div style={{ display:'grid',gridTemplateColumns:'1.5fr 100px 2fr 2fr 36px',gap:'0 12px',padding:'12px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'start' }}>
                   <div style={{ display:'flex',alignItems:'center',gap:6 }}>
-                    {(row.l1_criteria||row.l2_criteria||row.l3_criteria) && <button onClick={()=>toggleCriteria(row.id)} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:10,padding:0}} title="Toggle criteria">{expanded.has(row.id)?'▼':'▶'}</button>}
-                    <span style={{ color:'var(--fg)',fontSize:13,fontWeight:500 }}>{row.capability}</span>
+                    {(row.l1_criteria||row.l2_criteria||row.l3_criteria) && <button onClick={()=>toggleCriteria(row.id)} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:13,padding:0}} title="Toggle criteria">{expanded.has(row.id)?'▼':'▶'}</button>}
+                    <span style={{ color:'var(--fg)',fontSize:15,fontWeight:500 }}>{row.capability}</span>
                   </div>
-                  <select value={row.current_level||'L1'} onChange={e=>update(row.id,'current_level',e.target.value)} style={{ background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 8px',color:LEVEL_COLORS[row.current_level||'L1'],fontWeight:700,fontSize:13,cursor:'pointer',outline:'none' }}>
+                  <select value={row.current_level||'L1'} onChange={e=>update(row.id,'current_level',e.target.value)} style={{ background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'6px 8px',color:LEVEL_COLORS[row.current_level||'L1'],fontWeight:700,fontSize:15,cursor:'pointer',outline:'none' }}>
                     {['L1','L2','L3'].map(l=><option key={l} value={l}>{LEVEL_LABELS[l]}</option>)}
                   </select>
-                  <textarea value={row.evidence||''} onChange={e=>update(row.id,'evidence',e.target.value)} placeholder="What supports this level? e.g. metrics, processes in place…" rows={2} style={{ background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none' }} />
-                  <textarea value={row.gap_notes||''} onChange={e=>update(row.id,'gap_notes',e.target.value)} placeholder="What's needed to reach the next level?…" rows={2} style={{ background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none' }} />
+                  <textarea value={row.evidence||''} onChange={e=>update(row.id,'evidence',e.target.value)} placeholder="What supports this level? e.g. metrics, processes in place…" rows={2} style={{ background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:14,resize:'vertical',width:'100%',outline:'none' }} />
+                  <textarea value={row.gap_notes||''} onChange={e=>update(row.id,'gap_notes',e.target.value)} placeholder="What's needed to reach the next level?…" rows={2} style={{ background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:14,resize:'vertical',width:'100%',outline:'none' }} />
                   {confirmingId===row.id ? (
                     <div style={{display:'flex',gap:2}}>
-                      <button onClick={async()=>{cancelDelete();await fetch(`/api/assessments/${id}/emb`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({row_id:row.id})});setRows(prev=>prev.filter(r=>r.id!==row.id));}} style={{background:'none',border:'none',color:'var(--green)',cursor:'pointer',fontSize:16,padding:2}} title="Confirm delete">✓</button>
-                      <button onClick={cancelDelete} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:14,padding:2}} title="Cancel">✗</button>
+                      <button onClick={async()=>{cancelDelete();await fetch(`/api/assessments/${id}/emb`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({row_id:row.id})});setRows(prev=>prev.filter(r=>r.id!==row.id));}} style={{background:'none',border:'none',color:'var(--green)',cursor:'pointer',fontSize:18,padding:2}} title="Confirm delete">✓</button>
+                      <button onClick={cancelDelete} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:16,padding:2}} title="Cancel">✗</button>
                     </div>
                   ) : (
-                    <button onClick={()=>requestDelete(row.id)} style={{background:'none',border:'none',color:'var(--red)',cursor:'pointer',fontSize:16,padding:4}}>✕</button>
+                    <button onClick={()=>requestDelete(row.id)} style={{background:'none',border:'none',color:'var(--red)',cursor:'pointer',fontSize:18,padding:4}}>✕</button>
                   )}
                 </div>
                 {expanded.has(row.id) && (row.l1_criteria||row.l2_criteria||row.l3_criteria) && (
                   <div style={{padding:'8px 16px 12px 40px',borderTop:'1px dashed var(--border)',background:'rgba(18,135,106,0.03)',display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:12}}>
-                    <div><div style={{fontSize:11,fontWeight:600,color:'var(--red)',marginBottom:4}}>◆ L1 (Basic)</div><div style={{fontSize:12,color:'var(--muted)',lineHeight:1.5}}>{row.l1_criteria||'–'}</div></div>
-                    <div><div style={{fontSize:11,fontWeight:600,color:'#f59e0b',marginBottom:4}}>⚙ L2 (Developing)</div><div style={{fontSize:12,color:'var(--muted)',lineHeight:1.5}}>{row.l2_criteria||'–'}</div></div>
-                    <div><div style={{fontSize:11,fontWeight:600,color:'var(--green)',marginBottom:4}}>🚀 L3 (Optimised)</div><div style={{fontSize:12,color:'var(--muted)',lineHeight:1.5}}>{row.l3_criteria||'–'}</div></div>
+                    <div><div style={{fontSize:13,fontWeight:600,color:'var(--red)',marginBottom:4}}>◆ L1 (Basic)</div><div style={{fontSize:14,color:'var(--muted)',lineHeight:1.5}}>{row.l1_criteria||'–'}</div></div>
+                    <div><div style={{fontSize:13,fontWeight:600,color:'#f59e0b',marginBottom:4}}>⚙ L2 (Developing)</div><div style={{fontSize:14,color:'var(--muted)',lineHeight:1.5}}>{row.l2_criteria||'–'}</div></div>
+                    <div><div style={{fontSize:13,fontWeight:600,color:'var(--green)',marginBottom:4}}>🚀 L3 (Optimised)</div><div style={{fontSize:14,color:'var(--muted)',lineHeight:1.5}}>{row.l3_criteria||'–'}</div></div>
                   </div>
                 )}
               </div>
@@ -360,31 +360,31 @@ function DriversModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>P
   return (
     <div>
       <div style={{ display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24,gap:12,flexWrap:'wrap' as const }}>
-        <div><h2 style={{color:'var(--fg)',margin:0}}>Business Drivers</h2><p style={{color:'var(--muted)',fontSize:13,margin:'4px 0 0'}}>Document the business reasons behind your engineering team. Capture cost drivers, scale factors, and strategic growth plans to help leadership understand investment priorities.</p></div>
+        <div><h2 style={{color:'var(--fg)',margin:0}}>Business Drivers</h2><p style={{color:'var(--muted)',fontSize:15,margin:'4px 0 0'}}>Document the business reasons behind your engineering team. Capture cost drivers, scale factors, and strategic growth plans to help leadership understand investment priorities.</p></div>
       </div>
       {categories.map(cat => (
         <div key={cat} style={{marginBottom:28}}>
-          <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'none',letterSpacing:'0.01em',display:'flex',alignItems:'center',justifyContent:'space-between'}}><span>{cat}</span><button onClick={()=>addRow(cat)} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Driver</button></div>
+          <div style={{fontWeight:700,color:'var(--gold)',fontSize:16,marginBottom:10,textTransform:'none',letterSpacing:'0.01em',display:'flex',alignItems:'center',justifyContent:'space-between'}}><span>{cat}</span><button onClick={()=>addRow(cat)} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Driver</button></div>
           <div className="scroll-table" style={{ background:'var(--surface)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border)' }}>
-            <div style={{ display:'grid',gridTemplateColumns:'1.2fr 1.5fr 70px 2.5fr 1.5fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'none',letterSpacing:'0.01em' }}>
+            <div style={{ display:'grid',gridTemplateColumns:'1.2fr 1.5fr 70px 2.5fr 1.5fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:14,fontWeight:600,color:'var(--muted)',textTransform:'none',letterSpacing:'0.01em' }}>
               <div>Driver Name</div><div>What It Means</div><div>Required?</div><div>Key Considerations</div><div>Additional Notes</div><div></div>
             </div>
             {rows.filter(r=>r.category===cat).map((row,i) => (
               <div key={row.id} style={{ display:'grid',gridTemplateColumns:'1.2fr 1.5fr 70px 2.5fr 1.5fr 36px',gap:'0 12px',padding:'12px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'start' }}>
-                <input value={row.driver_name} onChange={e=>update(row.id,'driver_name',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
-                <textarea value={row.description||''} onChange={e=>update(row.id,'description',e.target.value)} placeholder="Describe this driver and its impact…" rows={2} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
+                <input value={row.driver_name} onChange={e=>update(row.id,'driver_name',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:14,outline:'none',width:'100%'}} />
+                <textarea value={row.description||''} onChange={e=>update(row.id,'description',e.target.value)} placeholder="Describe this driver and its impact…" rows={2} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:14,resize:'vertical',width:'100%',outline:'none'}} />
                 <div style={{display:'flex',justifyContent:'center',paddingTop:4}}>
-                  <button onClick={()=>update(row.id,'is_mandatory',!row.is_mandatory)} style={{background:row.is_mandatory?'var(--gold)':'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 10px',color:row.is_mandatory?'var(--gold-btn-text)':'var(--muted)',fontSize:12,cursor:'pointer',fontWeight:row.is_mandatory?700:400}}>{row.is_mandatory?'Yes':'No'}</button>
+                  <button onClick={()=>update(row.id,'is_mandatory',!row.is_mandatory)} style={{background:row.is_mandatory?'var(--gold)':'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px 10px',color:row.is_mandatory?'var(--gold-btn-text)':'var(--muted)',fontSize:14,cursor:'pointer',fontWeight:row.is_mandatory?700:400}}>{row.is_mandatory?'Yes':'No'}</button>
                 </div>
-                <textarea value={row.considerations||''} onChange={e=>update(row.id,'considerations',e.target.value)} placeholder="What factors should leadership consider?" rows={3} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
-                <textarea value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} placeholder="Timeline, owner, or follow-up notes…" rows={2} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
+                <textarea value={row.considerations||''} onChange={e=>update(row.id,'considerations',e.target.value)} placeholder="What factors should leadership consider?" rows={3} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:14,resize:'vertical',width:'100%',outline:'none'}} />
+                <textarea value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} placeholder="Timeline, owner, or follow-up notes…" rows={2} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:14,resize:'vertical',width:'100%',outline:'none'}} />
                 {confirmingId===row.id ? (
                   <div style={{display:'flex',gap:2}}>
-                    <button onClick={()=>{cancelDelete();deleteRow(row.id);}} style={{background:'none',border:'none',color:'var(--green)',cursor:'pointer',fontSize:16,padding:2}} title="Confirm delete">✓</button>
-                    <button onClick={cancelDelete} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:14,padding:2}} title="Cancel">✗</button>
+                    <button onClick={()=>{cancelDelete();deleteRow(row.id);}} style={{background:'none',border:'none',color:'var(--green)',cursor:'pointer',fontSize:18,padding:2}} title="Confirm delete">✓</button>
+                    <button onClick={cancelDelete} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:16,padding:2}} title="Cancel">✗</button>
                   </div>
                 ) : (
-                  <button onClick={()=>requestDelete(row.id)} style={{background:'none',border:'none',color:'var(--red)',cursor:'pointer',fontSize:16,padding:4}}>✕</button>
+                  <button onClick={()=>requestDelete(row.id)} style={{background:'none',border:'none',color:'var(--red)',cursor:'pointer',fontSize:18,padding:4}}>✕</button>
                 )}
               </div>
             ))}
@@ -394,9 +394,9 @@ function DriversModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>P
       {rows.length===0 && <div style={{textAlign:'center',padding:48}}>
         <div style={{border:'2px dashed var(--border)',borderRadius:16,padding:'40px 24px',maxWidth:400,margin:'0 auto'}}>
           <div style={{fontSize:32,marginBottom:12}}>📋</div>
-          <div style={{color:'var(--fg)',fontWeight:600,fontSize:15,marginBottom:6}}>No business drivers documented yet</div>
-          <div style={{color:'var(--muted)',fontSize:13,marginBottom:16}}>Capture cost, scale, and strategic reasons for your engineering team.</div>
-          <button onClick={()=>addRow('Engineering Cost')} style={{background:'var(--cream)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Driver</button>
+          <div style={{color:'var(--fg)',fontWeight:600,fontSize:17,marginBottom:6}}>No business drivers documented yet</div>
+          <div style={{color:'var(--muted)',fontSize:15,marginBottom:16}}>Capture cost, scale, and strategic reasons for your engineering team.</div>
+          <button onClick={()=>addRow('Engineering Cost')} style={{background:'var(--cream)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:15}}>+ Add Driver</button>
         </div>
       </div>}
     </div>
@@ -421,50 +421,50 @@ function BenchmarksModule({ id, save }: { id:string; save:(e:string,r:unknown[])
   return (
     <div>
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24,gap:12,flexWrap:'wrap' as const}}>
-        <div><h2 style={{color:'var(--fg)',margin:0}}>Performance Benchmarks</h2><p style={{color:'var(--muted)',fontSize:13,margin:'4px 0 0'}}>Track your team's performance against key metrics. Set targets, enter current values, and mark the status of each KPI. Click the arrow next to any KPI to see its full definition.</p></div>
+        <div><h2 style={{color:'var(--fg)',margin:0}}>Performance Benchmarks</h2><p style={{color:'var(--muted)',fontSize:15,margin:'4px 0 0'}}>Track your team's performance against key metrics. Set targets, enter current values, and mark the status of each KPI. Click the arrow next to any KPI to see its full definition.</p></div>
       </div>
       {pillars.map(pillar => {
         const pillarRows = rows.filter(r=>r.pillar===pillar);
         const subCats = [...new Set(pillarRows.map(r=>r.sub_category||''))];
         return (
           <div key={pillar} style={{marginBottom:28}}>
-            <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'none',letterSpacing:'0.01em'}}>{pillar}</div>
+            <div style={{fontWeight:700,color:'var(--gold)',fontSize:16,marginBottom:10,textTransform:'none',letterSpacing:'0.01em'}}>{pillar}</div>
             {subCats.map(sub => (
               <div key={sub} style={{marginBottom:16}}>
-                {sub && <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(18,135,106,0.08)',borderRadius:'8px 8px 0 0',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                {sub && <div style={{fontSize:14,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(18,135,106,0.08)',borderRadius:'8px 8px 0 0',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
                   <span>{sub}</span>
-                  <button onClick={()=>addRow(pillar,sub)} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add KPI</button>
+                  <button onClick={()=>addRow(pillar,sub)} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add KPI</button>
                 </div>}
                 <div className="scroll-table" style={{background:'var(--surface)',borderRadius:sub?'0 0 12px 12px':'12px',overflow:'hidden',border:'1px solid var(--border)'}}>
-                  <div style={{display:'grid',gridTemplateColumns:'1.2fr 50px 60px 70px 100px 110px 2fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'none',letterSpacing:'0.01em'}}>
+                  <div style={{display:'grid',gridTemplateColumns:'1.2fr 50px 60px 70px 100px 110px 2fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:13,fontWeight:600,color:'var(--muted)',textTransform:'none',letterSpacing:'0.01em'}}>
                     <div>KPI Name</div><div>Weight</div><div>Unit</div><div>Target</div><div>Actual</div><div>Status</div><div>Notes</div><div></div>
                   </div>
                   {pillarRows.filter(r=>(r.sub_category||'')===sub).map((row,i)=>(
                     <div key={row.id}>
                       <div style={{display:'grid',gridTemplateColumns:'1.2fr 50px 60px 70px 100px 110px 2fr 36px',gap:'0 12px',padding:'10px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'center'}}>
                         <div style={{display:'flex',alignItems:'center',gap:6}}>
-                          <button onClick={()=>toggleDef(row.id)} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:10,padding:0}} title="Toggle definition">{expanded.has(row.id)?'▼':'▶'}</button>
-                          <span style={{color:'var(--fg)',fontSize:13}}>{row.kpi_name}</span>
+                          <button onClick={()=>toggleDef(row.id)} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:13,padding:0}} title="Toggle definition">{expanded.has(row.id)?'▼':'▶'}</button>
+                          <span style={{color:'var(--fg)',fontSize:15}}>{row.kpi_name}</span>
                         </div>
-                        <div style={{color:'var(--muted)',fontSize:12}}>{row.weight ? `${(row.weight*100).toFixed(0)}%` : '–'}</div>
-                        <div style={{color:'var(--muted)',fontSize:12}}>{row.unit}</div>
-                        <div style={{color:'var(--muted)',fontSize:12}}>{row.target_value}</div>
-                        <input value={row.current_value||''} onChange={e=>update(row.id,'current_value',e.target.value)} placeholder="Actual value" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:13,outline:'none',width:'100%'}} />
-                        <select value={row.status} onChange={e=>update(row.id,'status',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:STATUS_COLORS[row.status],fontWeight:600,fontSize:12,cursor:'pointer',outline:'none'}}>
+                        <div style={{color:'var(--muted)',fontSize:14}}>{row.weight ? `${(row.weight*100).toFixed(0)}%` : '–'}</div>
+                        <div style={{color:'var(--muted)',fontSize:14}}>{row.unit}</div>
+                        <div style={{color:'var(--muted)',fontSize:14}}>{row.target_value}</div>
+                        <input value={row.current_value||''} onChange={e=>update(row.id,'current_value',e.target.value)} placeholder="Actual value" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:15,outline:'none',width:'100%'}} />
+                        <select value={row.status} onChange={e=>update(row.id,'status',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:STATUS_COLORS[row.status],fontWeight:600,fontSize:14,cursor:'pointer',outline:'none'}}>
                           {STATUSES.map(s=><option key={s}>{s}</option>)}
                         </select>
-                        <input value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} placeholder="Why this value, or what to improve…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
+                        <input value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} placeholder="Why this value, or what to improve…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:14,outline:'none',width:'100%'}} />
                         {confirmingId===row.id ? (
                           <div style={{display:'flex',gap:2}}>
-                            <button onClick={async()=>{cancelDelete();await fetch(`/api/assessments/${id}/benchmarks`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({row_id:row.id})});setRows(prev=>prev.filter(r=>r.id!==row.id));}} style={{background:'none',border:'none',color:'var(--green)',cursor:'pointer',fontSize:16,padding:2}} title="Confirm delete">✓</button>
-                            <button onClick={cancelDelete} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:14,padding:2}} title="Cancel">✗</button>
+                            <button onClick={async()=>{cancelDelete();await fetch(`/api/assessments/${id}/benchmarks`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({row_id:row.id})});setRows(prev=>prev.filter(r=>r.id!==row.id));}} style={{background:'none',border:'none',color:'var(--green)',cursor:'pointer',fontSize:18,padding:2}} title="Confirm delete">✓</button>
+                            <button onClick={cancelDelete} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:16,padding:2}} title="Cancel">✗</button>
                           </div>
                         ) : (
-                          <button onClick={()=>requestDelete(row.id)} style={{background:'none',border:'none',color:'var(--red)',cursor:'pointer',fontSize:16,padding:4}}>✕</button>
+                          <button onClick={()=>requestDelete(row.id)} style={{background:'none',border:'none',color:'var(--red)',cursor:'pointer',fontSize:18,padding:4}}>✕</button>
                         )}
                       </div>
                       {expanded.has(row.id) && row.definition && (
-                        <div style={{padding:'4px 16px 8px 40px',fontSize:12,color:'var(--muted)',lineHeight:1.5,borderTop:'1px dashed var(--border)',background:'rgba(18,135,106,0.03)'}}>
+                        <div style={{padding:'4px 16px 8px 40px',fontSize:14,color:'var(--muted)',lineHeight:1.5,borderTop:'1px dashed var(--border)',background:'rgba(18,135,106,0.03)'}}>
                           <strong>Definition:</strong> {row.definition}
                         </div>
                       )}
@@ -498,44 +498,44 @@ function ScopeModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Pro
   return (
     <div>
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24,gap:12,flexWrap:'wrap' as const}}>
-        <div><h2 style={{color:'var(--fg)',margin:0}}>Scope of Product Engineering</h2><p style={{color:'var(--muted)',fontSize:13,margin:'4px 0 0'}}>Map the scope of your product engineering activities. Set the target maturity level and your current level for each — the gap is calculated automatically. Expand any row to see L1/L2/L3 guidance.</p></div>
+        <div><h2 style={{color:'var(--fg)',margin:0}}>Scope of Product Engineering</h2><p style={{color:'var(--muted)',fontSize:15,margin:'4px 0 0'}}>Map the scope of your product engineering activities. Set the target maturity level and your current level for each — the gap is calculated automatically. Expand any row to see L1/L2/L3 guidance.</p></div>
       </div>
       {pillars.map(pillar=>(
         <div key={pillar} style={{marginBottom:28}}>
-          <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'none',letterSpacing:'0.01em',display:'flex',alignItems:'center',justifyContent:'space-between'}}><span>{pillar}</span><button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/scope`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pillar})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,pillar,activity:'New Activity',required_level:1,current_level:1,gap:0,notes:'',l1_guidance:'',l2_guidance:'',l3_guidance:''}]);}} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Activity</button></div>
+          <div style={{fontWeight:700,color:'var(--gold)',fontSize:16,marginBottom:10,textTransform:'none',letterSpacing:'0.01em',display:'flex',alignItems:'center',justifyContent:'space-between'}}><span>{pillar}</span><button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/scope`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pillar})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,pillar,activity:'New Activity',required_level:1,current_level:1,gap:0,notes:'',l1_guidance:'',l2_guidance:'',l3_guidance:''}]);}} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Activity</button></div>
           <div className="scroll-table" style={{background:'var(--surface)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border)'}}>
-            <div style={{display:'grid',gridTemplateColumns:'1.2fr 100px 100px 60px 2fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'none',letterSpacing:'0.01em'}}>
+            <div style={{display:'grid',gridTemplateColumns:'1.2fr 100px 100px 60px 2fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:14,fontWeight:600,color:'var(--muted)',textTransform:'none',letterSpacing:'0.01em'}}>
               <div>Activity</div><div>Target Level</div><div>Current Level</div><div>Gap</div><div>Action Notes</div><div></div>
             </div>
             {rows.filter(r=>r.pillar===pillar).map((row,i)=>(
               <div key={row.id}>
                 <div style={{display:'grid',gridTemplateColumns:'1.2fr 100px 100px 60px 2fr 36px',gap:'0 12px',padding:'12px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'center'}}>
                   <div style={{display:'flex',alignItems:'center',gap:6}}>
-                    {(row.l1_guidance||row.l2_guidance||row.l3_guidance) && <button onClick={()=>toggleGuide(row.id)} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:10,padding:0}} title="Toggle guidance">{expanded.has(row.id)?'▼':'▶'}</button>}
-                    <span style={{color:'var(--fg)',fontSize:13}}>{row.activity}</span>
+                    {(row.l1_guidance||row.l2_guidance||row.l3_guidance) && <button onClick={()=>toggleGuide(row.id)} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:13,padding:0}} title="Toggle guidance">{expanded.has(row.id)?'▼':'▶'}</button>}
+                    <span style={{color:'var(--fg)',fontSize:15}}>{row.activity}</span>
                   </div>
-                  <select value={row.required_level} onChange={e=>update(row.id,'required_level',parseInt(e.target.value))} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:LEVEL_CLR[row.required_level]||'var(--fg)',fontWeight:700,fontSize:13,cursor:'pointer',outline:'none'}}>
+                  <select value={row.required_level} onChange={e=>update(row.id,'required_level',parseInt(e.target.value))} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:LEVEL_CLR[row.required_level]||'var(--fg)',fontWeight:700,fontSize:15,cursor:'pointer',outline:'none'}}>
                     {[1,2,3].map(l=><option key={l} value={l}>{LEVEL_ICONS[l]}</option>)}
                   </select>
-                  <select value={row.current_level} onChange={e=>update(row.id,'current_level',parseInt(e.target.value))} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:LEVEL_CLR[row.current_level]||'var(--fg)',fontWeight:700,fontSize:13,cursor:'pointer',outline:'none'}}>
+                  <select value={row.current_level} onChange={e=>update(row.id,'current_level',parseInt(e.target.value))} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:LEVEL_CLR[row.current_level]||'var(--fg)',fontWeight:700,fontSize:15,cursor:'pointer',outline:'none'}}>
                     {[1,2,3].map(l=><option key={l} value={l}>{LEVEL_ICONS[l]}</option>)}
                   </select>
-                  <div style={{fontWeight:700,color:Math.max(0,row.required_level-row.current_level)>0?'var(--red)':'var(--green)',fontSize:14}}>{Math.max(0,row.required_level-row.current_level)>0?`-${Math.max(0,row.required_level-row.current_level)}`:'✓'}</div>
-                  <input value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} placeholder="Steps to close the gap, or context…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
+                  <div style={{fontWeight:700,color:Math.max(0,row.required_level-row.current_level)>0?'var(--red)':'var(--green)',fontSize:16}}>{Math.max(0,row.required_level-row.current_level)>0?`-${Math.max(0,row.required_level-row.current_level)}`:'✓'}</div>
+                  <input value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} placeholder="Steps to close the gap, or context…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:14,outline:'none',width:'100%'}} />
                   {confirmingId===row.id ? (
                     <div style={{display:'flex',gap:2}}>
-                      <button onClick={async()=>{cancelDelete();await fetch(`/api/assessments/${id}/scope`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({row_id:row.id})});setRows(prev=>prev.filter(r=>r.id!==row.id));}} style={{background:'none',border:'none',color:'var(--green)',cursor:'pointer',fontSize:16,padding:2}} title="Confirm delete">✓</button>
-                      <button onClick={cancelDelete} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:14,padding:2}} title="Cancel">✗</button>
+                      <button onClick={async()=>{cancelDelete();await fetch(`/api/assessments/${id}/scope`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({row_id:row.id})});setRows(prev=>prev.filter(r=>r.id!==row.id));}} style={{background:'none',border:'none',color:'var(--green)',cursor:'pointer',fontSize:18,padding:2}} title="Confirm delete">✓</button>
+                      <button onClick={cancelDelete} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:16,padding:2}} title="Cancel">✗</button>
                     </div>
                   ) : (
-                    <button onClick={()=>requestDelete(row.id)} style={{background:'none',border:'none',color:'var(--red)',cursor:'pointer',fontSize:16,padding:4}}>✕</button>
+                    <button onClick={()=>requestDelete(row.id)} style={{background:'none',border:'none',color:'var(--red)',cursor:'pointer',fontSize:18,padding:4}}>✕</button>
                   )}
                 </div>
                 {expanded.has(row.id) && (
                   <div style={{padding:'8px 16px 12px 40px',borderTop:'1px dashed var(--border)',background:'rgba(18,135,106,0.03)',display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:12}}>
-                    <div><div style={{fontSize:11,fontWeight:600,color:'var(--red)',marginBottom:4}}>◆ L1 Guidance</div><div style={{fontSize:12,color:'var(--muted)',lineHeight:1.5}}>{row.l1_guidance||'–'}</div></div>
-                    <div><div style={{fontSize:11,fontWeight:600,color:'#f59e0b',marginBottom:4}}>⚙ L2 Guidance</div><div style={{fontSize:12,color:'var(--muted)',lineHeight:1.5}}>{row.l2_guidance||'–'}</div></div>
-                    <div><div style={{fontSize:11,fontWeight:600,color:'var(--green)',marginBottom:4}}>🚀 L3 Guidance</div><div style={{fontSize:12,color:'var(--muted)',lineHeight:1.5}}>{row.l3_guidance||'–'}</div></div>
+                    <div><div style={{fontSize:13,fontWeight:600,color:'var(--red)',marginBottom:4}}>◆ L1 Guidance</div><div style={{fontSize:14,color:'var(--muted)',lineHeight:1.5}}>{row.l1_guidance||'–'}</div></div>
+                    <div><div style={{fontSize:13,fontWeight:600,color:'#f59e0b',marginBottom:4}}>⚙ L2 Guidance</div><div style={{fontSize:14,color:'var(--muted)',lineHeight:1.5}}>{row.l2_guidance||'–'}</div></div>
+                    <div><div style={{fontSize:13,fontWeight:600,color:'var(--green)',marginBottom:4}}>🚀 L3 Guidance</div><div style={{fontSize:14,color:'var(--muted)',lineHeight:1.5}}>{row.l3_guidance||'–'}</div></div>
                   </div>
                 )}
               </div>
@@ -578,7 +578,7 @@ function SummaryModule({ id }: { id:string }) {
   return (
     <div>
       <h2 style={{color:'var(--fg)',marginBottom:8}}>Competency Maturity Summary</h2>
-      <p style={{color:'var(--muted)',fontSize:13,marginBottom:32}}>Your auto-generated overview. The radar chart and breakdown are built from your EMB Maturity and Scope data — complete those modules to see results here.</p>
+      <p style={{color:'var(--muted)',fontSize:15,marginBottom:32}}>Your auto-generated overview. The radar chart and breakdown are built from your EMB Maturity and Scope data — complete those modules to see results here.</p>
       <div className="grid-stack" style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:32}}>
         <div style={{background:'var(--surface)',borderRadius:16,padding:24,border:'1px solid var(--border)'}}>
           <div style={{fontWeight:700,color:'var(--fg)',marginBottom:16}}>Maturity Radar</div>
@@ -586,13 +586,13 @@ function SummaryModule({ id }: { id:string }) {
             {gridLevels.map(l=>(
               <polygon key={l} points={angles.map(a=>{const p=polarToXY(a,(l/3)*r);return `${p.x},${p.y}`;}).join(' ')} fill="none" stroke="var(--border)" strokeWidth={1} />
             ))}
-            {angles.map((a,i)=>{const p=polarToXY(a,r+20);return<text key={i} x={p.x} y={p.y} textAnchor="middle" dominantBaseline="middle" fontSize={11} fill="var(--muted)" style={{fontSize:11}}>{PILLARS[i].split(' ').slice(0,2).join(' ')}</text>;})}
+            {angles.map((a,i)=>{const p=polarToXY(a,r+20);return<text key={i} x={p.x} y={p.y} textAnchor="middle" dominantBaseline="middle" fontSize={11} fill="var(--muted)" style={{fontSize:13}}>{PILLARS[i].split(' ').slice(0,2).join(' ')}</text>;})}
             <path d={pathFromScores(embScores,3)} fill="rgba(18,135,106,0.2)" stroke="var(--gold)" strokeWidth={2} />
             <path d={pathFromScores(scopeScores,3)} fill="rgba(18,135,106,0.1)" stroke="var(--blue)" strokeWidth={2} strokeDasharray="4,4" />
           </svg>
           <div style={{display:'flex',gap:16,justifyContent:'center',marginTop:8}}>
-            <div style={{display:'flex',alignItems:'center',gap:6,fontSize:12,color:'var(--muted)'}}><div style={{width:20,height:3,background:'var(--cream)'}}></div>EMB Maturity</div>
-            <div style={{display:'flex',alignItems:'center',gap:6,fontSize:12,color:'var(--muted)'}}><div style={{width:20,height:3,background:'var(--blue)',borderTop:'2px dashed var(--blue)'}}></div>Scope Assessment</div>
+            <div style={{display:'flex',alignItems:'center',gap:6,fontSize:14,color:'var(--muted)'}}><div style={{width:20,height:3,background:'var(--cream)'}}></div>EMB Maturity</div>
+            <div style={{display:'flex',alignItems:'center',gap:6,fontSize:14,color:'var(--muted)'}}><div style={{width:20,height:3,background:'var(--blue)',borderTop:'2px dashed var(--blue)'}}></div>Scope Assessment</div>
           </div>
         </div>
         <div style={{background:'var(--surface)',borderRadius:16,padding:24,border:'1px solid var(--border)'}}>
@@ -600,8 +600,8 @@ function SummaryModule({ id }: { id:string }) {
           {PILLARS.map((p,i)=>(
             <div key={p} style={{marginBottom:16}}>
               <div style={{display:'flex',justifyContent:'space-between',marginBottom:4}}>
-                <div style={{fontSize:13,color:'var(--fg)'}}>{p}</div>
-                <div style={{fontSize:12,color:'var(--muted)'}}>{(embScores[i]/3*100).toFixed(0)}%</div>
+                <div style={{fontSize:15,color:'var(--fg)'}}>{p}</div>
+                <div style={{fontSize:14,color:'var(--muted)'}}>{(embScores[i]/3*100).toFixed(0)}%</div>
               </div>
               <div style={{background:'var(--card)',borderRadius:4,height:8,overflow:'hidden'}}>
                 <div style={{width:`${(embScores[i]/3)*100}%`,height:'100%',background:'var(--cream)',borderRadius:4,transition:'width 0.5s'}}></div>
@@ -630,39 +630,39 @@ function MaturityModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>
   return (
     <div>
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24,gap:12,flexWrap:'wrap' as const}}>
-        <div><h2 style={{color:'var(--fg)',margin:0}}>Competency Maturity Levels</h2><p style={{color:'var(--muted)',fontSize:13,margin:'4px 0 0'}}>Assess the key factors that shape your team's overall maturity. For each, select a level and describe current ownership, skill capability, and the business value it delivers.</p></div>
-        <button onClick={addRow} style={{background:'var(--cream)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Factor</button>
+        <div><h2 style={{color:'var(--fg)',margin:0}}>Competency Maturity Levels</h2><p style={{color:'var(--muted)',fontSize:15,margin:'4px 0 0'}}>Assess the key factors that shape your team's overall maturity. For each, select a level and describe current ownership, skill capability, and the business value it delivers.</p></div>
+        <button onClick={addRow} style={{background:'var(--cream)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:15}}>+ Add Factor</button>
       </div>
       <div className="scroll-table" style={{background:'var(--surface)',borderRadius:12,overflow:'hidden',border:'1px solid var(--border)'}}>
-        <div style={{display:'grid',gridTemplateColumns:'1.2fr 90px 1.5fr 1.5fr 1.5fr 1.2fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'none',letterSpacing:'0.01em'}}>
+        <div style={{display:'grid',gridTemplateColumns:'1.2fr 90px 1.5fr 1.5fr 1.5fr 1.2fr 36px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:14,fontWeight:600,color:'var(--muted)',textTransform:'none',letterSpacing:'0.01em'}}>
           <div>Factor Name</div><div>Maturity Level</div><div>Who Owns This</div><div>Skill Capability</div><div>Business Impact</div><div>Notes</div><div></div>
         </div>
         {rows.map((row,i)=>(
           <div key={row.id} style={{display:'grid',gridTemplateColumns:'1.2fr 90px 1.5fr 1.5fr 1.5fr 1.2fr 36px',gap:'0 12px',padding:'12px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'start'}}>
-            <input value={row.factor_name} onChange={e=>update(row.id,'factor_name',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:13,fontWeight:500,outline:'none',width:'100%'}} />
-            <select value={row.maturity_level} onChange={e=>update(row.id,'maturity_level',parseInt(e.target.value))} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:LEVEL_CLR[row.maturity_level]||'var(--fg)',fontWeight:700,fontSize:13,cursor:'pointer',outline:'none'}}>
+            <input value={row.factor_name} onChange={e=>update(row.id,'factor_name',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:15,fontWeight:500,outline:'none',width:'100%'}} />
+            <select value={row.maturity_level} onChange={e=>update(row.id,'maturity_level',parseInt(e.target.value))} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:LEVEL_CLR[row.maturity_level]||'var(--fg)',fontWeight:700,fontSize:15,cursor:'pointer',outline:'none'}}>
               <option value={1}>◆ L1</option><option value={2}>⚙ L2</option><option value={3}>🚀 L3</option>
             </select>
-            <textarea value={row.ownership_level||''} onChange={e=>update(row.id,'ownership_level',e.target.value)} rows={2} placeholder="Who drives this? e.g. team lead, shared across org…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
-            <textarea value={row.skill_level||''} onChange={e=>update(row.id,'skill_level',e.target.value)} rows={2} placeholder="What skills exist? e.g. CI/CD, testing, automation…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
-            <textarea value={row.business_value||''} onChange={e=>update(row.id,'business_value',e.target.value)} rows={2} placeholder="How does this impact business outcomes?" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
-            <textarea value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} rows={2} placeholder="Context, blockers, or improvement plans…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
+            <textarea value={row.ownership_level||''} onChange={e=>update(row.id,'ownership_level',e.target.value)} rows={2} placeholder="Who drives this? e.g. team lead, shared across org…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:14,resize:'vertical',width:'100%',outline:'none'}} />
+            <textarea value={row.skill_level||''} onChange={e=>update(row.id,'skill_level',e.target.value)} rows={2} placeholder="What skills exist? e.g. CI/CD, testing, automation…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:14,resize:'vertical',width:'100%',outline:'none'}} />
+            <textarea value={row.business_value||''} onChange={e=>update(row.id,'business_value',e.target.value)} rows={2} placeholder="How does this impact business outcomes?" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:14,resize:'vertical',width:'100%',outline:'none'}} />
+            <textarea value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} rows={2} placeholder="Context, blockers, or improvement plans…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:14,resize:'vertical',width:'100%',outline:'none'}} />
             {confirmingId===row.id ? (
               <div style={{display:'flex',gap:2}}>
-                <button onClick={()=>{cancelDelete();deleteRow(row.id);}} style={{background:'none',border:'none',color:'var(--green)',cursor:'pointer',fontSize:16,padding:2}} title="Confirm delete">✓</button>
-                <button onClick={cancelDelete} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:14,padding:2}} title="Cancel">✗</button>
+                <button onClick={()=>{cancelDelete();deleteRow(row.id);}} style={{background:'none',border:'none',color:'var(--green)',cursor:'pointer',fontSize:18,padding:2}} title="Confirm delete">✓</button>
+                <button onClick={cancelDelete} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:16,padding:2}} title="Cancel">✗</button>
               </div>
             ) : (
-              <button onClick={()=>requestDelete(row.id)} style={{background:'none',border:'none',color:'var(--red)',cursor:'pointer',fontSize:16,padding:4}}>✕</button>
+              <button onClick={()=>requestDelete(row.id)} style={{background:'none',border:'none',color:'var(--red)',cursor:'pointer',fontSize:18,padding:4}}>✕</button>
             )}
           </div>
         ))}
         {rows.length===0 && <div style={{textAlign:'center',padding:48}}>
           <div style={{border:'2px dashed var(--border)',borderRadius:16,padding:'40px 24px',maxWidth:400,margin:'0 auto'}}>
             <div style={{fontSize:32,marginBottom:12}}>📊</div>
-            <div style={{color:'var(--fg)',fontWeight:600,fontSize:15,marginBottom:6}}>No maturity factors yet</div>
-            <div style={{color:'var(--muted)',fontSize:13,marginBottom:16}}>Assess ownership, skills, and business value across key areas.</div>
-            <button onClick={addRow} style={{background:'var(--cream)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Factor</button>
+            <div style={{color:'var(--fg)',fontWeight:600,fontSize:17,marginBottom:6}}>No maturity factors yet</div>
+            <div style={{color:'var(--muted)',fontSize:15,marginBottom:16}}>Assess ownership, skills, and business value across key areas.</div>
+            <button onClick={addRow} style={{background:'var(--cream)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:15}}>+ Add Factor</button>
           </div>
         </div>}
       </div>
@@ -689,9 +689,9 @@ function KRAModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Promi
   return (
     <div>
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24,gap:12,flexWrap:'wrap' as const}}>
-        <div><h2 style={{color:'var(--fg)',margin:0}}>Roles & Performance KRA</h2><p style={{color:'var(--muted)',fontSize:13,margin:'4px 0 0'}}>Define measurable goals for each role level. Set targets, track progress, and update status. Use the role filter to focus on a specific level.</p></div>
+        <div><h2 style={{color:'var(--fg)',margin:0}}>Roles & Performance KRA</h2><p style={{color:'var(--muted)',fontSize:15,margin:'4px 0 0'}}>Define measurable goals for each role level. Set targets, track progress, and update status. Use the role filter to focus on a specific level.</p></div>
         <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
-          {['All',...ROLES].map(r=><button key={r} onClick={()=>setRoleFilter(r)} style={{background:roleFilter===r?'var(--gold)':'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:roleFilter===r?'var(--gold-btn-text)':'var(--fg)',fontSize:11,fontWeight:roleFilter===r?700:400,cursor:'pointer'}}>{r==='All'?'All':r.split(',')[0]}</button>)}
+          {['All',...ROLES].map(r=><button key={r} onClick={()=>setRoleFilter(r)} style={{background:roleFilter===r?'var(--gold)':'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:roleFilter===r?'var(--gold-btn-text)':'var(--fg)',fontSize:13,fontWeight:roleFilter===r?700:400,cursor:'pointer'}}>{r==='All'?'All':r.split(',')[0]}</button>)}
         </div>
       </div>
       {roles.map(role => {
@@ -699,28 +699,28 @@ function KRAModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Promi
         const rolePillars = [...new Set(roleRows.map(r=>r.pillar||''))];
         return (
           <div key={role} style={{marginBottom:32}}>
-            <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'none',letterSpacing:'0.01em',display:'flex',alignItems:'center',justifyContent:'space-between'}}><span>{role}</span><button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/kra`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({role_level:role,pillar:'Operational Excellence'})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,role_level:role,pillar:'Operational Excellence',person_name:'',kra_name:'New KRA',description:'',target:'',current:'',status:'not-started',notes:''}]);}} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add KRA</button></div>
+            <div style={{fontWeight:700,color:'var(--gold)',fontSize:16,marginBottom:10,textTransform:'none',letterSpacing:'0.01em',display:'flex',alignItems:'center',justifyContent:'space-between'}}><span>{role}</span><button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/kra`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({role_level:role,pillar:'Operational Excellence'})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,role_level:role,pillar:'Operational Excellence',person_name:'',kra_name:'New KRA',description:'',target:'',current:'',status:'not-started',notes:''}]);}} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add KRA</button></div>
             {rolePillars.map(pillar => (
               <div key={pillar} style={{marginBottom:12}}>
-                {pillar && <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'4px 16px',background:'rgba(18,135,106,0.06)'}}>{pillar}</div>}
+                {pillar && <div style={{fontSize:14,color:'var(--muted)',fontWeight:600,padding:'4px 16px',background:'rgba(18,135,106,0.06)'}}>{pillar}</div>}
                 <div className="scroll-table" style={{background:'var(--surface)',borderRadius:8,overflow:'hidden',border:'1px solid var(--border)'}}>
                   {roleRows.filter(r=>(r.pillar||'')===pillar).map((row,i)=>(
                     <div key={row.id} style={{display:'grid',gridTemplateColumns:'1.5fr 2.5fr 0.8fr 0.8fr 110px 1.5fr 36px',gap:'0 12px',padding:'10px 16px',borderTop:i>0?'1px solid var(--border)':'none',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'start'}}>
-                      <input value={row.kra_name} onChange={e=>update(row.id,'kra_name',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
-                      <textarea value={row.description||''} onChange={e=>update(row.id,'description',e.target.value)} rows={1} placeholder="What does success look like?" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
-                      <input value={row.target||''} onChange={e=>update(row.id,'target',e.target.value)} placeholder="Goal e.g. 95%" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
-                      <input value={row.current||''} onChange={e=>update(row.id,'current',e.target.value)} placeholder="Actual e.g. 78%" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
-                      <select value={row.status} onChange={e=>update(row.id,'status',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px',color:STATUS_COLORS[row.status],fontWeight:600,fontSize:12,cursor:'pointer',outline:'none'}}>
+                      <input value={row.kra_name} onChange={e=>update(row.id,'kra_name',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:14,outline:'none',width:'100%'}} />
+                      <textarea value={row.description||''} onChange={e=>update(row.id,'description',e.target.value)} rows={1} placeholder="What does success look like?" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:14,resize:'vertical',width:'100%',outline:'none'}} />
+                      <input value={row.target||''} onChange={e=>update(row.id,'target',e.target.value)} placeholder="Goal e.g. 95%" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:14,outline:'none',width:'100%'}} />
+                      <input value={row.current||''} onChange={e=>update(row.id,'current',e.target.value)} placeholder="Actual e.g. 78%" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:14,outline:'none',width:'100%'}} />
+                      <select value={row.status} onChange={e=>update(row.id,'status',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'4px',color:STATUS_COLORS[row.status],fontWeight:600,fontSize:14,cursor:'pointer',outline:'none'}}>
                         {STATUSES.map(s=><option key={s}>{s}</option>)}
                       </select>
-                      <textarea value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} rows={1} placeholder="Progress notes or blockers…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,resize:'vertical',width:'100%',outline:'none'}} />
+                      <textarea value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} rows={1} placeholder="Progress notes or blockers…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:14,resize:'vertical',width:'100%',outline:'none'}} />
                       {confirmingId===row.id ? (
                         <div style={{display:'flex',gap:2}}>
-                          <button onClick={async()=>{cancelDelete();await fetch(`/api/assessments/${id}/kra`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({row_id:row.id})});setRows(prev=>prev.filter(r=>r.id!==row.id));}} style={{background:'none',border:'none',color:'var(--green)',cursor:'pointer',fontSize:16,padding:2}} title="Confirm delete">✓</button>
-                          <button onClick={cancelDelete} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:14,padding:2}} title="Cancel">✗</button>
+                          <button onClick={async()=>{cancelDelete();await fetch(`/api/assessments/${id}/kra`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({row_id:row.id})});setRows(prev=>prev.filter(r=>r.id!==row.id));}} style={{background:'none',border:'none',color:'var(--green)',cursor:'pointer',fontSize:18,padding:2}} title="Confirm delete">✓</button>
+                          <button onClick={cancelDelete} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:16,padding:2}} title="Cancel">✗</button>
                         </div>
                       ) : (
-                        <button onClick={()=>requestDelete(row.id)} style={{background:'none',border:'none',color:'var(--red)',cursor:'pointer',fontSize:16,padding:4}}>✕</button>
+                        <button onClick={()=>requestDelete(row.id)} style={{background:'none',border:'none',color:'var(--red)',cursor:'pointer',fontSize:18,padding:4}}>✕</button>
                       )}
                     </div>
                   ))}
@@ -733,8 +733,8 @@ function KRAModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Promi
       {filtered.length===0 && <div style={{textAlign:'center',padding:48}}>
         <div style={{border:'2px dashed var(--border)',borderRadius:16,padding:'40px 24px',maxWidth:400,margin:'0 auto'}}>
           <div style={{fontSize:32,marginBottom:12}}>🎯</div>
-          <div style={{color:'var(--fg)',fontWeight:600,fontSize:15,marginBottom:6}}>No Key Result Areas defined yet</div>
-          <div style={{color:'var(--muted)',fontSize:13}}>Select a role level above, then click '+ Add KRA' to set goals.</div>
+          <div style={{color:'var(--fg)',fontWeight:600,fontSize:17,marginBottom:6}}>No Key Result Areas defined yet</div>
+          <div style={{color:'var(--muted)',fontSize:15}}>Select a role level above, then click '+ Add KRA' to set goals.</div>
         </div>
       </div>}
     </div>
@@ -767,11 +767,11 @@ function LeadershipModule({ id, save }: { id:string; save:(e:string,r:unknown[])
   return (
     <div>
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24,gap:12,flexWrap:'wrap' as const}}>
-        <div><h2 style={{color:'var(--fg)',margin:0}}>Leadership Qualities</h2><p style={{color:'var(--muted)',fontSize:13,margin:'4px 0 0'}}>Evaluate each engineering leader across standardised leadership skills. Mandatory skills are marked with a star — focus on these first. Expand any skill to see its detailed breakdown.</p></div>
+        <div><h2 style={{color:'var(--fg)',margin:0}}>Leadership Qualities</h2><p style={{color:'var(--muted)',fontSize:15,margin:'4px 0 0'}}>Evaluate each engineering leader across standardised leadership skills. Mandatory skills are marked with a star — focus on these first. Expand any skill to see its detailed breakdown.</p></div>
         <div style={{display:'flex',gap:8,alignItems:'center'}}>
-          <input value={newLeader} onChange={e=>setNewLeader(e.target.value)} placeholder="e.g. Jane Smith" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'8px 12px',color:'var(--fg)',fontSize:13,outline:'none',width:160}} />
-          <input value={newRole} onChange={e=>setNewRole(e.target.value)} placeholder="e.g. Sr. Engineering Manager" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'8px 12px',color:'var(--fg)',fontSize:13,outline:'none',width:140}} />
-          <button onClick={addLeader} style={{background:'var(--cream)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Leader</button>
+          <input value={newLeader} onChange={e=>setNewLeader(e.target.value)} placeholder="e.g. Jane Smith" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'8px 12px',color:'var(--fg)',fontSize:15,outline:'none',width:160}} />
+          <input value={newRole} onChange={e=>setNewRole(e.target.value)} placeholder="e.g. Sr. Engineering Manager" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'8px 12px',color:'var(--fg)',fontSize:15,outline:'none',width:140}} />
+          <button onClick={addLeader} style={{background:'var(--cream)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:15}}>+ Add Leader</button>
         </div>
       </div>
       {leaders.map(leader=>{
@@ -785,50 +785,50 @@ function LeadershipModule({ id, save }: { id:string; save:(e:string,r:unknown[])
           <div key={leader} style={{marginBottom:32}}>
             <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:10}}>
               <div>
-                <span style={{fontWeight:700,color:'var(--gold)',fontSize:16}}>{leader}</span>
-                {leaderRole&&<span style={{color:'var(--muted)',fontSize:13,marginLeft:8}}>{leaderRole}</span>}
-                <span style={{color:'var(--muted)',fontSize:12,marginLeft:16}}>Total: {totalScore}/{leaderRows.length*10} · Mandatory: {mandatoryScore}/{mandatoryMax}</span>
+                <span style={{fontWeight:700,color:'var(--gold)',fontSize:18}}>{leader}</span>
+                {leaderRole&&<span style={{color:'var(--muted)',fontSize:15,marginLeft:8}}>{leaderRole}</span>}
+                <span style={{color:'var(--muted)',fontSize:14,marginLeft:16}}>Total: {totalScore}/{leaderRows.length*10} · Mandatory: {mandatoryScore}/{mandatoryMax}</span>
               </div>
               {confirmingId===`leader:${leader}` ? (
                 <div style={{display:'flex',gap:6,alignItems:'center'}}>
-                  <span style={{fontSize:12,color:'var(--red)'}}>Remove?</span>
-                  <button onClick={()=>{cancelDelete();deleteLeader(leader);}} style={{background:'none',border:'1px solid var(--green)',borderRadius:6,padding:'4px 10px',color:'var(--green)',cursor:'pointer',fontSize:12}}>Yes</button>
-                  <button onClick={cancelDelete} style={{background:'none',border:'1px solid var(--border)',borderRadius:6,padding:'4px 10px',color:'var(--muted)',cursor:'pointer',fontSize:12}}>No</button>
+                  <span style={{fontSize:14,color:'var(--red)'}}>Remove?</span>
+                  <button onClick={()=>{cancelDelete();deleteLeader(leader);}} style={{background:'none',border:'1px solid var(--green)',borderRadius:6,padding:'4px 10px',color:'var(--green)',cursor:'pointer',fontSize:14}}>Yes</button>
+                  <button onClick={cancelDelete} style={{background:'none',border:'1px solid var(--border)',borderRadius:6,padding:'4px 10px',color:'var(--muted)',cursor:'pointer',fontSize:14}}>No</button>
                 </div>
               ) : (
-                <button onClick={()=>requestDelete(`leader:${leader}`)} style={{background:'none',border:'1px solid var(--red)',borderRadius:6,padding:'4px 10px',color:'var(--red)',cursor:'pointer',fontSize:12}}>Remove Leader</button>
+                <button onClick={()=>requestDelete(`leader:${leader}`)} style={{background:'none',border:'1px solid var(--red)',borderRadius:6,padding:'4px 10px',color:'var(--red)',cursor:'pointer',fontSize:14}}>Remove Leader</button>
               )}
             </div>
             {categories.map(cat => {
               const catRows = leaderRows.filter(r=>(r.skill_category||'')===cat);
               return (
                 <div key={cat} style={{marginBottom:16}}>
-                  {cat && <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(18,135,106,0.08)',borderRadius:'8px 8px 0 0',textTransform:'none',letterSpacing:'0.01em'}}>{cat}</div>}
+                  {cat && <div style={{fontSize:14,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(18,135,106,0.08)',borderRadius:'8px 8px 0 0',textTransform:'none',letterSpacing:'0.01em'}}>{cat}</div>}
                   <div className="scroll-table" style={{background:'var(--surface)',borderRadius:cat?'0 0 12px 12px':'12px',overflow:'hidden',border:'1px solid var(--border)'}}>
                     {catRows.map((row,i)=>(
                       <div key={row.id}>
                         <div style={{display:'grid',gridTemplateColumns:'1.2fr 100px 2fr 28px 36px',gap:'0 12px',padding:'10px 16px',borderTop:i>0?'1px solid var(--border)':'none',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'center'}}>
                           <div style={{display:'flex',alignItems:'center',gap:6}}>
-                            {row.detailed_skills && <button onClick={()=>toggleDetail(row.id)} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:10,padding:0}}>{expanded.has(row.id)?'▼':'▶'}</button>}
-                            <span style={{color:'var(--fg)',fontSize:13,fontWeight:row.is_mandatory?600:400}}>{row.skill_name}</span>
+                            {row.detailed_skills && <button onClick={()=>toggleDetail(row.id)} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:13,padding:0}}>{expanded.has(row.id)?'▼':'▶'}</button>}
+                            <span style={{color:'var(--fg)',fontSize:15,fontWeight:row.is_mandatory?600:400}}>{row.skill_name}</span>
                           </div>
                           <div style={{display:'flex',alignItems:'center',gap:8}}>
                             <input type="range" min={0} max={10} value={row.score} onChange={e=>update(row.id,'score',parseInt(e.target.value))} style={{width:50,accentColor:'var(--gold)'}} />
-                            <span style={{color:'var(--gold)',fontWeight:700,fontSize:14,minWidth:16}}>{row.score}</span>
+                            <span style={{color:'var(--gold)',fontWeight:700,fontSize:16,minWidth:16}}>{row.score}</span>
                           </div>
-                          <input value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} placeholder="Observations or development actions…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
-                          <div style={{textAlign:'center',color:row.is_mandatory?'#f59e0b':'var(--border)',fontSize:14}} title={row.is_mandatory?'Mandatory':''}>★</div>
+                          <input value={row.notes||''} onChange={e=>update(row.id,'notes',e.target.value)} placeholder="Observations or development actions…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:14,outline:'none',width:'100%'}} />
+                          <div style={{textAlign:'center',color:row.is_mandatory?'#f59e0b':'var(--border)',fontSize:16}} title={row.is_mandatory?'Mandatory':''}>★</div>
                           {confirmingId===row.id ? (
                             <div style={{display:'flex',gap:2}}>
-                              <button onClick={()=>{cancelDelete();deleteSkill(row.id);}} style={{background:'none',border:'none',color:'var(--green)',cursor:'pointer',fontSize:14,padding:2}} title="Confirm delete">✓</button>
-                              <button onClick={cancelDelete} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:12,padding:2}} title="Cancel">✗</button>
+                              <button onClick={()=>{cancelDelete();deleteSkill(row.id);}} style={{background:'none',border:'none',color:'var(--green)',cursor:'pointer',fontSize:16,padding:2}} title="Confirm delete">✓</button>
+                              <button onClick={cancelDelete} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:14,padding:2}} title="Cancel">✗</button>
                             </div>
                           ) : (
-                            <button onClick={()=>requestDelete(row.id)} style={{background:'none',border:'none',color:'var(--red)',cursor:'pointer',fontSize:14,padding:2}}>✕</button>
+                            <button onClick={()=>requestDelete(row.id)} style={{background:'none',border:'none',color:'var(--red)',cursor:'pointer',fontSize:16,padding:2}}>✕</button>
                           )}
                         </div>
                         {expanded.has(row.id) && row.detailed_skills && (
-                          <div style={{padding:'4px 16px 8px 40px',fontSize:12,color:'var(--muted)',lineHeight:1.5,borderTop:'1px dashed var(--border)',background:'rgba(18,135,106,0.03)'}}>
+                          <div style={{padding:'4px 16px 8px 40px',fontSize:14,color:'var(--muted)',lineHeight:1.5,borderTop:'1px dashed var(--border)',background:'rgba(18,135,106,0.03)'}}>
                             <strong>Detailed Skills:</strong> {row.detailed_skills}
                           </div>
                         )}
@@ -844,8 +844,8 @@ function LeadershipModule({ id, save }: { id:string; save:(e:string,r:unknown[])
       {leaders.length===0&&<div style={{textAlign:'center',padding:48}}>
         <div style={{border:'2px dashed var(--border)',borderRadius:16,padding:'40px 24px',maxWidth:400,margin:'0 auto'}}>
           <div style={{fontSize:32,marginBottom:12}}>👥</div>
-          <div style={{color:'var(--fg)',fontWeight:600,fontSize:15,marginBottom:6}}>No leaders added yet</div>
-          <div style={{color:'var(--muted)',fontSize:13}}>Enter a name and role above, then click '+ Add Leader' to begin the assessment.</div>
+          <div style={{color:'var(--fg)',fontWeight:600,fontSize:17,marginBottom:6}}>No leaders added yet</div>
+          <div style={{color:'var(--muted)',fontSize:15}}>Enter a name and role above, then click '+ Add Leader' to begin the assessment.</div>
         </div>
       </div>}
     </div>
@@ -941,12 +941,12 @@ function TalentMapModule({ id }: { id:string }) {
   return (
     <div>
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24,gap:12,flexWrap:'wrap' as const}}>
-        <div><h2 style={{color:'var(--fg)',margin:0}}>Engineering Talent Map</h2><p style={{color:'var(--muted)',fontSize:13,margin:'4px 0 0'}}>Build a complete profile for each engineer. Assess technical skills, product mindset, knowledge management, and AI readiness. Use Team Tracker to compare the whole team at a glance.</p></div>
+        <div><h2 style={{color:'var(--fg)',margin:0}}>Engineering Talent Map</h2><p style={{color:'var(--muted)',fontSize:15,margin:'4px 0 0'}}>Build a complete profile for each engineer. Assess technical skills, product mindset, knowledge management, and AI readiness. Use Team Tracker to compare the whole team at a glance.</p></div>
         <div style={{display:'flex',gap:8,alignItems:'center'}}>
-          {saving && <span style={{color:'var(--muted)',fontSize:12}}>Saving…</span>}
-          {saveMsg && <span style={{color:'var(--green)',fontSize:12}}>{saveMsg}</span>}
-          <input value={newName} onChange={e=>setNewName(e.target.value)} placeholder="e.g. John Doe" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'8px 12px',color:'var(--fg)',fontSize:13,outline:'none',width:160}} />
-          <button onClick={addEngineer} style={{background:'var(--cream)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Engineer</button>
+          {saving && <span style={{color:'var(--muted)',fontSize:14}}>Saving…</span>}
+          {saveMsg && <span style={{color:'var(--green)',fontSize:14}}>{saveMsg}</span>}
+          <input value={newName} onChange={e=>setNewName(e.target.value)} placeholder="e.g. John Doe" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:8,padding:'8px 12px',color:'var(--fg)',fontSize:15,outline:'none',width:160}} />
+          <button onClick={addEngineer} style={{background:'var(--cream)',border:'none',borderRadius:8,padding:'8px 16px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:15}}>+ Add Engineer</button>
         </div>
       </div>
 
@@ -955,14 +955,14 @@ function TalentMapModule({ id }: { id:string }) {
         <div style={{display:'flex',gap:4,marginBottom:16,flexWrap:'wrap',alignItems:'center'}}>
           {engineers.map(e => (
             <div key={e.id} style={{display:'flex',alignItems:'center',gap:0}}>
-              <button onClick={()=>setSelectedEng(e.id)} style={{background:selectedEng===e.id?'var(--gold)':'var(--card)',border:'1px solid var(--border)',borderRadius:'8px 0 0 8px',padding:'8px 14px',color:selectedEng===e.id?'var(--gold-btn-text)':'var(--fg)',fontSize:13,fontWeight:selectedEng===e.id?700:400,cursor:'pointer'}}>{e.name}</button>
+              <button onClick={()=>setSelectedEng(e.id)} style={{background:selectedEng===e.id?'var(--gold)':'var(--card)',border:'1px solid var(--border)',borderRadius:'8px 0 0 8px',padding:'8px 14px',color:selectedEng===e.id?'var(--gold-btn-text)':'var(--fg)',fontSize:15,fontWeight:selectedEng===e.id?700:400,cursor:'pointer'}}>{e.name}</button>
               {confirmingId===e.id ? (
                 <div style={{display:'flex',alignItems:'center',background:selectedEng===e.id?'var(--gold)':'var(--card)',border:'1px solid var(--border)',borderLeft:'none',borderRadius:'0 8px 8px 0',padding:'4px 6px',gap:2}}>
-                  <button onClick={()=>{cancelDelete();deleteEngineer(e.id);}} style={{background:'none',border:'none',color:'var(--green)',cursor:'pointer',fontSize:14,padding:2}} title="Confirm delete">✓</button>
-                  <button onClick={cancelDelete} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:12,padding:2}} title="Cancel">✗</button>
+                  <button onClick={()=>{cancelDelete();deleteEngineer(e.id);}} style={{background:'none',border:'none',color:'var(--green)',cursor:'pointer',fontSize:16,padding:2}} title="Confirm delete">✓</button>
+                  <button onClick={cancelDelete} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:14,padding:2}} title="Cancel">✗</button>
                 </div>
               ) : (
-                <button onClick={()=>requestDelete(e.id)} style={{background:selectedEng===e.id?'var(--gold)':'var(--card)',border:'1px solid var(--border)',borderLeft:'none',borderRadius:'0 8px 8px 0',padding:'8px 8px',color:'var(--red)',cursor:'pointer',fontSize:12}}>✕</button>
+                <button onClick={()=>requestDelete(e.id)} style={{background:selectedEng===e.id?'var(--gold)':'var(--card)',border:'1px solid var(--border)',borderLeft:'none',borderRadius:'0 8px 8px 0',padding:'8px 8px',color:'var(--red)',cursor:'pointer',fontSize:14}}>✕</button>
               )}
             </div>
           ))}
@@ -975,7 +975,7 @@ function TalentMapModule({ id }: { id:string }) {
           <div style={{position:'relative',marginBottom:20}}>
             <div className="talent-subtabs" style={{display:'flex',gap:2,background:'var(--surface)',borderRadius:8,border:'1px solid var(--border)',overflowX:'auto'}}>
               {SUB_TABS.map(st => (
-                <button key={st.id} onClick={()=>setSubTab(st.id)} style={{flexShrink:0,padding:'10px 16px',background:'none',border:'none',borderBottom:`3px solid ${subTab===st.id?'var(--gold)':'transparent'}`,color:subTab===st.id?'var(--gold)':'var(--muted)',fontSize:12,fontWeight:subTab===st.id?700:400,cursor:'pointer',whiteSpace:'nowrap'}}>
+                <button key={st.id} onClick={()=>setSubTab(st.id)} style={{flexShrink:0,padding:'10px 16px',background:'none',border:'none',borderBottom:`3px solid ${subTab===st.id?'var(--gold)':'transparent'}`,color:subTab===st.id?'var(--gold)':'var(--muted)',fontSize:14,fontWeight:subTab===st.id?700:400,cursor:'pointer',whiteSpace:'nowrap'}}>
                   {st.label}
                 </button>
               ))}
@@ -993,21 +993,21 @@ function TalentMapModule({ id }: { id:string }) {
                   ['product_name','Product'],['industry','Industry'],['ai_phase','AI Phase'],['primary_stack','Primary Stack'],
                 ] as [string,string][]).map(([field,label]) => (
                   <div key={field}>
-                    <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,marginBottom:4}}>{label}</div>
+                    <div style={{fontSize:14,color:'var(--muted)',fontWeight:600,marginBottom:4}}>{label}</div>
                     {field==='level' ? (
-                      <select value={eng[field]||'Mid'} onChange={e=>updateEng(field,e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:13,outline:'none',width:'100%'}}>
+                      <select value={eng[field]||'Mid'} onChange={e=>updateEng(field,e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:15,outline:'none',width:'100%'}}>
                         {['Junior','Mid','Senior','Staff','Principal','Lead','Manager'].map(l=><option key={l}>{l}</option>)}
                       </select>
                     ) : field==='employment' ? (
-                      <select value={eng[field]||'Full-time'} onChange={e=>updateEng(field,e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:13,outline:'none',width:'100%'}}>
+                      <select value={eng[field]||'Full-time'} onChange={e=>updateEng(field,e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:15,outline:'none',width:'100%'}}>
                         {['Full-time','Part-time','Contract','Intern'].map(l=><option key={l}>{l}</option>)}
                       </select>
                     ) : field==='ai_phase' ? (
-                      <select value={eng[field]||'Phase 1'} onChange={e=>updateEng(field,e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:13,outline:'none',width:'100%'}}>
+                      <select value={eng[field]||'Phase 1'} onChange={e=>updateEng(field,e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:15,outline:'none',width:'100%'}}>
                         {['Phase 1','Phase 2','Phase 3'].map(l=><option key={l}>{l}</option>)}
                       </select>
                     ) : (
-                      <input value={eng[field]||''} onChange={e=>updateEng(field,e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:13,outline:'none',width:'100%'}} />
+                      <input value={eng[field]||''} onChange={e=>updateEng(field,e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:15,outline:'none',width:'100%'}} />
                     )}
                   </div>
                 ))}
@@ -1015,8 +1015,8 @@ function TalentMapModule({ id }: { id:string }) {
               <div className="grid-stack" style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16,marginTop:16}}>
                 {([['key_strengths','Key Strengths'],['development_focus','Development Focus'],['training_recommendation','Training Recommendation'],['career_goal','Career Goal'],['manager_notes','Manager Notes']] as [string,string][]).map(([field,label]) => (
                   <div key={field}>
-                    <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,marginBottom:4}}>{label}</div>
-                    <textarea value={eng[field]||''} onChange={e=>updateEng(field,e.target.value)} rows={3} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:13,resize:'vertical',width:'100%',outline:'none'}} />
+                    <div style={{fontSize:14,color:'var(--muted)',fontWeight:600,marginBottom:4}}>{label}</div>
+                    <textarea value={eng[field]||''} onChange={e=>updateEng(field,e.target.value)} rows={3} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:15,resize:'vertical',width:'100%',outline:'none'}} />
                   </div>
                 ))}
               </div>
@@ -1032,34 +1032,34 @@ function TalentMapModule({ id }: { id:string }) {
                 const categories = [...new Set(sectionSkills.map((s:any) => s.category))] as string[];
                 return categories.map((cat) => (
                   <div key={cat} style={{marginBottom:20}}>
-                    <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(18,135,106,0.08)',borderRadius:'8px 8px 0 0',textTransform:'none',letterSpacing:'0.01em'}}>{cat}</div>
+                    <div style={{fontSize:14,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(18,135,106,0.08)',borderRadius:'8px 8px 0 0',textTransform:'none',letterSpacing:'0.01em'}}>{cat}</div>
                     <div className="scroll-table" style={{background:'var(--surface)',borderRadius:'0 0 12px 12px',overflow:'hidden',border:'1px solid var(--border)'}}>
-                      <div style={{display:'grid',gridTemplateColumns:'1.2fr 64px 64px 64px 2fr 40px',gap:'0 12px',background:'var(--card)',padding:'8px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'none',letterSpacing:'0.01em'}}>
+                      <div style={{display:'grid',gridTemplateColumns:'1.2fr 64px 64px 64px 2fr 40px',gap:'0 12px',background:'var(--card)',padding:'8px 16px',fontSize:13,fontWeight:600,color:'var(--muted)',textTransform:'none',letterSpacing:'0.01em'}}>
                         <div>Skill</div><div>Self Score</div><div>Mgr Score</div><div>Target</div><div>Notes</div><div></div>
                       </div>
                       {sectionSkills.filter((s:any)=>s.category===cat).map((skill:any,i:number)=>(
                         <div key={skill.id}>
                           <div style={{display:'grid',gridTemplateColumns:'1.2fr 64px 64px 64px 2fr 40px',gap:'0 12px',padding:'10px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'center'}}>
                             <div style={{display:'flex',alignItems:'center',gap:6}}>
-                              {skill.description && <button onClick={()=>toggleDetail(skill.id)} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:10,padding:0}}>{expanded.has(skill.id)?'▼':'▶'}</button>}
-                              <span style={{color:'var(--fg)',fontSize:13}}>{skill.skill_name}</span>
+                              {skill.description && <button onClick={()=>toggleDetail(skill.id)} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:13,padding:0}}>{expanded.has(skill.id)?'▼':'▶'}</button>}
+                              <span style={{color:'var(--fg)',fontSize:15}}>{skill.skill_name}</span>
                             </div>
                             <div style={{display:'flex',alignItems:'center',gap:4}}>
-                              <input type="number" min={0} max={10} value={skill.self_score} onChange={e=>updateSkill(skill.id,'self_score',parseInt(e.target.value)||0)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:SCORE_CLR(skill.self_score),fontWeight:700,fontSize:13,outline:'none',width:44,textAlign:'center'}} />
+                              <input type="number" min={0} max={10} value={skill.self_score} onChange={e=>updateSkill(skill.id,'self_score',parseInt(e.target.value)||0)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:SCORE_CLR(skill.self_score),fontWeight:700,fontSize:15,outline:'none',width:44,textAlign:'center'}} />
                             </div>
                             <div style={{display:'flex',alignItems:'center',gap:4}}>
-                              <input type="number" min={0} max={10} value={skill.manager_score} onChange={e=>updateSkill(skill.id,'manager_score',parseInt(e.target.value)||0)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:SCORE_CLR(skill.manager_score),fontWeight:700,fontSize:13,outline:'none',width:44,textAlign:'center'}} />
+                              <input type="number" min={0} max={10} value={skill.manager_score} onChange={e=>updateSkill(skill.id,'manager_score',parseInt(e.target.value)||0)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:SCORE_CLR(skill.manager_score),fontWeight:700,fontSize:15,outline:'none',width:44,textAlign:'center'}} />
                             </div>
                             <div style={{display:'flex',alignItems:'center',gap:4}}>
-                              <input type="number" min={0} max={10} value={skill.target_score} onChange={e=>updateSkill(skill.id,'target_score',parseInt(e.target.value)||0)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--muted)',fontWeight:700,fontSize:13,outline:'none',width:44,textAlign:'center'}} />
+                              <input type="number" min={0} max={10} value={skill.target_score} onChange={e=>updateSkill(skill.id,'target_score',parseInt(e.target.value)||0)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--muted)',fontWeight:700,fontSize:15,outline:'none',width:44,textAlign:'center'}} />
                             </div>
-                            <input value={skill.notes||''} onChange={e=>updateSkill(skill.id,'notes',e.target.value)} placeholder="Development plan or evidence…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
-                            <div style={{textAlign:'center',color:skill.target_score > 0 && skill.manager_score < skill.target_score ? 'var(--red)' : 'var(--green)',fontSize:12,fontWeight:700}}>
+                            <input value={skill.notes||''} onChange={e=>updateSkill(skill.id,'notes',e.target.value)} placeholder="Development plan or evidence…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:14,outline:'none',width:'100%'}} />
+                            <div style={{textAlign:'center',color:skill.target_score > 0 && skill.manager_score < skill.target_score ? 'var(--red)' : 'var(--green)',fontSize:14,fontWeight:700}}>
                               {skill.target_score > 0 ? (skill.manager_score >= skill.target_score ? '✓' : `-${skill.target_score - skill.manager_score}`) : '–'}
                             </div>
                           </div>
                           {expanded.has(skill.id) && skill.description && (
-                            <div style={{padding:'4px 16px 8px 40px',fontSize:12,color:'var(--muted)',lineHeight:1.5,borderTop:'1px dashed var(--border)',background:'rgba(18,135,106,0.03)'}}>
+                            <div style={{padding:'4px 16px 8px 40px',fontSize:14,color:'var(--muted)',lineHeight:1.5,borderTop:'1px dashed var(--border)',background:'rgba(18,135,106,0.03)'}}>
                               {skill.description}
                             </div>
                           )}
@@ -1075,7 +1075,7 @@ function TalentMapModule({ id }: { id:string }) {
           {/* Team Tracker sub-tab */}
           {subTab === 'tracker' && (
             <div className="scroll-table" style={{background:'var(--surface)',borderRadius:12,border:'1px solid var(--border)',overflow:'hidden'}}>
-              <div style={{display:'grid',gridTemplateColumns:'1.5fr 0.8fr repeat(4,80px) 140px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'none',letterSpacing:'0.01em'}}>
+              <div style={{display:'grid',gridTemplateColumns:'1.5fr 0.8fr repeat(4,80px) 140px',gap:'0 12px',background:'var(--card)',padding:'10px 16px',fontSize:13,fontWeight:600,color:'var(--muted)',textTransform:'none',letterSpacing:'0.01em'}}>
                 <div>Engineer</div><div>Level</div><div>Technical</div><div>Mindset</div><div>Knowledge</div><div>AI Ready</div><div>Overall</div>
               </div>
               {engineers.map((e,i) => {
@@ -1091,17 +1091,17 @@ function TalentMapModule({ id }: { id:string }) {
                 const overall = (techAvg+mindAvg+knowAvg+aiAvg)/4;
                 return (
                   <div key={e.id} style={{display:'grid',gridTemplateColumns:'1.5fr 0.8fr repeat(4,80px) 140px',gap:'0 12px',padding:'12px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'center'}}>
-                    <div style={{color:'var(--fg)',fontSize:13,fontWeight:500}}>{e.name}</div>
-                    <div style={{color:'var(--muted)',fontSize:12}}>{e.level||'–'}</div>
-                    <div style={{color:SCORE_CLR(techAvg),fontWeight:700,fontSize:13}}>{techAvg.toFixed(1)}</div>
-                    <div style={{color:SCORE_CLR(mindAvg),fontWeight:700,fontSize:13}}>{mindAvg.toFixed(1)}</div>
-                    <div style={{color:SCORE_CLR(knowAvg),fontWeight:700,fontSize:13}}>{knowAvg.toFixed(1)}</div>
-                    <div style={{color:SCORE_CLR(aiAvg),fontWeight:700,fontSize:13}}>{aiAvg.toFixed(1)}</div>
+                    <div style={{color:'var(--fg)',fontSize:15,fontWeight:500}}>{e.name}</div>
+                    <div style={{color:'var(--muted)',fontSize:14}}>{e.level||'–'}</div>
+                    <div style={{color:SCORE_CLR(techAvg),fontWeight:700,fontSize:15}}>{techAvg.toFixed(1)}</div>
+                    <div style={{color:SCORE_CLR(mindAvg),fontWeight:700,fontSize:15}}>{mindAvg.toFixed(1)}</div>
+                    <div style={{color:SCORE_CLR(knowAvg),fontWeight:700,fontSize:15}}>{knowAvg.toFixed(1)}</div>
+                    <div style={{color:SCORE_CLR(aiAvg),fontWeight:700,fontSize:15}}>{aiAvg.toFixed(1)}</div>
                     <div style={{display:'flex',alignItems:'center',gap:8}}>
                       <div style={{flex:1,background:'var(--card)',borderRadius:4,height:8,overflow:'hidden'}}>
                         <div style={{width:`${(overall/10)*100}%`,height:'100%',background:SCORE_CLR(overall),borderRadius:4,transition:'width 0.5s'}}></div>
                       </div>
-                      <span style={{color:SCORE_CLR(overall),fontWeight:700,fontSize:13,minWidth:28}}>{overall.toFixed(1)}</span>
+                      <span style={{color:SCORE_CLR(overall),fontWeight:700,fontSize:15,minWidth:28}}>{overall.toFixed(1)}</span>
                     </div>
                   </div>
                 );
@@ -1109,8 +1109,8 @@ function TalentMapModule({ id }: { id:string }) {
               {engineers.length===0 && <div style={{textAlign:'center',padding:48}}>
                 <div style={{border:'2px dashed var(--border)',borderRadius:16,padding:'40px 24px',maxWidth:400,margin:'0 auto'}}>
                   <div style={{fontSize:32,marginBottom:12}}>👤</div>
-                  <div style={{color:'var(--fg)',fontWeight:600,fontSize:15,marginBottom:6}}>No engineers on the team yet</div>
-                  <div style={{color:'var(--muted)',fontSize:13}}>Add one above to start building your talent map.</div>
+                  <div style={{color:'var(--fg)',fontWeight:600,fontSize:17,marginBottom:6}}>No engineers on the team yet</div>
+                  <div style={{color:'var(--muted)',fontSize:15}}>Add one above to start building your talent map.</div>
                 </div>
               </div>}
             </div>
@@ -1120,8 +1120,8 @@ function TalentMapModule({ id }: { id:string }) {
       {engineers.length===0 && <div style={{textAlign:'center',padding:48}}>
         <div style={{border:'2px dashed var(--border)',borderRadius:16,padding:'40px 24px',maxWidth:400,margin:'0 auto'}}>
           <div style={{fontSize:32,marginBottom:12}}>🧑‍💻</div>
-          <div style={{color:'var(--fg)',fontWeight:600,fontSize:15,marginBottom:6}}>No engineers added yet</div>
-          <div style={{color:'var(--muted)',fontSize:13}}>Enter a name above and click '+ Add Engineer' to create a full assessment profile.</div>
+          <div style={{color:'var(--fg)',fontWeight:600,fontSize:17,marginBottom:6}}>No engineers added yet</div>
+          <div style={{color:'var(--muted)',fontSize:15}}>Enter a name above and click '+ Add Engineer' to create a full assessment profile.</div>
         </div>
       </div>}
     </div>
@@ -1196,25 +1196,25 @@ function SkillsetModule({ id }: { id:string }) {
   return (
     <div>
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24,gap:12,flexWrap:'wrap' as const}}>
-        <div><h2 style={{color:'var(--fg)',margin:0}}>Technical Skillset Requirements</h2><p style={{color:'var(--muted)',fontSize:13,margin:'4px 0 0'}}>Define the technical skills your product requires and assess your team against them. The gap analysis at the bottom highlights where critical shortfalls exist.</p></div>
+        <div><h2 style={{color:'var(--fg)',margin:0}}>Technical Skillset Requirements</h2><p style={{color:'var(--muted)',fontSize:15,margin:'4px 0 0'}}>Define the technical skills your product requires and assess your team against them. The gap analysis at the bottom highlights where critical shortfalls exist.</p></div>
         <div style={{display:'flex',gap:8,alignItems:'center'}}>
-          {saving && <span style={{color:'var(--muted)',fontSize:12}}>Saving…</span>}
-          {saveMsg && <span style={{color:'var(--green)',fontSize:12}}>{saveMsg}</span>}
+          {saving && <span style={{color:'var(--muted)',fontSize:14}}>Saving…</span>}
+          {saveMsg && <span style={{color:'var(--green)',fontSize:14}}>{saveMsg}</span>}
         </div>
       </div>
 
       {/* Product Context */}
       <div style={{marginBottom:28}}>
-        <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'none',letterSpacing:'0.01em'}}>Product Context</div>
+        <div style={{fontWeight:700,color:'var(--gold)',fontSize:16,marginBottom:10,textTransform:'none',letterSpacing:'0.01em'}}>Product Context</div>
         {groups.map(group => (
           <div key={group} style={{marginBottom:12}}>
-            <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(18,135,106,0.08)',borderRadius:'8px 8px 0 0',textTransform:'capitalize'}}>{group}</div>
+            <div style={{fontSize:14,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(18,135,106,0.08)',borderRadius:'8px 8px 0 0',textTransform:'capitalize'}}>{group}</div>
             <div style={{background:'var(--surface)',borderRadius:'0 0 12px 12px',border:'1px solid var(--border)',padding:16}}>
               <div className="grid-stack" style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
                 {context.filter(c=>c.field_group===group).map(c => (
                   <div key={c.id}>
-                    <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,marginBottom:4}}>{c.field_name}</div>
-                    <input value={c.field_value||''} onChange={e=>updateCtx(c.id,e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:13,outline:'none',width:'100%'}} />
+                    <div style={{fontSize:14,color:'var(--muted)',fontWeight:600,marginBottom:4}}>{c.field_name}</div>
+                    <input value={c.field_value||''} onChange={e=>updateCtx(c.id,e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:15,outline:'none',width:'100%'}} />
                   </div>
                 ))}
               </div>
@@ -1229,31 +1229,31 @@ function SkillsetModule({ id }: { id:string }) {
         const cats = [...new Set(sectionItems.map(i=>i.category||''))];
         return (
           <div key={section} style={{marginBottom:28}}>
-            <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'none',letterSpacing:'0.01em'}}>{section}</div>
+            <div style={{fontWeight:700,color:'var(--gold)',fontSize:16,marginBottom:10,textTransform:'none',letterSpacing:'0.01em'}}>{section}</div>
             {cats.map(cat => (
               <div key={cat} style={{marginBottom:16}}>
-                {cat && <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(18,135,106,0.08)',borderRadius:'8px 8px 0 0',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                {cat && <div style={{fontSize:14,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(18,135,106,0.08)',borderRadius:'8px 8px 0 0',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
                   <span>{cat}</span>
-                  <button onClick={()=>addItem(section,cat)} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Skill</button>
+                  <button onClick={()=>addItem(section,cat)} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:13}}>+ Add Skill</button>
                 </div>}
                 <div className="scroll-table" style={{background:'var(--surface)',borderRadius:cat?'0 0 12px 12px':'12px',overflow:'hidden',border:'1px solid var(--border)'}}>
-                  <div style={{display:'grid',gridTemplateColumns:'1.5fr 90px 90px 90px 56px 2fr 36px',gap:'0 12px',background:'var(--card)',padding:'8px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'none',letterSpacing:'0.01em'}}>
+                  <div style={{display:'grid',gridTemplateColumns:'1.5fr 90px 90px 90px 56px 2fr 36px',gap:'0 12px',background:'var(--card)',padding:'8px 16px',fontSize:13,fontWeight:600,color:'var(--muted)',textTransform:'none',letterSpacing:'0.01em'}}>
                     <div>Skill Name</div><div>Priority</div><div>Required</div><div>Current</div><div>Gap</div><div>Action Notes</div><div></div>
                   </div>
                   {sectionItems.filter(i=>(i.category||'')===cat).map((item,i)=>(
                     <div key={item.id}>
                       <div style={{display:'grid',gridTemplateColumns:'1.5fr 90px 90px 90px 56px 2fr 36px',gap:'0 12px',padding:'10px 16px',borderTop:'1px solid var(--border)',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'center'}}>
                         <div style={{display:'flex',alignItems:'center',gap:6}}>
-                          {item.description && <button onClick={()=>toggleDetail(item.id)} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:10,padding:0}}>{expanded.has(item.id)?'▼':'▶'}</button>}
-                          <input value={item.item_name} onChange={e=>updateItem(item.id,'item_name',e.target.value)} style={{background:'transparent',border:'none',color:'var(--fg)',fontSize:13,outline:'none',width:'100%'}} />
+                          {item.description && <button onClick={()=>toggleDetail(item.id)} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:13,padding:0}}>{expanded.has(item.id)?'▼':'▶'}</button>}
+                          <input value={item.item_name} onChange={e=>updateItem(item.id,'item_name',e.target.value)} style={{background:'transparent',border:'none',color:'var(--fg)',fontSize:15,outline:'none',width:'100%'}} />
                         </div>
-                        <select value={item.importance||'Important'} onChange={e=>updateItem(item.id,'importance',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:IMPORTANCE_CLR[item.importance]||'var(--fg)',fontWeight:600,fontSize:11,cursor:'pointer',outline:'none'}}>
+                        <select value={item.importance||'Important'} onChange={e=>updateItem(item.id,'importance',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:IMPORTANCE_CLR[item.importance]||'var(--fg)',fontWeight:600,fontSize:13,cursor:'pointer',outline:'none'}}>
                           {['Critical','Important','Nice-to-Have'].map(v=><option key={v}>{v}</option>)}
                         </select>
-                        <select value={item.required_level||''} onChange={e=>updateItem(item.id,'required_level',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:LEVEL_CLR[item.required_level]||'var(--fg)',fontWeight:600,fontSize:11,cursor:'pointer',outline:'none'}}>
+                        <select value={item.required_level||''} onChange={e=>updateItem(item.id,'required_level',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:LEVEL_CLR[item.required_level]||'var(--fg)',fontWeight:600,fontSize:13,cursor:'pointer',outline:'none'}}>
                           {['Basic','Intermediate','Advanced'].map(v=><option key={v}>{v}</option>)}
                         </select>
-                        <select value={item.current_level||''} onChange={e=>updateItem(item.id,'current_level',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:LEVEL_CLR[item.current_level]||'var(--fg)',fontWeight:600,fontSize:11,cursor:'pointer',outline:'none'}}>
+                        <select value={item.current_level||''} onChange={e=>updateItem(item.id,'current_level',e.target.value)} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:LEVEL_CLR[item.current_level]||'var(--fg)',fontWeight:600,fontSize:13,cursor:'pointer',outline:'none'}}>
                           <option value="">–</option>
                           {['Basic','Intermediate','Advanced'].map(v=><option key={v}>{v}</option>)}
                         </select>
@@ -1264,23 +1264,23 @@ function SkillsetModule({ id }: { id:string }) {
                           const hasBoth = cur >= 0 && req >= 0;
                           const diff = hasBoth ? cur - req : 0;
                           return (
-                            <div style={{fontWeight:700,fontSize:14,color:!hasBoth?'var(--muted)':(diff>=0?'var(--green)':'var(--red)')}}>
+                            <div style={{fontWeight:700,fontSize:16,color:!hasBoth?'var(--muted)':(diff>=0?'var(--green)':'var(--red)')}}>
                               {!hasBoth ? '–' : (diff>=0 ? '✓' : `${diff}`)}
                             </div>
                           );
                         })()}
-                        <input value={item.notes||''} onChange={e=>updateItem(item.id,'notes',e.target.value)} placeholder="How to close the gap, or why acceptable…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:12,outline:'none',width:'100%'}} />
+                        <input value={item.notes||''} onChange={e=>updateItem(item.id,'notes',e.target.value)} placeholder="How to close the gap, or why acceptable…" style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',color:'var(--fg)',fontSize:14,outline:'none',width:'100%'}} />
                         {confirmingId===item.id ? (
                           <div style={{display:'flex',gap:2}}>
-                            <button onClick={()=>{cancelDelete();deleteItem(item.id);}} style={{background:'none',border:'none',color:'var(--green)',cursor:'pointer',fontSize:16,padding:2}} title="Confirm delete">✓</button>
-                            <button onClick={cancelDelete} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:14,padding:2}} title="Cancel">✗</button>
+                            <button onClick={()=>{cancelDelete();deleteItem(item.id);}} style={{background:'none',border:'none',color:'var(--green)',cursor:'pointer',fontSize:18,padding:2}} title="Confirm delete">✓</button>
+                            <button onClick={cancelDelete} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:16,padding:2}} title="Cancel">✗</button>
                           </div>
                         ) : (
-                          <button onClick={()=>requestDelete(item.id)} style={{background:'none',border:'none',color:'var(--red)',cursor:'pointer',fontSize:16,padding:4}}>✕</button>
+                          <button onClick={()=>requestDelete(item.id)} style={{background:'none',border:'none',color:'var(--red)',cursor:'pointer',fontSize:18,padding:4}}>✕</button>
                         )}
                       </div>
                       {expanded.has(item.id) && item.description && (
-                        <div style={{padding:'4px 16px 8px 40px',fontSize:12,color:'var(--muted)',lineHeight:1.5,borderTop:'1px dashed var(--border)',background:'rgba(18,135,106,0.03)'}}>
+                        <div style={{padding:'4px 16px 8px 40px',fontSize:14,color:'var(--muted)',lineHeight:1.5,borderTop:'1px dashed var(--border)',background:'rgba(18,135,106,0.03)'}}>
                           {item.description}
                         </div>
                       )}
@@ -1296,7 +1296,7 @@ function SkillsetModule({ id }: { id:string }) {
       {/* Gap Analysis Summary */}
       {items.length > 0 && (
         <div style={{marginBottom:28}}>
-          <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'none',letterSpacing:'0.01em'}}>Gap Analysis Summary</div>
+          <div style={{fontWeight:700,color:'var(--gold)',fontSize:16,marginBottom:10,textTransform:'none',letterSpacing:'0.01em'}}>Gap Analysis Summary</div>
           <div style={{background:'var(--surface)',borderRadius:12,border:'1px solid var(--border)',padding:24}}>
             <div className="grid-stack" style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:16}}>
               {(() => {
@@ -1316,15 +1316,15 @@ function SkillsetModule({ id }: { id:string }) {
                   <>
                     <div style={{textAlign:'center'}}>
                       <div style={{fontSize:36,fontWeight:700,color:'var(--fg)'}}>{total}</div>
-                      <div style={{fontSize:12,color:'var(--muted)'}}>Total Skills</div>
+                      <div style={{fontSize:14,color:'var(--muted)'}}>Total Skills</div>
                     </div>
                     <div style={{textAlign:'center'}}>
                       <div style={{fontSize:36,fontWeight:700,color:'var(--green)'}}>{met}</div>
-                      <div style={{fontSize:12,color:'var(--muted)'}}>Requirements Met</div>
+                      <div style={{fontSize:14,color:'var(--muted)'}}>Requirements Met</div>
                     </div>
                     <div style={{textAlign:'center'}}>
                       <div style={{fontSize:36,fontWeight:700,color:'var(--red)'}}>{gaps}</div>
-                      <div style={{fontSize:12,color:'var(--muted)'}}>Gaps Identified</div>
+                      <div style={{fontSize:14,color:'var(--muted)'}}>Gaps Identified</div>
                     </div>
                   </>
                 );
@@ -1340,9 +1340,9 @@ function SkillsetModule({ id }: { id:string }) {
               if (!criticalGaps.length) return null;
               return (
                 <div style={{marginTop:16,padding:16,background:'rgba(239,68,68,0.08)',borderRadius:8,border:'1px solid rgba(239,68,68,0.2)'}}>
-                  <div style={{fontSize:12,fontWeight:700,color:'var(--red)',marginBottom:8,textTransform:'none'}}>Critical Gaps</div>
+                  <div style={{fontSize:14,fontWeight:700,color:'var(--red)',marginBottom:8,textTransform:'none'}}>Critical Gaps</div>
                   {criticalGaps.map(g => (
-                    <div key={g.id} style={{fontSize:13,color:'var(--fg)',marginBottom:4}}>
+                    <div key={g.id} style={{fontSize:15,color:'var(--fg)',marginBottom:4}}>
                       <strong>{g.item_name}</strong> <span style={{color:'var(--muted)'}}>({g.section} / {g.category})</span> — Current: {g.current_level}, Required: {g.required_level}
                     </div>
                   ))}
@@ -1356,8 +1356,8 @@ function SkillsetModule({ id }: { id:string }) {
       {items.length===0 && context.length===0 && <div style={{textAlign:'center',padding:48}}>
         <div style={{border:'2px dashed var(--border)',borderRadius:16,padding:'40px 24px',maxWidth:400,margin:'0 auto'}}>
           <div style={{fontSize:32,marginBottom:12}}>🔧</div>
-          <div style={{color:'var(--fg)',fontWeight:600,fontSize:15,marginBottom:6}}>No skill requirements defined yet</div>
-          <div style={{color:'var(--muted)',fontSize:13}}>If you used a template, data should appear here — otherwise add skills manually.</div>
+          <div style={{color:'var(--fg)',fontWeight:600,fontSize:17,marginBottom:6}}>No skill requirements defined yet</div>
+          <div style={{color:'var(--muted)',fontSize:15}}>If you used a template, data should appear here — otherwise add skills manually.</div>
         </div>
       </div>}
     </div>

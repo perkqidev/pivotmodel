@@ -98,9 +98,9 @@ export default function ConsultModal({ source = 'website' }: Props) {
           {/* Header */}
           <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', background: 'linear-gradient(135deg,rgba(18,135,106,.08),rgba(18,135,106,.03))' }}>
             <div>
-              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.15em', textTransform:'none', color: 'var(--gold)', marginBottom: 5 }}>Direct Access · 25+ Years Experience</div>
-              <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--cream)', fontFamily: 'var(--font-display)' }}>Book a Consulting Session</div>
-              <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 3 }}>Tell us about your situation — we respond within 24 hours</div>
+              <div style={{ fontSize:13, fontWeight: 700, letterSpacing:'0.01em', textTransform:'none', color: 'var(--gold)', marginBottom: 5 }}>Direct Access · 25+ Years Experience</div>
+              <div style={{ fontSize:19, fontWeight: 700, color: 'var(--cream)', fontFamily: 'var(--font-display)' }}>Book a Consulting Session</div>
+              <div style={{ fontSize:14, color: 'var(--muted)', marginTop: 3 }}>Tell us about your situation — we respond within 24 hours</div>
             </div>
             <button className="modal-close" onClick={close}>×</button>
           </div>
@@ -254,8 +254,8 @@ export default function ConsultModal({ source = 'website' }: Props) {
           {done && (
             <div style={{ padding: 32, textAlign: 'center' }}>
               <div style={{ fontSize: 44, marginBottom: 16 }}>✓</div>
-              <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--cream)', marginBottom: 8 }}>Inquiry received!</div>
-              <div style={{ fontSize: 14, color: 'var(--muted)', marginBottom: 24 }}>We&apos;ll be in touch within 24 hours to schedule your conversation.</div>
+              <div style={{ fontSize:19, fontWeight: 700, color: 'var(--cream)', marginBottom: 8 }}>Inquiry received!</div>
+              <div style={{ fontSize:16, color: 'var(--muted)', marginBottom: 24 }}>We&apos;ll be in touch within 24 hours to schedule your conversation.</div>
               <button className="btn btn-outline" onClick={close}>Close</button>
             </div>
           )}

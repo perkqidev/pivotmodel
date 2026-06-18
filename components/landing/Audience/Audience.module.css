@@ -13,7 +13,7 @@
 }
 .head h2 strong { font-weight: 500; }
 .head p {
-  font-family: var(--font-mono); font-size: 12px;
+  font-family: var(--font-mono); font-size: 14px;
   letter-spacing: 0.01em; text-transform: none; color: var(--muted);
   max-width: 26ch; text-align: right;
 }
@@ -28,7 +28,7 @@
 }
 .card .img img { width: 100%; height: 100%; object-fit: contain; }
 .lab {
-  font-family: var(--font-mono); font-size: 12px;
+  font-family: var(--font-mono); font-size: 14px;
   letter-spacing: 0.01em; text-transform: none; color: var(--accent);
 }
 .card h4 {
@@ -36,7 +36,7 @@
   font-size: 20px; letter-spacing: -0.01em;
   margin: 10px 0 10px; color: var(--ink);
 }
-.card p { font-size: 16px; font-weight: 400; color: var(--ink-2); line-height: 1.65; }
+.card p { font-size: 18px; font-weight: 400; color: var(--ink-2); line-height: 1.65; }
 @media (max-width: 960px) {
   .wrap { padding: 0 28px; }
   .grid { grid-template-columns: 1fr; gap: 16px; }

@@ -26,7 +26,7 @@
 .n .suf { font-size: 0.55em; letter-spacing: -0.01em; }
 .l {
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 14px;
   letter-spacing: 0.01em;
   text-transform: none;
   color: rgba(247, 247, 245, 0.45);

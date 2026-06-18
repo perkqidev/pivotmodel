@@ -6,19 +6,19 @@
                    radial-gradient(ellipse at 80% 70%, rgba(70,199,158, 0.08), transparent 60%);
                  pointer-events: none; }
 .wrap { max-width: 880px; margin: 0 auto; padding: 0 56px; text-align: center; position: relative; z-index: 2; }
-.orn { font-family: var(--font-mono); font-size: 16px; color: var(--accent);
+.orn { font-family: var(--font-mono); font-size: 18px; color: var(--accent);
        letter-spacing: 0.01em; margin-bottom: 28px; opacity: 0.7; }
 .h { font-family: var(--font-disp); font-weight: 400; font-size: clamp(40px, 5.4vw, 80px);
      letter-spacing: -0.03em; line-height: 0.98; margin-bottom: 28px; }
 .h strong { font-weight: 500; font-style: italic; }
-.lead { font-family: var(--font-sans); font-size: 18px; font-weight: 400; line-height: 1.7;
+.lead { font-family: var(--font-sans); font-size: 19px; font-weight: 400; line-height: 1.7;
         color: rgba(255,255,255,0.72); max-width: 60ch; margin: 0 auto 44px; }
 .cta { display: inline-flex; align-items: center; gap: 12px;
-       font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.01em; text-transform: none;
+       font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.01em; text-transform: none;
        background: #2FA98A; color: #FFFFFF !important; padding: 22px 44px;
        border: 1px solid #2FA98A; transition: background 0.3s var(--ease), color 0.3s var(--ease); }
 .cta:hover { background: #F7F7F5; color: #15161A !important; border-color: #F7F7F5; }
 .cta .ar { transition: transform 0.25s; } .cta:hover .ar { transform: translateX(6px); }
-.note { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.01em;
+.note { font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.01em;
         text-transform: none; color: rgba(255,255,255,0.4); margin-top: 28px; }
 @media (max-width: 960px) { .wrap { padding: 0 28px; } }

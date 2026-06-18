@@ -5,15 +5,15 @@
        box-shadow: 0 30px 60px -42px rgba(21, 22, 26, 0.4); }
 .img img { width: 100%; height: 100%; object-fit: contain; }
 .label { display: flex; align-items: center; gap: 16px; margin-bottom: 32px;
-         font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.01em;
+         font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.01em;
          text-transform: none; color: var(--muted); }
 .label::before { content: ''; height: 1px; width: 28px; background: var(--line); }
 .h { font-family: var(--font-disp); font-weight: 400; font-size: clamp(30px, 3.6vw, 50px);
      line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 24px; color: var(--ink); }
 .h strong { font-weight: 500; }
-.lead { font-size: 16px; font-weight: 400; color: var(--ink-2); line-height: 1.7; max-width: 38ch; margin-bottom: 20px; }
+.lead { font-size: 18px; font-weight: 400; color: var(--ink-2); line-height: 1.7; max-width: 38ch; margin-bottom: 20px; }
 .cta { display: inline-flex; align-items: center; gap: 9px;
-       font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.01em; text-transform: none;
+       font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.01em; text-transform: none;
        color: var(--accent); border-bottom: 1px solid var(--accent); padding-bottom: 3px;
        transition: color 0.3s, border-color 0.3s; margin-bottom: 40px; }
 .cta:hover { color: var(--ink); border-bottom-color: var(--ink); }
@@ -21,12 +21,12 @@
 .lv { display: grid; grid-template-columns: 56px 1fr; gap: 28px; align-items: baseline;
       padding: 28px 0; border-top: 1px solid var(--line); }
 .lv:last-child { border-bottom: 1px solid var(--line); }
-.lv .c { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.01em; color: var(--muted); }
+.lv .c { font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.01em; color: var(--muted); }
 .lv[data-on='true'] .c { color: var(--accent); }
-.lv h4 { font-family: var(--font-disp); font-weight: 500; font-size: 18px;
+.lv h4 { font-family: var(--font-disp); font-weight: 500; font-size: 19px;
          margin-bottom: 6px; letter-spacing: -0.01em; color: var(--ink); }
 .lv[data-on='true'] h4 { color: var(--accent); }
-.lv p { font-size: 16px; font-weight: 400; color: var(--ink-2); line-height: 1.55; }
+.lv p { font-size: 18px; font-weight: 400; color: var(--ink-2); line-height: 1.55; }
 @media (max-width: 960px) {
   .wrap { grid-template-columns: 1fr; gap: 48px; padding: 0 28px; }
   .img { height: 480px; }

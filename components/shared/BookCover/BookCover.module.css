@@ -42,7 +42,7 @@
   justify-content: center; align-items: center;
   text-align: center; padding: 34px 30px;
 }
-.imk { color: var(--accent); font-size: 13px; letter-spacing: 0.01em; margin-bottom: 16px; }
+.imk { color: var(--accent); font-size: 15px; letter-spacing: 0.01em; margin-bottom: 16px; }
 .ittl { font-family: var(--font-disp); font-weight: 600; font-size: 21px; color: var(--ink);
         letter-spacing: -0.01em; line-height: 1.12; margin-bottom: 14px; }
 .iln { width: 26px; height: 1px; background: var(--accent); margin: 0 auto 16px; }
@@ -95,7 +95,7 @@
   color: rgba(105, 137, 168, 0.8); text-align: center; line-height: 2;
 }
 .mid { text-align: center; }
-.mark { color: rgba(105, 137, 168, 0.7); font-size: 13px; letter-spacing: 0.01em; margin-bottom: 14px; }
+.mark { color: rgba(105, 137, 168, 0.7); font-size: 15px; letter-spacing: 0.01em; margin-bottom: 14px; }
 .title { font-family: var(--font-disp); font-weight: 200; font-size: 30px;
          line-height: 0.95; color: #E8EAED; letter-spacing: 0.01em; }
 .title strong { display: block; font-weight: 600; color: #A6D6C8; }
