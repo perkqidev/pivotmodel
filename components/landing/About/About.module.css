@@ -16,7 +16,7 @@
   display: flex; align-items: center; gap: 20px;
   margin-bottom: 40px;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--muted);
@@ -24,7 +24,7 @@
 .label::before { content: ''; height: 1px; width: 32px; background: var(--line); }
 .h {
   font-family: var(--font-disp);
-  font-weight: 200;
+  font-weight: 400;
   font-size: clamp(30px, 3.6vw, 50px);
   line-height: 1.1;
   letter-spacing: -0.02em;
@@ -33,14 +33,14 @@
   color: var(--ink);
 }
 .h strong { font-weight: 500; }
-.body p { font-size: 16px; font-weight: 300; color: var(--ink-2); line-height: 1.75;
+.body p { font-size: 16px; font-weight: 400; color: var(--ink-2); line-height: 1.75;
           max-width: 50ch; margin-bottom: 20px; }
 .body strong { color: var(--ink); font-weight: 500; }
 .cta {
   display: inline-flex; align-items: center; gap: 9px;
   margin-top: 30px;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--accent);

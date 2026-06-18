@@ -17,7 +17,7 @@
 .item:last-child { border-right: 0; }
 .n {
   font-family: var(--font-disp);
-  font-weight: 200;
+  font-weight: 400;
   font-size: clamp(48px, 5.5vw, 82px);
   line-height: 1;
   letter-spacing: -0.03em;
@@ -26,7 +26,7 @@
 .n .suf { font-size: 0.55em; letter-spacing: -0.01em; }
 .l {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: rgba(247, 247, 245, 0.45);
