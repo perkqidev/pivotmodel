@@ -2,7 +2,7 @@
 .wrap { max-width: 1240px; margin: 0 auto; padding: 0 56px; }
 .head { padding-bottom: 28px; border-bottom: 1px solid var(--ink); margin-bottom: 48px;
         display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
-.head h2 { font-family: var(--font-disp); font-weight: 200; font-size: clamp(28px, 3.6vw, 48px);
+.head h2 { font-family: var(--font-disp); font-weight: 200; font-size: clamp(30px, 3.6vw, 50px);
            letter-spacing: -0.02em; color: var(--ink); }
 .head h2 strong { font-weight: 500; }
 .head p { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em;
@@ -15,15 +15,15 @@
 .item:hover { padding-left: 10px; }
 .item:hover h4 { color: var(--accent); }
 .ic { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; color: var(--muted); padding-top: 4px; }
-.cat { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.14em;
+.cat { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em;
        text-transform: uppercase; color: var(--accent); margin-bottom: 5px; }
-.item h4 { font-family: var(--font-disp); font-weight: 500; font-size: 15.5px;
+.item h4 { font-family: var(--font-disp); font-weight: 500; font-size: 15px;
            letter-spacing: -0.01em; line-height: 1.35; margin-bottom: 5px;
            color: var(--ink); transition: color 0.25s; }
-.meta { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.06em;
+.meta { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em;
         color: var(--muted); line-height: 1.5; }
 .cta { display: inline-flex; align-items: center; gap: 9px; margin-top: 22px;
-       font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase;
+       font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
        color: var(--accent); border-bottom: 1px solid var(--accent); padding-bottom: 3px;
        transition: color 0.3s, border-color 0.3s; }
 .cta:hover { color: var(--ink); border-bottom-color: var(--ink); }

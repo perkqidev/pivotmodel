@@ -298,7 +298,7 @@ function EMBModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Promi
       <div style={{ display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24,gap:12,flexWrap:'wrap' as const }}>
         <div><h2 style={{color:'var(--fg)',margin:0}}>Engineering Maturity Benchmark</h2><p style={{color:'var(--muted)',fontSize:13,margin:'4px 0 0'}}>Evaluate your engineering team's maturity across 5 pillars. For each capability, select your current level (L1 / L2 / L3) and record evidence to support your rating. Changes save automatically.</p></div>
       </div>
-      {nudge && <div style={{ background:'rgba(78,110,142,0.1)',border:'1px solid var(--gold)',borderRadius:12,padding:'12px 16px',marginBottom:24,fontSize:13,color:'var(--fg)' }}>💡 <strong>Intelligence Nudge:</strong> Based on your scores (avg {nudge.avg_score}/3), the computed maturity level is <strong style={{color:'var(--gold)'}}>{nudge.suggested_level}</strong>. Consider adjusting your overall rating.</div>}
+      {nudge && <div style={{ background:'rgba(18,135,106,0.1)',border:'1px solid var(--gold)',borderRadius:12,padding:'12px 16px',marginBottom:24,fontSize:13,color:'var(--fg)' }}>💡 <strong>Intelligence Nudge:</strong> Based on your scores (avg {nudge.avg_score}/3), the computed maturity level is <strong style={{color:'var(--gold)'}}>{nudge.suggested_level}</strong>. Consider adjusting your overall rating.</div>}
       {pillars.map(pillar => (
         <div key={pillar} style={{ marginBottom:32 }}>
           <div style={{ fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:12,textTransform:'uppercase',letterSpacing:'0.05em',display:'flex',alignItems:'center',justifyContent:'space-between' }}><span>{pillar}</span><button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/emb`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pivot_name:pillar})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,pivot_name:pillar,capability:'New Capability',current_level:'L1',evidence:'',gap_notes:'',sort_order:99}]);}} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Row</button></div>
@@ -328,7 +328,7 @@ function EMBModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Promi
                   )}
                 </div>
                 {expanded.has(row.id) && (row.l1_criteria||row.l2_criteria||row.l3_criteria) && (
-                  <div style={{padding:'8px 16px 12px 40px',borderTop:'1px dashed var(--border)',background:'rgba(78,110,142,0.03)',display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:12}}>
+                  <div style={{padding:'8px 16px 12px 40px',borderTop:'1px dashed var(--border)',background:'rgba(18,135,106,0.03)',display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:12}}>
                     <div><div style={{fontSize:11,fontWeight:600,color:'var(--red)',marginBottom:4}}>◆ L1 (Basic)</div><div style={{fontSize:12,color:'var(--muted)',lineHeight:1.5}}>{row.l1_criteria||'–'}</div></div>
                     <div><div style={{fontSize:11,fontWeight:600,color:'#f59e0b',marginBottom:4}}>⚙ L2 (Developing)</div><div style={{fontSize:12,color:'var(--muted)',lineHeight:1.5}}>{row.l2_criteria||'–'}</div></div>
                     <div><div style={{fontSize:11,fontWeight:600,color:'var(--green)',marginBottom:4}}>🚀 L3 (Optimised)</div><div style={{fontSize:12,color:'var(--muted)',lineHeight:1.5}}>{row.l3_criteria||'–'}</div></div>
@@ -431,7 +431,7 @@ function BenchmarksModule({ id, save }: { id:string; save:(e:string,r:unknown[])
             <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em'}}>{pillar}</div>
             {subCats.map(sub => (
               <div key={sub} style={{marginBottom:16}}>
-                {sub && <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(78,110,142,0.08)',borderRadius:'8px 8px 0 0',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                {sub && <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(18,135,106,0.08)',borderRadius:'8px 8px 0 0',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
                   <span>{sub}</span>
                   <button onClick={()=>addRow(pillar,sub)} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add KPI</button>
                 </div>}
@@ -464,7 +464,7 @@ function BenchmarksModule({ id, save }: { id:string; save:(e:string,r:unknown[])
                         )}
                       </div>
                       {expanded.has(row.id) && row.definition && (
-                        <div style={{padding:'4px 16px 8px 40px',fontSize:12,color:'var(--muted)',lineHeight:1.5,borderTop:'1px dashed var(--border)',background:'rgba(78,110,142,0.03)'}}>
+                        <div style={{padding:'4px 16px 8px 40px',fontSize:12,color:'var(--muted)',lineHeight:1.5,borderTop:'1px dashed var(--border)',background:'rgba(18,135,106,0.03)'}}>
                           <strong>Definition:</strong> {row.definition}
                         </div>
                       )}
@@ -532,7 +532,7 @@ function ScopeModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Pro
                   )}
                 </div>
                 {expanded.has(row.id) && (
-                  <div style={{padding:'8px 16px 12px 40px',borderTop:'1px dashed var(--border)',background:'rgba(78,110,142,0.03)',display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:12}}>
+                  <div style={{padding:'8px 16px 12px 40px',borderTop:'1px dashed var(--border)',background:'rgba(18,135,106,0.03)',display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:12}}>
                     <div><div style={{fontSize:11,fontWeight:600,color:'var(--red)',marginBottom:4}}>◆ L1 Guidance</div><div style={{fontSize:12,color:'var(--muted)',lineHeight:1.5}}>{row.l1_guidance||'–'}</div></div>
                     <div><div style={{fontSize:11,fontWeight:600,color:'#f59e0b',marginBottom:4}}>⚙ L2 Guidance</div><div style={{fontSize:12,color:'var(--muted)',lineHeight:1.5}}>{row.l2_guidance||'–'}</div></div>
                     <div><div style={{fontSize:11,fontWeight:600,color:'var(--green)',marginBottom:4}}>🚀 L3 Guidance</div><div style={{fontSize:12,color:'var(--muted)',lineHeight:1.5}}>{row.l3_guidance||'–'}</div></div>
@@ -587,8 +587,8 @@ function SummaryModule({ id }: { id:string }) {
               <polygon key={l} points={angles.map(a=>{const p=polarToXY(a,(l/3)*r);return `${p.x},${p.y}`;}).join(' ')} fill="none" stroke="var(--border)" strokeWidth={1} />
             ))}
             {angles.map((a,i)=>{const p=polarToXY(a,r+20);return<text key={i} x={p.x} y={p.y} textAnchor="middle" dominantBaseline="middle" fontSize={11} fill="var(--muted)" style={{fontSize:11}}>{PILLARS[i].split(' ').slice(0,2).join(' ')}</text>;})}
-            <path d={pathFromScores(embScores,3)} fill="rgba(78,110,142,0.2)" stroke="var(--gold)" strokeWidth={2} />
-            <path d={pathFromScores(scopeScores,3)} fill="rgba(78,110,142,0.1)" stroke="var(--blue)" strokeWidth={2} strokeDasharray="4,4" />
+            <path d={pathFromScores(embScores,3)} fill="rgba(18,135,106,0.2)" stroke="var(--gold)" strokeWidth={2} />
+            <path d={pathFromScores(scopeScores,3)} fill="rgba(18,135,106,0.1)" stroke="var(--blue)" strokeWidth={2} strokeDasharray="4,4" />
           </svg>
           <div style={{display:'flex',gap:16,justifyContent:'center',marginTop:8}}>
             <div style={{display:'flex',alignItems:'center',gap:6,fontSize:12,color:'var(--muted)'}}><div style={{width:20,height:3,background:'var(--cream)'}}></div>EMB Maturity</div>
@@ -702,7 +702,7 @@ function KRAModule({ id, save }: { id:string; save:(e:string,r:unknown[])=>Promi
             <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em',display:'flex',alignItems:'center',justifyContent:'space-between'}}><span>{role}</span><button onClick={async()=>{const res=await fetch(`/api/assessments/${id}/kra`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({role_level:role,pillar:'Operational Excellence'})});const d=await res.json();if(d.id)setRows(prev=>[...prev,{id:d.id,role_level:role,pillar:'Operational Excellence',person_name:'',kra_name:'New KRA',description:'',target:'',current:'',status:'not-started',notes:''}]);}} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add KRA</button></div>
             {rolePillars.map(pillar => (
               <div key={pillar} style={{marginBottom:12}}>
-                {pillar && <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'4px 16px',background:'rgba(78,110,142,0.06)'}}>{pillar}</div>}
+                {pillar && <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'4px 16px',background:'rgba(18,135,106,0.06)'}}>{pillar}</div>}
                 <div className="scroll-table" style={{background:'var(--surface)',borderRadius:8,overflow:'hidden',border:'1px solid var(--border)'}}>
                   {roleRows.filter(r=>(r.pillar||'')===pillar).map((row,i)=>(
                     <div key={row.id} style={{display:'grid',gridTemplateColumns:'1.5fr 2.5fr 0.8fr 0.8fr 110px 1.5fr 36px',gap:'0 12px',padding:'10px 16px',borderTop:i>0?'1px solid var(--border)':'none',background:i%2===0?'transparent':'rgba(255,255,255,0.02)',alignItems:'start'}}>
@@ -803,7 +803,7 @@ function LeadershipModule({ id, save }: { id:string; save:(e:string,r:unknown[])
               const catRows = leaderRows.filter(r=>(r.skill_category||'')===cat);
               return (
                 <div key={cat} style={{marginBottom:16}}>
-                  {cat && <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(78,110,142,0.08)',borderRadius:'8px 8px 0 0',textTransform:'uppercase',letterSpacing:'0.05em'}}>{cat}</div>}
+                  {cat && <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(18,135,106,0.08)',borderRadius:'8px 8px 0 0',textTransform:'uppercase',letterSpacing:'0.05em'}}>{cat}</div>}
                   <div className="scroll-table" style={{background:'var(--surface)',borderRadius:cat?'0 0 12px 12px':'12px',overflow:'hidden',border:'1px solid var(--border)'}}>
                     {catRows.map((row,i)=>(
                       <div key={row.id}>
@@ -828,7 +828,7 @@ function LeadershipModule({ id, save }: { id:string; save:(e:string,r:unknown[])
                           )}
                         </div>
                         {expanded.has(row.id) && row.detailed_skills && (
-                          <div style={{padding:'4px 16px 8px 40px',fontSize:12,color:'var(--muted)',lineHeight:1.5,borderTop:'1px dashed var(--border)',background:'rgba(78,110,142,0.03)'}}>
+                          <div style={{padding:'4px 16px 8px 40px',fontSize:12,color:'var(--muted)',lineHeight:1.5,borderTop:'1px dashed var(--border)',background:'rgba(18,135,106,0.03)'}}>
                             <strong>Detailed Skills:</strong> {row.detailed_skills}
                           </div>
                         )}
@@ -1032,7 +1032,7 @@ function TalentMapModule({ id }: { id:string }) {
                 const categories = [...new Set(sectionSkills.map((s:any) => s.category))] as string[];
                 return categories.map((cat) => (
                   <div key={cat} style={{marginBottom:20}}>
-                    <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(78,110,142,0.08)',borderRadius:'8px 8px 0 0',textTransform:'uppercase',letterSpacing:'0.05em'}}>{cat}</div>
+                    <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(18,135,106,0.08)',borderRadius:'8px 8px 0 0',textTransform:'uppercase',letterSpacing:'0.05em'}}>{cat}</div>
                     <div className="scroll-table" style={{background:'var(--surface)',borderRadius:'0 0 12px 12px',overflow:'hidden',border:'1px solid var(--border)'}}>
                       <div style={{display:'grid',gridTemplateColumns:'1.2fr 64px 64px 64px 2fr 40px',gap:'0 12px',background:'var(--card)',padding:'8px 16px',fontSize:11,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
                         <div>Skill</div><div>Self Score</div><div>Mgr Score</div><div>Target</div><div>Notes</div><div></div>
@@ -1059,7 +1059,7 @@ function TalentMapModule({ id }: { id:string }) {
                             </div>
                           </div>
                           {expanded.has(skill.id) && skill.description && (
-                            <div style={{padding:'4px 16px 8px 40px',fontSize:12,color:'var(--muted)',lineHeight:1.5,borderTop:'1px dashed var(--border)',background:'rgba(78,110,142,0.03)'}}>
+                            <div style={{padding:'4px 16px 8px 40px',fontSize:12,color:'var(--muted)',lineHeight:1.5,borderTop:'1px dashed var(--border)',background:'rgba(18,135,106,0.03)'}}>
                               {skill.description}
                             </div>
                           )}
@@ -1208,7 +1208,7 @@ function SkillsetModule({ id }: { id:string }) {
         <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em'}}>Product Context</div>
         {groups.map(group => (
           <div key={group} style={{marginBottom:12}}>
-            <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(78,110,142,0.08)',borderRadius:'8px 8px 0 0',textTransform:'capitalize'}}>{group}</div>
+            <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(18,135,106,0.08)',borderRadius:'8px 8px 0 0',textTransform:'capitalize'}}>{group}</div>
             <div style={{background:'var(--surface)',borderRadius:'0 0 12px 12px',border:'1px solid var(--border)',padding:16}}>
               <div className="grid-stack" style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
                 {context.filter(c=>c.field_group===group).map(c => (
@@ -1232,7 +1232,7 @@ function SkillsetModule({ id }: { id:string }) {
             <div style={{fontWeight:700,color:'var(--gold)',fontSize:14,marginBottom:10,textTransform:'uppercase',letterSpacing:'0.05em'}}>{section}</div>
             {cats.map(cat => (
               <div key={cat} style={{marginBottom:16}}>
-                {cat && <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(78,110,142,0.08)',borderRadius:'8px 8px 0 0',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                {cat && <div style={{fontSize:12,color:'var(--muted)',fontWeight:600,padding:'6px 16px',background:'rgba(18,135,106,0.08)',borderRadius:'8px 8px 0 0',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
                   <span>{cat}</span>
                   <button onClick={()=>addItem(section,cat)} style={{background:'var(--cream)',border:'none',borderRadius:6,padding:'3px 10px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:11}}>+ Add Skill</button>
                 </div>}
@@ -1280,7 +1280,7 @@ function SkillsetModule({ id }: { id:string }) {
                         )}
                       </div>
                       {expanded.has(item.id) && item.description && (
-                        <div style={{padding:'4px 16px 8px 40px',fontSize:12,color:'var(--muted)',lineHeight:1.5,borderTop:'1px dashed var(--border)',background:'rgba(78,110,142,0.03)'}}>
+                        <div style={{padding:'4px 16px 8px 40px',fontSize:12,color:'var(--muted)',lineHeight:1.5,borderTop:'1px dashed var(--border)',background:'rgba(18,135,106,0.03)'}}>
                           {item.description}
                         </div>
                       )}

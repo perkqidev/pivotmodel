@@ -14,7 +14,7 @@
 .head h2 {
   font-family: var(--font-disp);
   font-weight: 200;
-  font-size: clamp(28px, 3.6vw, 48px);
+  font-size: clamp(30px, 3.6vw, 50px);
   letter-spacing: -0.02em;
   color: var(--ink);
 }
@@ -29,7 +29,7 @@
 }
 .row {
   display: grid;
-  grid-template-columns: 92px 200px 1fr 120px;
+  grid-template-columns: 92px 200px 1fr 240px;
   gap: 36px; align-items: center;
   padding: 32px 0;
   border-bottom: 1px solid var(--line);
@@ -55,21 +55,21 @@
 }
 .tag {
   font-family: var(--font-mono);
-  font-size: 9.5px;
+  font-size: 10px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--accent);
 }
 .desc {
-  font-size: 14.5px;
+  font-size: 14px;
   font-weight: 300;
   color: var(--ink-2);
   line-height: 1.65;
   max-width: 48ch;
 }
 .thumb {
-  width: 116px;
-  height: 74px;
+  width: 240px;
+  height: 160px;
   justify-self: end;
   border-radius: 4px;
   overflow: hidden;

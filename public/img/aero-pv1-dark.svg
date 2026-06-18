@@ -1,26 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 240" font-family="Manrope,sans-serif"><defs>
-<linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#161921"/><stop offset="100%" stop-color="#0E0F14"/></linearGradient>
-<linearGradient id="bgDark" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#0a0b0f"/><stop offset="100%" stop-color="#0E0F14"/></linearGradient>
-<linearGradient id="node" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#B4CADC"/><stop offset="100%" stop-color="#7CA0C7"/></linearGradient>
-<linearGradient id="nodeDark" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7CA0C7"/><stop offset="100%" stop-color="#3a546e"/></linearGradient>
-<linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#7CA0C7"/><stop offset="100%" stop-color="#B4CADC"/></linearGradient>
-<linearGradient id="step1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#1c2029"/><stop offset="100%" stop-color="#171a22"/></linearGradient>
-<linearGradient id="step2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#222632"/><stop offset="100%" stop-color="#1c2029"/></linearGradient>
-<linearGradient id="step3" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#B4CADC"/><stop offset="100%" stop-color="#7CA0C7"/></linearGradient>
-<radialGradient id="centerGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#7CA0C7" stop-opacity="0.4"/><stop offset="100%" stop-color="#7CA0C7" stop-opacity="0"/></radialGradient>
-<radialGradient id="softGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#B4CADC" stop-opacity="0.35"/><stop offset="100%" stop-color="#B4CADC" stop-opacity="0"/></radialGradient>
-<filter id="dropShadow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation="4"/><feOffset dx="0" dy="6"/><feComponentTransfer><feFuncA type="linear" slope="0.5"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-<filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation="2"/><feOffset dx="0" dy="3"/><feComponentTransfer><feFuncA type="linear" slope="0.4"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-<filter id="glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="3"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-<pattern id="dotgrid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.8" fill="#E7EAEF" opacity="0.06"/></pattern>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 240" font-family="'Manrope','Segoe UI',system-ui,sans-serif">
+<defs>
+<linearGradient id="pg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#181B22"/><stop offset="1" stop-color="#0E0F14"/></linearGradient>
+<linearGradient id="acc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#73D9B9"/><stop offset="1" stop-color="#46C79E"/></linearGradient>
+<radialGradient id="halo" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#46C79E" stop-opacity="0.16"/><stop offset="1" stop-color="#46C79E" stop-opacity="0"/></radialGradient>
+<filter id="sh" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur in="SourceAlpha" stdDeviation="5"/><feOffset dy="7"/><feComponentTransfer><feFuncA type="linear" slope="0.10"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
 </defs>
-<rect width="360" height="240" fill="url(#bg)"/>
-<text x="20" y="28" font-size="9" letter-spacing="2" fill="#B4CADC" font-family="JetBrains Mono,monospace">01 · FOUNDATION</text>
-<g transform="translate(180,135)" filter="url(#softShadow)">
-<rect x="-90" y="22" width="180" height="34" fill="#7CA0C7"/>
-<rect x="-68" y="-18" width="136" height="34" fill="#B4CADC"/>
-<rect x="-44" y="-58" width="88" height="34" fill="#d6e3ef"/>
-</g>
-<line x1="20" y1="180" x2="340" y2="180" stroke="#2A2E37" stroke-width="0.6"/>
-<text x="20" y="216" font-size="11" font-weight="500" fill="#E7EAEF">Operational Excellence</text>
-</svg>
+<rect width="360" height="240" fill="url(#pg)"/>
+<g stroke="#272B34" stroke-width="1" opacity="0.45"><line x1="32" y1="0" x2="32" y2="240"/><line x1="64" y1="0" x2="64" y2="240"/><line x1="96" y1="0" x2="96" y2="240"/><line x1="128" y1="0" x2="128" y2="240"/><line x1="160" y1="0" x2="160" y2="240"/><line x1="192" y1="0" x2="192" y2="240"/><line x1="224" y1="0" x2="224" y2="240"/><line x1="256" y1="0" x2="256" y2="240"/><line x1="288" y1="0" x2="288" y2="240"/><line x1="320" y1="0" x2="320" y2="240"/><line x1="352" y1="0" x2="352" y2="240"/><line x1="0" y1="32" x2="360" y2="32"/><line x1="0" y1="64" x2="360" y2="64"/><line x1="0" y1="96" x2="360" y2="96"/><line x1="0" y1="128" x2="360" y2="128"/><line x1="0" y1="160" x2="360" y2="160"/><line x1="0" y1="192" x2="360" y2="192"/><line x1="0" y1="224" x2="360" y2="224"/></g>
+<g stroke="#6A6F79" stroke-width="1" opacity="0.6" fill="none"><path d="M28 37 V28 H37"/><path d="M323 28 H332 V37"/><path d="M28 203 V212 H37"/><path d="M332 203 V212 H323"/></g><text x="28" y="40" font-family="'JetBrains Mono','SFMono-Regular',ui-monospace,monospace" font-size="9.5" letter-spacing="2.2" fill="#46C79E">01 · OPERATIONAL EXCELLENCE</text><circle cx="180" cy="118" r="52" fill="url(#halo)"/><circle cx="180" cy="118" r="44" fill="none" stroke="#272B34" stroke-width="1.2"/><g stroke="#46C79E" stroke-width="1.6" fill="none"><line x1="194.0" y1="120.0" x2="198.0" y2="120.0"/><line x1="188.7" y1="132.7" x2="191.6" y2="135.6"/><line x1="176.0" y1="138.0" x2="176.0" y2="142.0"/><line x1="163.3" y1="132.7" x2="160.4" y2="135.6"/><line x1="158.0" y1="120.0" x2="154.0" y2="120.0"/><line x1="163.3" y1="107.3" x2="160.4" y2="104.4"/><line x1="176.0" y1="102.0" x2="176.0" y2="98.0"/><line x1="188.7" y1="107.3" x2="191.6" y2="104.4"/><circle cx="176" cy="120" r="18.0"/><circle cx="176" cy="120" r="6.1"/></g><path d="M183.0 118 l6.6 7.199999999999999 l12.0 -15.0" fill="none" stroke="#46C79E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><line x1="28" y1="202" x2="228" y2="202" stroke="#272B34" stroke-width="1"/><text x="28" y="218" font-family="'Manrope','Segoe UI',system-ui,sans-serif" font-size="12.5" font-weight="600" fill="#E7EAEF">Operational Excellence</text><text x="28" y="233" font-family="'JetBrains Mono','SFMono-Regular',ui-monospace,monospace" font-size="8.5" letter-spacing="1.4" fill="#6A6F79">focus on efficiency &amp; quality</text></svg>

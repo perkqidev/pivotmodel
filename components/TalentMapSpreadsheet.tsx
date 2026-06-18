@@ -510,7 +510,7 @@ export default function TalentMapSpreadsheet({ userId }: { userId: number }) {
               <div key={section} style={{ marginBottom: 24 }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <span style={{ fontWeight: 700, fontSize: 13, color: 'var(--gold)', background: 'rgba(78,110,142,.12)', padding: '3px 12px', borderRadius: 20, border: '1px solid var(--gold-d)' }}>{section}</span>
+                    <span style={{ fontWeight: 700, fontSize: 13, color: 'var(--gold)', background: 'rgba(18,135,106,.12)', padding: '3px 12px', borderRadius: 20, border: '1px solid var(--gold-d)' }}>{section}</span>
                     {sectionAvg(tab, section) && <span style={{ fontSize: 12, color: 'var(--muted)' }}>avg {sectionAvg(tab, section)}</span>}
                   </div>
                   <button onClick={() => addRow(tab, section)}
@@ -592,7 +592,7 @@ export default function TalentMapSpreadsheet({ userId }: { userId: number }) {
             {sections.map(section => (
               <div key={section} style={{ marginBottom: 24 }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-                  <span style={{ fontWeight: 700, fontSize: 13, color: 'var(--gold)', background: 'rgba(78,110,142,.12)', padding: '3px 12px', borderRadius: 20, border: '1px solid var(--gold-d)' }}>{section}</span>
+                  <span style={{ fontWeight: 700, fontSize: 13, color: 'var(--gold)', background: 'rgba(18,135,106,.12)', padding: '3px 12px', borderRadius: 20, border: '1px solid var(--gold-d)' }}>{section}</span>
                   <button onClick={() => addRow('knowledge', section)}
                     style={{ background: 'none', border: '1px dashed var(--ink-3)', color: 'var(--muted)', borderRadius: 6, padding: '4px 12px', fontSize: 11, cursor: 'pointer', fontFamily: 'inherit' }}>
                     ＋ Add item

@@ -8,8 +8,8 @@
   margin: 0 auto;
   padding: 0 56px;
   display: grid;
-  grid-template-columns: 1fr 340px;
-  gap: 96px;
+  grid-template-columns: 1fr 460px;
+  gap: 72px;
   align-items: start;
 }
 .label {
@@ -25,7 +25,7 @@
 .h {
   font-family: var(--font-disp);
   font-weight: 200;
-  font-size: clamp(32px, 4vw, 54px);
+  font-size: clamp(30px, 3.6vw, 50px);
   line-height: 1.1;
   letter-spacing: -0.02em;
   max-width: 20ch;
@@ -52,7 +52,7 @@
 .cta .ar { transition: transform 0.25s; }
 .cta:hover .ar { transform: translateX(5px); }
 .img {
-  height: 460px;
+  height: 604px;
   margin-top: 8px;
   background: var(--base-2);
   border-radius: 4px;

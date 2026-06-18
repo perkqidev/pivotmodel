@@ -63,7 +63,7 @@ function Sidebar({ panel, setPanel, user, setUser }: any) {
         {user.isAdmin && <div style={{ fontSize:11,color:'var(--gold)',marginTop:4,fontWeight:700 }}>ADMIN</div>}
       </div>
       {items.map(item => (
-        <button key={item.id} onClick={() => setPanel(item.id)} style={{ textAlign:'left',padding:'10px 20px',background:panel===item.id?'rgba(78,110,142,0.1)':'none',border:'none',borderLeft:panel===item.id?'3px solid var(--gold)':'3px solid transparent',color:panel===item.id?'var(--gold)':'var(--muted)',fontSize:13,cursor:'pointer',fontWeight:panel===item.id?600:400 }}>
+        <button key={item.id} onClick={() => setPanel(item.id)} style={{ textAlign:'left',padding:'10px 20px',background:panel===item.id?'rgba(18,135,106,0.1)':'none',border:'none',borderLeft:panel===item.id?'3px solid var(--gold)':'3px solid transparent',color:panel===item.id?'var(--gold)':'var(--muted)',fontSize:13,cursor:'pointer',fontWeight:panel===item.id?600:400 }}>
           {item.label}
         </button>
       ))}

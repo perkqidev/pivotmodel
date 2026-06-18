@@ -421,7 +421,7 @@ export default function SkillRequirementsSpreadsheet({ userId }: { userId: numbe
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 18 }}>
             {SECTIONS.map(s => (
               <button key={s} onClick={() => setActiveSection(s)}
-                style={{ background: activeSection === s ? 'rgba(78,110,142,.18)' : 'var(--ink-2)', border: `1px solid ${activeSection === s ? 'var(--gold-d)' : 'var(--ink-3)'}`,
+                style={{ background: activeSection === s ? 'rgba(18,135,106,.18)' : 'var(--ink-2)', border: `1px solid ${activeSection === s ? 'var(--gold-d)' : 'var(--ink-3)'}`,
                   color: activeSection === s ? 'var(--gold)' : 'var(--muted)', borderRadius: 20, padding: '5px 14px', fontSize: 12, cursor: 'pointer', fontFamily: 'inherit', fontWeight: activeSection === s ? 600 : 400 }}>
                 {s.split('. ')[1]} <span style={{ opacity: .6 }}>({rows.filter(r => r.section === s).length})</span>
               </button>
@@ -492,7 +492,7 @@ export default function SkillRequirementsSpreadsheet({ userId }: { userId: numbe
             </table>
           </div>
           <button onClick={() => addRow(activeSection)}
-            style={{ marginTop: 12, background: 'rgba(78,110,142,.08)', border: '1px dashed var(--gold-d)', color: 'var(--gold)', borderRadius: 8, padding: '7px 18px', fontSize: 12, cursor: 'pointer', fontFamily: 'inherit' }}>
+            style={{ marginTop: 12, background: 'rgba(18,135,106,.08)', border: '1px dashed var(--gold-d)', color: 'var(--gold)', borderRadius: 8, padding: '7px 18px', fontSize: 12, cursor: 'pointer', fontFamily: 'inherit' }}>
             ＋ Add skill to {activeSection.split('. ')[1]}
           </button>
         </div>

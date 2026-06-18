@@ -29,7 +29,7 @@
 .links { display: flex; align-items: center; gap: 38px; }
 .links a {
   font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--muted);

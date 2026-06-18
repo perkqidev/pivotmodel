@@ -81,8 +81,8 @@
   transition: background 0.3s var(--ease), border-color 0.3s var(--ease), color 0.3s var(--ease);
 }
 .btnPrimary:hover {
-  background: #4E6E8E;
-  border-color: #4E6E8E;
+  background: #12876A;
+  border-color: #12876A;
   color: #FFFFFF !important;
 }
 :global([data-theme='dark']) .btnPrimary {
@@ -91,8 +91,8 @@
   border-color: #E7EAEF;
 }
 :global([data-theme='dark']) .btnPrimary:hover {
-  background: #7CA0C7;
-  border-color: #7CA0C7;
+  background: #46C79E;
+  border-color: #46C79E;
   color: #0E0F14 !important;
 }
 
@@ -118,7 +118,7 @@
   z-index: 2;
   display: flex; align-items: center; gap: 12px;
   font-family: var(--font-mono);
-  font-size: 9.5px;
+  font-size: 10px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--muted);

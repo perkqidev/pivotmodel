@@ -17,7 +17,7 @@
   background: var(--ink-3, #FFFFFF);
   color: var(--cream, #15161A);
   border: 1px solid var(--border-2, rgba(21,22,26,0.14));
-  border-left: 3px solid var(--accent, #4E6E8E);
+  border-left: 3px solid var(--accent, #12876A);
   box-shadow: 0 8px 32px rgba(21,22,26,0.12), 0 2px 6px rgba(21,22,26,0.04);
   font-family: var(--font-display, 'Manrope', system-ui, sans-serif);
   padding: 14px 18px 14px 16px;
@@ -39,7 +39,7 @@
   border-left-color: var(--red, #B0524A);
 }
 .toast[data-variant='info'] {
-  border-left-color: var(--accent, #4E6E8E);
+  border-left-color: var(--accent, #12876A);
 }
 
 .icon {
@@ -51,7 +51,7 @@
 }
 .toast[data-variant='success'] .icon { color: var(--green, #4A7A5C); }
 .toast[data-variant='error']   .icon { color: var(--red,   #B0524A); }
-.toast[data-variant='info']    .icon { color: var(--accent,#4E6E8E); }
+.toast[data-variant='info']    .icon { color: var(--accent,#12876A); }
 
 .body {
   font-size: 13.5px;

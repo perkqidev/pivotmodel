@@ -14,13 +14,24 @@
   --muted: #8B8F96;
   --line: #E6E6E2;
   --line-2: rgba(21, 22, 26, 0.07);
-  --accent: #4E6E8E;
-  --accent-l: #6889A8;
-  --accent-hi: #6889A8;
-  --accent-bg: rgba(78, 110, 142, 0.06);
+  --accent: #12876A;
+  --accent-l: #2FA98A;
+  --accent-hi: #2FA98A;
+  --accent-bg: rgba(18,135,106, 0.06);
 
   --font-disp: 'Manrope', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
+
+  /* Normalized type scale — whole-pixel steps, no half-pixel one-offs.
+     Section headings share one clamp; display roles (hero, stats) stay distinct. */
+  --fs-eyebrow: 10px;   /* mono labels / eyebrows */
+  --fs-caption: 12px;   /* mono captions, locks */
+  --fs-small:   14px;   /* card body */
+  --fs-body:    16px;   /* prose body */
+  --fs-lead:    15px;   /* section leads */
+  --fs-h4:      18px;   /* card titles */
+  --fs-h3:      20px;
+  --fs-h2:      clamp(30px, 3.6vw, 50px);  /* section headings */
 
   --ease: cubic-bezier(0.19, 1, 0.22, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -42,10 +53,10 @@
   --muted: #6B707A;
   --line: #1E2128;
   --line-2: rgba(231, 234, 239, 0.10);
-  --accent: #7CA0C7;
-  --accent-l: #B4CADC;
-  --accent-hi: #B4CADC;
-  --accent-bg: rgba(124, 160, 199, 0.10);
+  --accent: #46C79E;
+  --accent-l: #86DEC0;
+  --accent-hi: #86DEC0;
+  --accent-bg: rgba(70,199,158, 0.10);
 }
 
 .landing-aero-toggle {
