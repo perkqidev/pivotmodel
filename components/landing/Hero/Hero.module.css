@@ -83,8 +83,8 @@
   transition: background 0.3s var(--ease), border-color 0.3s var(--ease), color 0.3s var(--ease);
 }
 .btnPrimary:hover {
-  background: #12876A;
-  border-color: #12876A;
+  background: #0d9488;
+  border-color: #0d9488;
   color: #FFFFFF !important;
 }
 :global([data-theme='dark']) .btnPrimary {
@@ -93,8 +93,8 @@
   border-color: #E7EAEF;
 }
 :global([data-theme='dark']) .btnPrimary:hover {
-  background: #46C79E;
-  border-color: #46C79E;
+  background: #2dd4bf;
+  border-color: #2dd4bf;
   color: #0E0F14 !important;
 }
 

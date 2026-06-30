@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
+import Icon from '@/components/Icon';
 
 // ── Types ─────────────────────────────────────────────────────────────────
 interface EMBRow {
@@ -31,7 +32,7 @@ const LEVEL_COLOR: Record<string, string> = {
   L1: 'var(--red)', L2: 'var(--gold)', L3: 'var(--green)',
 };
 const LEVEL_BG: Record<string, string> = {
-  L1: 'rgba(232,139,126,.12)', L2: 'rgba(18,135,106,.12)', L3: 'rgba(126,232,162,.12)',
+  L1: 'rgba(232,139,126,.12)', L2: 'rgba(13,148,136,.12)', L3: 'rgba(126,232,162,.12)',
 };
 
 // ── Inline editable field ─────────────────────────────────────────────────
@@ -270,7 +271,7 @@ export default function EMBSpreadsheet({ userId }: { userId: number }) {
 
       {!loading && !assessments.length && (
         <div style={{ background: 'var(--ink-3)', border: '1px solid var(--border)', borderRadius: 8, padding: 36, textAlign: 'center' }}>
-          <div style={{ fontSize: 40, marginBottom: 14 }}>📊</div>
+          <div style={{ color:'var(--muted-2)', marginBottom: 14 }}><Icon name="layers" size={34} /></div>
           <div style={{ fontWeight: 700, color: 'var(--cream)', marginBottom: 6 }}>No assessments yet</div>
           <div style={{ fontSize:15, color: 'var(--muted)', marginBottom: 20, lineHeight: 1.6, maxWidth: 400, margin: '0 auto 20px' }}>
             Create your first assessment — pre-loaded with 17 standard EMB capabilities. Rename, remove, reorder, or add your own.
@@ -303,7 +304,7 @@ export default function EMBSpreadsheet({ userId }: { userId: number }) {
               <div className="field"><label className="lbl">Assessment Date</label>
                 <input className="inp" type="date" value={newDate} onChange={e => setNewDate(e.target.value)} />
               </div>
-              <div style={{ fontSize:14, color: 'var(--muted)', lineHeight: 1.6, padding: '10px 14px', background: 'rgba(18,135,106,.05)', borderRadius: 6, border: '1px solid rgba(18,135,106,.12)' }}>
+              <div style={{ fontSize:14, color: 'var(--muted)', lineHeight: 1.6, padding: '10px 14px', background: 'rgba(13,148,136,.05)', borderRadius: 6, border: '1px solid rgba(13,148,136,.12)' }}>
                 Pre-loaded with all 17 standard capabilities across the 4 pivots. You can rename, remove, reorder, or add your own at any time.
               </div>
             </div>
@@ -331,7 +332,7 @@ export default function EMBSpreadsheet({ userId }: { userId: number }) {
           <div style={{ fontSize:13, color: 'var(--muted)' }}>{current.assessment_date}</div>
         </div>
         {savedMsg && <span style={{ fontSize:14, color: 'var(--green)' }}>{savedMsg}</span>}
-        <button className="btn btn-outline" style={{ fontSize:14, padding: '7px 14px' }} onClick={exportCSV}>⬇ CSV</button>
+        <button className="btn btn-outline" style={{ fontSize:14, padding: '7px 14px' }} onClick={exportCSV}>CSV</button>
         <button className="btn btn-primary" style={{ fontSize:14, padding: '7px 14px' }} onClick={() => save(false)} disabled={saving}>{saving ? 'Saving…' : 'Save'}</button>
       </div>
 
@@ -359,12 +360,12 @@ export default function EMBSpreadsheet({ userId }: { userId: number }) {
       </div>
 
       {/* Hint bar */}
-      <div style={{ background: 'rgba(18,135,106,.05)', border: '1px solid rgba(18,135,106,.12)', borderRadius: 6, padding: '8px 14px', marginBottom: 18, fontSize:14, color: 'var(--muted)', display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-        <span>✏️ <strong style={{ color: 'var(--cream)' }}>Click any underlined name</strong> to rename it</span>
-        <span>➕ Use <strong style={{ color: 'var(--cream)' }}>+ Capability</strong> to add rows</span>
+      <div style={{ background: 'rgba(13,148,136,.05)', border: '1px solid rgba(13,148,136,.12)', borderRadius: 6, padding: '8px 14px', marginBottom: 18, fontSize:14, color: 'var(--muted)', display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+        <span><strong style={{ color: 'var(--cream)' }}>Click any underlined name</strong> to rename it</span>
+        <span>+ Use <strong style={{ color: 'var(--cream)' }}>+ Capability</strong> to add rows</span>
         <span>↕️ <strong style={{ color: 'var(--cream)' }}>▲▼</strong> to reorder within a pivot</span>
-        <span>🔍 View L1/L2/L3 benchmark criteria</span>
-        <span>🗑 Remove any capability</span>
+        <span>View L1/L2/L3 benchmark criteria</span>
+        <span>Remove any capability</span>
       </div>
 
       {/* ── Pivot sections ───────────────────────────────────────────────── */}
@@ -378,7 +379,7 @@ export default function EMBSpreadsheet({ userId }: { userId: number }) {
           <div key={pNum} style={{ marginBottom: 20 }}>
 
             {/* Pivot header row */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'rgba(18,135,106,.06)', border: '1px solid rgba(18,135,106,.18)', borderRadius: '6px 6px 0 0', padding: '8px 14px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'rgba(13,148,136,.06)', border: '1px solid rgba(13,148,136,.18)', borderRadius: '6px 6px 0 0', padding: '8px 14px' }}>
               <span style={{ fontWeight: 900, color: 'var(--gold)', fontSize:16, flexShrink: 0, fontFamily: 'var(--font-display)' }}>{pNum}.</span>
               <div style={{ flex: 1 }}>
                 <InlineEdit
@@ -389,7 +390,7 @@ export default function EMBSpreadsheet({ userId }: { userId: number }) {
               </div>
               <span style={{ fontSize:13, color: 'var(--muted)', flexShrink: 0 }}>Avg {pAvg} · {l3Count}/{pRows.length} at L3</span>
               <button onClick={() => addCapability(pNum, pivotName)}
-                style={{ background: 'rgba(18,135,106,.12)', border: '1px solid rgba(18,135,106,.3)', color: 'var(--gold)', borderRadius: 4, padding: '4px 12px', fontSize:13, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', flexShrink: 0 }}>
+                style={{ background: 'rgba(13,148,136,.12)', border: '1px solid rgba(13,148,136,.3)', color: 'var(--gold)', borderRadius: 4, padding: '4px 12px', fontSize:13, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', flexShrink: 0 }}>
                 + Capability
               </button>
             </div>
@@ -484,20 +485,20 @@ export default function EMBSpreadsheet({ userId }: { userId: number }) {
                       {(row.l1_criteria || row.l2_criteria || row.l3_criteria) && (
                         <button onClick={() => setExpandedRow(prev => prev === row.id ? null : row.id)}
                           title="View L1/L2/L3 benchmark criteria"
-                          style={{ background: expandedRow === row.id ? 'rgba(18,135,106,.15)' : 'none', border: 'none', color: expandedRow === row.id ? 'var(--gold)' : 'var(--muted-2)', fontSize:15, cursor: 'pointer', padding: '3px 5px', borderRadius: 3, lineHeight: 1 }}>🔍</button>
+                          style={{ background: expandedRow === row.id ? 'rgba(13,148,136,.15)' : 'none', border: 'none', color: expandedRow === row.id ? 'var(--gold)' : 'var(--muted-2)', fontSize:15, cursor: 'pointer', padding: '3px 5px', borderRadius: 3, lineHeight: 1 }}><Icon name="search" size={15} /></button>
                       )}
                       {/* Delete */}
                       <button onClick={() => setConfirmDelete({ rowId: row.id, label: row.capability })}
                         title="Remove this capability"
                         style={{ background: 'none', border: 'none', color: 'var(--muted-2)', fontSize:15, cursor: 'pointer', padding: '3px 5px', borderRadius: 3, lineHeight: 1, transition: 'color .15s' }}
                         onMouseEnter={e => (e.currentTarget.style.color = 'var(--red)')}
-                        onMouseLeave={e => (e.currentTarget.style.color = 'var(--muted-2)')}>🗑</button>
+                        onMouseLeave={e => (e.currentTarget.style.color = 'var(--muted-2)')}><Icon name="trash" size={15} /></button>
                     </div>
                   </div>
 
                   {/* Criteria expand — fixed benchmarks, read only */}
                   {expandedRow === row.id && (row.l1_criteria || row.l2_criteria || row.l3_criteria) && (
-                    <div style={{ background: 'rgba(18,135,106,.04)', borderBottom: '1px solid rgba(18,135,106,.1)', borderLeft: '3px solid rgba(18,135,106,.25)', padding: '12px 14px' }}>
+                    <div style={{ background: 'rgba(13,148,136,.04)', borderBottom: '1px solid rgba(13,148,136,.1)', borderLeft: '3px solid rgba(13,148,136,.25)', padding: '12px 14px' }}>
                       <div style={{ fontSize:13, fontWeight: 700, color: 'var(--gold)', textTransform:'none', letterSpacing:'0.01em', marginBottom: 10 }}>Benchmark Criteria — {row.capability}</div>
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14 }}>
                         {[{ level: 'L1', text: row.l1_criteria }, { level: 'L2', text: row.l2_criteria }, { level: 'L3', text: row.l3_criteria }].map(lc => (
@@ -521,12 +522,12 @@ export default function EMBSpreadsheet({ userId }: { userId: number }) {
         {!showAddPivot ? (
           <button onClick={() => setShowAddPivot(true)}
             style={{ width: '100%', background: 'rgba(255,255,255,.02)', border: '1px dashed rgba(255,255,255,.1)', borderRadius: 6, padding: '11px', color: 'var(--muted)', fontSize:15, cursor: 'pointer', fontFamily: 'inherit', transition: 'all .2s' }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(18,135,106,.35)'; e.currentTarget.style.color = 'var(--gold)'; }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(13,148,136,.35)'; e.currentTarget.style.color = 'var(--gold)'; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,.1)'; e.currentTarget.style.color = 'var(--muted)'; }}>
             + Add Custom Pivot Section
           </button>
         ) : (
-          <div style={{ background: 'var(--ink-3)', border: '1px solid rgba(18,135,106,.2)', borderRadius: 6, padding: 14, display: 'flex', gap: 10, alignItems: 'center' }}>
+          <div style={{ background: 'var(--ink-3)', border: '1px solid rgba(13,148,136,.2)', borderRadius: 6, padding: 14, display: 'flex', gap: 10, alignItems: 'center' }}>
             <input autoFocus value={newPivotName} onChange={e => setNewPivotName(e.target.value)}
               onKeyDown={e => { if (e.key === 'Enter') addPivotSection(); if (e.key === 'Escape') { setShowAddPivot(false); setNewPivotName(''); } }}
               placeholder="e.g. Security & Compliance, Team Health, AI Readiness"
@@ -542,7 +543,7 @@ export default function EMBSpreadsheet({ userId }: { userId: number }) {
         <textarea className="inp" value={current.notes || ''} onChange={e => setCurrent(p => p ? { ...p, notes: e.target.value } : p)} onBlur={() => save(true)}
           rows={2} placeholder="Overall assessment notes…" style={{ flex: 1, resize: 'vertical' }} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <button className="btn btn-outline" style={{ fontSize:14 }} onClick={exportCSV}>⬇ Export CSV</button>
+          <button className="btn btn-outline" style={{ fontSize:14 }} onClick={exportCSV}>Export CSV</button>
           <button className="btn btn-primary" style={{ fontSize:14 }} onClick={() => save(false)} disabled={saving}>{saving ? 'Saving…' : savedMsg || 'Save'}</button>
         </div>
       </div>

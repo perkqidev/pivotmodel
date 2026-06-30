@@ -25,9 +25,9 @@
           font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.01em;
           text-transform: none; background: #15161A; color: #FFFFFF !important;
           padding: 18px 36px; border: 1px solid #15161A; transition: background 0.3s var(--ease), border-color 0.3s var(--ease), color 0.3s var(--ease); }
-.bigBtn:hover { background: #12876A; border-color: #12876A; color: #FFFFFF !important; }
+.bigBtn:hover { background: #0d9488; border-color: #0d9488; color: #FFFFFF !important; }
 :global([data-theme='dark']) .bigBtn { background: #E7EAEF; color: #0E0F14 !important; border-color: #E7EAEF; }
-:global([data-theme='dark']) .bigBtn:hover { background: #46C79E; border-color: #46C79E; color: #0E0F14 !important; }
+:global([data-theme='dark']) .bigBtn:hover { background: #2dd4bf; border-color: #2dd4bf; color: #0E0F14 !important; }
 .bigBtn .ar { transition: transform 0.25s; }
 .bigBtn:hover .ar { transform: translateX(5px); }
 .note { font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.01em;

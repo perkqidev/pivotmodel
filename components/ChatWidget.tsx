@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
+import Icon from '@/components/Icon';
 
 interface Message { role: 'user' | 'assistant'; content: string; }
 
@@ -45,8 +46,8 @@ export default function ChatWidget() {
 
   return (
     <>
-      <button onClick={() => setOpen(o => !o)} style={{ position:'fixed',bottom:24,right:24,width:56,height:56,borderRadius:'50%',background:'var(--cream)',border:'none',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',boxShadow:'0 4px 24px rgba(0,0,0,0.3)',zIndex:1000,fontSize:24 }}>
-        {open ? '✕' : '💬'}
+      <button onClick={() => setOpen(o => !o)} style={{ position:'fixed',bottom:24,right:24,width:56,height:56,borderRadius:'50%',background:'var(--cream)',color:'var(--ink)',border:'none',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',boxShadow:'0 4px 24px rgba(0,0,0,0.3)',zIndex:1000 }}>
+        {open ? <Icon name="close" size={22} /> : <Icon name="message" size={24} />}
       </button>
       {open && (
         <div style={{ position:'fixed',bottom:90,right:24,width:360,height:520,background:'var(--surface)',border:'1px solid var(--border)',borderRadius:16,display:'flex',flexDirection:'column',zIndex:1000,boxShadow:'0 8px 40px rgba(0,0,0,0.4)',overflow:'hidden' }}>

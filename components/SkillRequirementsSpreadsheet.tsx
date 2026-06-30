@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
+import Icon from '@/components/Icon';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -326,7 +327,7 @@ export default function SkillRequirementsSpreadsheet({ userId }: { userId: numbe
 
       {profiles.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--muted)', border: '1px dashed var(--ink-3)', borderRadius: 12 }}>
-          <div style={{ fontSize: 40, marginBottom: 12 }}>🎯</div>
+          <div style={{ color:'var(--muted-2)', marginBottom: 12 }}><Icon name="clipboard" size={34} /></div>
           <div style={{ fontSize:17, fontWeight: 600, color: 'var(--cream)', marginBottom: 8 }}>No skill profiles yet</div>
           <div style={{ fontSize:15, marginBottom: 20 }}>Create one to define what your product engineering team needs.</div>
           <button className="btn-primary" onClick={() => setShowNew(true)}>Create first profile</button>
@@ -381,15 +382,15 @@ export default function SkillRequirementsSpreadsheet({ userId }: { userId: numbe
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           {savedMsg && <span style={{ fontSize:14, color: 'var(--gold)', opacity: 0.8 }}>{savedMsg}</span>}
           {saving && <span style={{ fontSize:14, color: 'var(--muted)' }}>Saving…</span>}
-          <button className="btn-ghost" style={{ fontSize:14 }} onClick={downloadExcel}>⬇ Download Excel</button>
+          <button className="btn-ghost" style={{ fontSize:14 }} onClick={downloadExcel}>Download Excel</button>
           <button className="btn-primary" style={{ fontSize:14 }} onClick={() => doSave()}>Save</button>
-          <button onClick={deleteProfile} style={{ background: 'none', border: 'none', color: 'var(--red)', cursor: 'pointer', fontSize:19, lineHeight: 1, padding: '0 4px' }} title="Delete profile">🗑</button>
+          <button onClick={deleteProfile} style={{ background: 'none', border: 'none', color: 'var(--red)', cursor: 'pointer', fontSize:19, lineHeight: 1, padding: '0 4px' }} title="Delete profile"><Icon name="trash" size={16} /></button>
         </div>
       </div>
 
       {/* Tabs */}
       <div style={{ display: 'flex', gap: 4, marginBottom: 20, borderBottom: '1px solid var(--ink-3)', paddingBottom: 0 }}>
-        {[['context','📋 Context'],['matrix','📊 Skills Matrix']].map(([id, label]) => (
+        {[['context','Context'],['matrix','Skills Matrix']].map(([id, label]) => (
           <button key={id} onClick={() => setTab(id as 'context' | 'matrix')}
             style={{ background: tab === id ? 'var(--gold)' : 'none', color: tab === id ? 'var(--ink)' : 'var(--muted)', border: 'none', borderRadius: '6px 6px 0 0', padding: '8px 16px', fontSize:15, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}>
             {label}
@@ -421,7 +422,7 @@ export default function SkillRequirementsSpreadsheet({ userId }: { userId: numbe
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 18 }}>
             {SECTIONS.map(s => (
               <button key={s} onClick={() => setActiveSection(s)}
-                style={{ background: activeSection === s ? 'rgba(18,135,106,.18)' : 'var(--ink-2)', border: `1px solid ${activeSection === s ? 'var(--gold-d)' : 'var(--ink-3)'}`,
+                style={{ background: activeSection === s ? 'rgba(13,148,136,.18)' : 'var(--ink-2)', border: `1px solid ${activeSection === s ? 'var(--gold-d)' : 'var(--ink-3)'}`,
                   color: activeSection === s ? 'var(--gold)' : 'var(--muted)', borderRadius: 20, padding: '5px 14px', fontSize:14, cursor: 'pointer', fontFamily: 'inherit', fontWeight: activeSection === s ? 600 : 400 }}>
                 {s.split('. ')[1]} <span style={{ opacity: .6 }}>({rows.filter(r => r.section === s).length})</span>
               </button>
@@ -483,7 +484,7 @@ export default function SkillRequirementsSpreadsheet({ userId }: { userId: numbe
                         </span>
                       ) : (
                         <button onClick={() => setConfirmDel({ rowId: row.id, skill: row.skill })}
-                          style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', fontSize:16, opacity: 0.6 }} title="Remove row">🗑</button>
+                          style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', fontSize:16, opacity: 0.6 }} title="Remove row"><Icon name="trash" size={16} /></button>
                       )}
                     </td>
                   </tr>
@@ -492,7 +493,7 @@ export default function SkillRequirementsSpreadsheet({ userId }: { userId: numbe
             </table>
           </div>
           <button onClick={() => addRow(activeSection)}
-            style={{ marginTop: 12, background: 'rgba(18,135,106,.08)', border: '1px dashed var(--gold-d)', color: 'var(--gold)', borderRadius: 8, padding: '7px 18px', fontSize:14, cursor: 'pointer', fontFamily: 'inherit' }}>
+            style={{ marginTop: 12, background: 'rgba(13,148,136,.08)', border: '1px dashed var(--gold-d)', color: 'var(--gold)', borderRadius: 8, padding: '7px 18px', fontSize:14, cursor: 'pointer', fontFamily: 'inherit' }}>
             ＋ Add skill to {activeSection.split('. ')[1]}
           </button>
         </div>

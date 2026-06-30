@@ -19,7 +19,7 @@ export default function AdminPage() {
   if (checking) return <div style={{minHeight:'100vh',background:'var(--ink)',display:'flex',alignItems:'center',justifyContent:'center',color:'var(--muted)'}}>Checking access…</div>;
   if (!authed) return <div style={{minHeight:'100vh',background:'var(--ink)',display:'flex',alignItems:'center',justifyContent:'center',color:'var(--red)',fontSize:19}}>Access denied. Admin only.</div>;
 
-  const TABS: {id:Tab;label:string}[] = [{id:'users',label:'👥 Users'},{id:'blog',label:'✍️ Blog'},{id:'whitepapers',label:'📄 Whitepapers'},{id:'chat',label:'💬 Chat Config'},{id:'stats',label:'📊 Stats'}];
+  const TABS: {id:Tab;label:string}[] = [{id:'users',label:'Users'},{id:'blog',label:'Blog'},{id:'whitepapers',label:'Whitepapers'},{id:'chat',label:'Chat Config'},{id:'stats',label:'Stats'}];
 
   return (
     <div style={{minHeight:'100vh',background:'var(--ink)',color:'var(--cream)'}}>
@@ -313,14 +313,13 @@ function ChatConfigTab() {
 function StatsTab() {
   const [stats, setStats] = useState<any>({});
   useEffect(()=>{ fetch('/api/admin/config').then(r=>r.json()).then(d=>{ if(d.stats) setStats(d.stats); }); },[]);
-  const cards = [['👥','Total Users',stats.users||0],['📋','Assessments',stats.assessments||0],['💬','Chat Messages',stats.chat_messages||0]];
+  const cards = [['Total Users',stats.users||0],['Assessments',stats.assessments||0],['Chat Messages',stats.chat_messages||0]];
   return (
     <div>
       <h2 style={{color:'var(--cream)',marginBottom:24}}>Platform Stats</h2>
       <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:16}}>
-        {cards.map(([icon,label,val])=>(
+        {cards.map(([label,val])=>(
           <div key={label as string} style={{background:'var(--ink-2)',border:'1px solid var(--border-2)',borderRadius:16,padding:28,textAlign:'center'}}>
-            <div style={{fontSize:40,marginBottom:12}}>{icon}</div>
             <div style={{fontSize:40,fontWeight:700,color:'var(--gold)'}}>{val as number}</div>
             <div style={{color:'var(--muted)',fontSize:16,marginTop:4}}>{label as string}</div>
           </div>

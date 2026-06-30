@@ -3,7 +3,7 @@ export default function Footer() {
     <footer className="footer">
       <div className="footer-inner">
         <div className="footer-brand">
-          <div className="footer-logo">THE PIVOT MODEL</div>
+          <div className="footer-logo">The Pivot Model</div>
           <div className="footer-tagline">Engineering Excellence, Offshore.</div>
         </div>
         <div className="footer-links">
@@ -13,9 +13,7 @@ export default function Footer() {
           <a href="/community">Materials</a>
         </div>
         <div className="footer-copy">
-          © {new Date().getFullYear()} The Pivot Model. All rights reserved.{' '}
-          &nbsp;·&nbsp;{' '}
-          <a href="/admin" style={{ color: 'var(--muted-2)', fontSize: 11, opacity: 0.4 }}>Admin</a>
+          © {new Date().getFullYear()} The Pivot Model. All rights reserved.
         </div>
       </div>
     </footer>

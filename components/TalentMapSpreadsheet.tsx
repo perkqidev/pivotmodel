@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
+import Icon from '@/components/Icon';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 interface MapRow {
@@ -28,10 +29,10 @@ interface TalentMap {
 type SheetKey = 'technical' | 'mindset' | 'ai' | 'knowledge';
 
 const SHEET_LABELS: Record<SheetKey, string> = {
-  technical: '🔧 Technical Skills',
-  mindset:   '🧠 Product Mindset',
-  ai:        '🤖 AI Readiness',
-  knowledge: '📚 Knowledge Mgmt',
+  technical: 'Technical Skills',
+  mindset:   'Product Mindset',
+  ai:        'AI Readiness',
+  knowledge: 'Knowledge Mgmt',
 };
 
 const PROFILE_FIELDS = [
@@ -407,7 +408,7 @@ export default function TalentMapSpreadsheet({ userId }: { userId: number }) {
 
       {maps.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--muted)', border: '1px dashed var(--ink-3)', borderRadius: 12 }}>
-          <div style={{ fontSize: 40, marginBottom: 12 }}>👤</div>
+          <div style={{ color:'var(--muted-2)', marginBottom: 12 }}><Icon name="user" size={34} /></div>
           <div style={{ fontSize:17, fontWeight: 600, color: 'var(--cream)', marginBottom: 8 }}>No talent assessments yet</div>
           <div style={{ fontSize:15, marginBottom: 20 }}>Create one per engineer to track skills, mindset, and AI readiness.</div>
           <button className="btn-primary" onClick={() => setShowNew(true)}>Create first assessment</button>
@@ -449,11 +450,11 @@ export default function TalentMapSpreadsheet({ userId }: { userId: number }) {
 
   // ── Render assessment ───────────────────────────────────────────────────────
   const TABS: Array<['profile' | SheetKey, string]> = [
-    ['profile',   '👤 Profile'],
-    ['technical', '🔧 Technical'],
-    ['mindset',   '🧠 Mindset'],
-    ['ai',        '🤖 AI Readiness'],
-    ['knowledge', '📚 Knowledge'],
+    ['profile',   'Profile'],
+    ['technical', 'Technical'],
+    ['mindset',   'Mindset'],
+    ['ai',        'AI Readiness'],
+    ['knowledge', 'Knowledge'],
   ];
 
   return (
@@ -467,9 +468,9 @@ export default function TalentMapSpreadsheet({ userId }: { userId: number }) {
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           {savedMsg && <span style={{ fontSize:14, color: 'var(--gold)', opacity: 0.8 }}>{savedMsg}</span>}
           {saving && <span style={{ fontSize:14, color: 'var(--muted)' }}>Saving…</span>}
-          <button className="btn-ghost" style={{ fontSize:14 }} onClick={downloadExcel}>⬇ Download Excel</button>
+          <button className="btn-ghost" style={{ fontSize:14 }} onClick={downloadExcel}>Download Excel</button>
           <button className="btn-primary" style={{ fontSize:14 }} onClick={() => doSave()}>Save</button>
-          <button onClick={deleteMap} style={{ background: 'none', border: 'none', color: 'var(--red)', cursor: 'pointer', fontSize:19, lineHeight: 1, padding: '0 4px' }} title="Delete">🗑</button>
+          <button onClick={deleteMap} style={{ background: 'none', border: 'none', color: 'var(--red)', cursor: 'pointer', fontSize:19, lineHeight: 1, padding: '0 4px' }} title="Delete"><Icon name="trash" size={16} /></button>
         </div>
       </div>
 
@@ -510,7 +511,7 @@ export default function TalentMapSpreadsheet({ userId }: { userId: number }) {
               <div key={section} style={{ marginBottom: 24 }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <span style={{ fontWeight: 700, fontSize:15, color: 'var(--gold)', background: 'rgba(18,135,106,.12)', padding: '3px 12px', borderRadius: 20, border: '1px solid var(--gold-d)' }}>{section}</span>
+                    <span style={{ fontWeight: 700, fontSize:15, color: 'var(--gold)', background: 'rgba(13,148,136,.12)', padding: '3px 12px', borderRadius: 20, border: '1px solid var(--gold-d)' }}>{section}</span>
                     {sectionAvg(tab, section) && <span style={{ fontSize:14, color: 'var(--muted)' }}>avg {sectionAvg(tab, section)}</span>}
                   </div>
                   <button onClick={() => addRow(tab, section)}
@@ -568,7 +569,7 @@ export default function TalentMapSpreadsheet({ userId }: { userId: number }) {
                                 </span>
                               ) : (
                                 <button onClick={() => setConfirmDel({ rowId: row.id, item: row.item })}
-                                  style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', fontSize:16, opacity: 0.5 }}>🗑</button>
+                                  style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', fontSize:16, opacity: 0.5 }}><Icon name="trash" size={16} /></button>
                               )}
                             </td>
                           </tr>
@@ -592,7 +593,7 @@ export default function TalentMapSpreadsheet({ userId }: { userId: number }) {
             {sections.map(section => (
               <div key={section} style={{ marginBottom: 24 }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-                  <span style={{ fontWeight: 700, fontSize:15, color: 'var(--gold)', background: 'rgba(18,135,106,.12)', padding: '3px 12px', borderRadius: 20, border: '1px solid var(--gold-d)' }}>{section}</span>
+                  <span style={{ fontWeight: 700, fontSize:15, color: 'var(--gold)', background: 'rgba(13,148,136,.12)', padding: '3px 12px', borderRadius: 20, border: '1px solid var(--gold-d)' }}>{section}</span>
                   <button onClick={() => addRow('knowledge', section)}
                     style={{ background: 'none', border: '1px dashed var(--ink-3)', color: 'var(--muted)', borderRadius: 6, padding: '4px 12px', fontSize:13, cursor: 'pointer', fontFamily: 'inherit' }}>
                     ＋ Add item
@@ -632,7 +633,7 @@ export default function TalentMapSpreadsheet({ userId }: { userId: number }) {
                             </span>
                           ) : (
                             <button onClick={() => setConfirmDel({ rowId: row.id, item: row.item })}
-                              style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', fontSize:16, opacity: 0.5 }}>🗑</button>
+                              style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', fontSize:16, opacity: 0.5 }}><Icon name="trash" size={16} /></button>
                           )}
                         </td>
                       </tr>

@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
+import Icon from '@/components/Icon';
 import ConsultModal from '@/components/ConsultModal';
 import ChatWidget from '@/components/ChatWidget';
 import { useToast } from '@/components/shared/Toast/ToastProvider';
@@ -46,14 +47,14 @@ export default function CommunityPage() {
 function Sidebar({ panel, setPanel, user, setUser }: any) {
   async function logout() { await fetch('/api/auth/login', { method:'DELETE' }); setUser(null); }
   const items = [
-    { id:'home', label:'🏠 Home', },
-    { id:'assessments', label:'📋 Assessments', },
-    { id:'materials', label:'📚 Materials', },
-    { id:'blog', label:'✍️ Blog', },
-    { id:'whitepapers', label:'📄 Whitepapers', },
-    { id:'consulting', label:'💼 Consulting', },
-    { id:'account', label:'⚙️ Account', },
-  ];
+    { id:'home', label:'Home', icon:'home' },
+    { id:'assessments', label:'Assessments', icon:'clipboard' },
+    { id:'materials', label:'Materials', icon:'layers' },
+    { id:'blog', label:'Blog', icon:'pen' },
+    { id:'whitepapers', label:'Whitepapers', icon:'file' },
+    { id:'consulting', label:'Consulting', icon:'briefcase' },
+    { id:'account', label:'Account', icon:'user' },
+  ] as const;
   return (
     <div style={{ background:'var(--surface)',borderRight:'1px solid var(--border)',padding:'24px 0',display:'flex',flexDirection:'column',gap:2 }}>
       <div style={{ padding:'0 20px 20px',borderBottom:'1px solid var(--border)',marginBottom:8 }}>
@@ -63,17 +64,17 @@ function Sidebar({ panel, setPanel, user, setUser }: any) {
         {user.isAdmin && <div style={{ fontSize:13,color:'var(--gold)',marginTop:4,fontWeight:700 }}>ADMIN</div>}
       </div>
       {items.map(item => (
-        <button key={item.id} onClick={() => setPanel(item.id)} style={{ textAlign:'left',padding:'10px 20px',background:panel===item.id?'rgba(18,135,106,0.1)':'none',border:'none',borderLeft:panel===item.id?'3px solid var(--gold)':'3px solid transparent',color:panel===item.id?'var(--gold)':'var(--muted)',fontSize:15,cursor:'pointer',fontWeight:panel===item.id?600:400 }}>
-          {item.label}
+        <button key={item.id} onClick={() => setPanel(item.id)} style={{ display:'flex',alignItems:'center',gap:11,textAlign:'left',padding:'10px 20px',background:panel===item.id?'rgba(13,148,136,0.1)':'none',border:'none',borderLeft:panel===item.id?'3px solid var(--gold)':'3px solid transparent',color:panel===item.id?'var(--gold)':'var(--muted)',fontSize:15,cursor:'pointer',fontWeight:panel===item.id?600:400 }}>
+          <Icon name={item.icon} size={17} /> {item.label}
         </button>
       ))}
       {user.isAdmin && (
-        <a href="/admin" style={{ textAlign:'left',padding:'10px 20px',background:'none',border:'none',borderLeft:'3px solid transparent',color:'var(--muted)',fontSize:15,cursor:'pointer',textDecoration:'none',display:'block',marginTop:8,borderTop:'1px solid var(--border)',paddingTop:16 }}>
-          🔧 Admin Panel
+        <a href="/admin" style={{ display:'flex',alignItems:'center',gap:11,textAlign:'left',padding:'16px 20px 10px',background:'none',border:'none',borderLeft:'3px solid transparent',color:'var(--muted)',fontSize:15,cursor:'pointer',textDecoration:'none',marginTop:8,borderTop:'1px solid var(--border)' }}>
+          <Icon name="shield" size={17} /> Admin Panel
         </a>
       )}
-      <button onClick={logout} style={{ textAlign:'left',padding:'10px 20px',background:'none',border:'none',borderLeft:'3px solid transparent',color:'var(--red)',fontSize:15,cursor:'pointer',marginTop:'auto' }}>
-        ← Sign out
+      <button onClick={logout} style={{ display:'flex',alignItems:'center',gap:11,textAlign:'left',padding:'10px 20px',background:'none',border:'none',borderLeft:'3px solid transparent',color:'var(--red)',fontSize:15,cursor:'pointer',marginTop:'auto' }}>
+        <Icon name="logout" size={17} /> Sign out
       </button>
     </div>
   );
@@ -83,13 +84,13 @@ function HomePanel({ user, setPanel }: any) {
   return (
     <div>
       <div style={{ marginBottom:32 }}>
-        <h1 style={{ color:'var(--fg)',marginBottom:8 }}>Welcome back, {user.name.split(' ')[0]} 👋</h1>
+        <h1 style={{ color:'var(--fg)',marginBottom:8 }}>Welcome back, {user.name.split(' ')[0]}</h1>
         <p style={{ color:'var(--muted)',fontSize:17 }}>The Pivot Model community — assessments, tools, and insights for engineering leaders.</p>
       </div>
       <div style={{ display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:16,marginBottom:32 }}>
-        {[{ icon:'📋',title:'Assessments',desc:'Evaluate your team across 7 modules',action:()=>setPanel('assessments') },{ icon:'📚',title:'Materials',desc:'Frameworks and tools',action:()=>setPanel('materials') },{ icon:'💼',title:'Consulting',desc:'Work with The Pivot Model team',action:()=>setPanel('consulting') }].map(c=>(
+        {[{ icon:'clipboard' as const,title:'Assessments',desc:'Evaluate your team across 7 modules',action:()=>setPanel('assessments') },{ icon:'layers' as const,title:'Materials',desc:'Frameworks and tools',action:()=>setPanel('materials') },{ icon:'briefcase' as const,title:'Consulting',desc:'Work with The Pivot Model team',action:()=>setPanel('consulting') }].map(c=>(
           <button key={c.title} onClick={c.action} style={{ background:'var(--surface)',border:'1px solid var(--border)',borderRadius:16,padding:24,cursor:'pointer',textAlign:'left',transition:'border-color 0.2s' }}>
-            <div style={{ fontSize:32,marginBottom:12 }}>{c.icon}</div>
+            <div style={{ color:'var(--gold)',marginBottom:14 }}><Icon name={c.icon} size={26} stroke={1.6} /></div>
             <div style={{ fontWeight:700,color:'var(--fg)',fontSize:18,marginBottom:4 }}>{c.title}</div>
             <div style={{ color:'var(--muted)',fontSize:15 }}>{c.desc}</div>
           </button>

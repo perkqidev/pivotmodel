@@ -28,7 +28,6 @@ export function Footer() {
             <h5>Direct</h5>
             <a href="#consulting">Consulting</a>
             <a href="/community">Contact</a>
-            <a href="/admin">Admin</a>
           </div>
         </div>
         <div className={styles.row}>

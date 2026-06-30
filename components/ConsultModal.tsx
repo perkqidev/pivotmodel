@@ -96,7 +96,7 @@ export default function ConsultModal({ source = 'website' }: Props) {
       <div className="modal-overlay" onClick={e => { if (e.target === e.currentTarget) close(); }}>
         <div className="modal-box" style={{ maxWidth: 680 }}>
           {/* Header */}
-          <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', background: 'linear-gradient(135deg,rgba(18,135,106,.08),rgba(18,135,106,.03))' }}>
+          <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', background: 'linear-gradient(135deg,rgba(13,148,136,.08),rgba(13,148,136,.03))' }}>
             <div>
               <div style={{ fontSize:13, fontWeight: 700, letterSpacing:'0.01em', textTransform:'none', color: 'var(--gold)', marginBottom: 5 }}>Direct Access · 25+ Years Experience</div>
               <div style={{ fontSize:19, fontWeight: 700, color: 'var(--cream)', fontFamily: 'var(--font-display)' }}>Book a Consulting Session</div>
@@ -186,7 +186,6 @@ export default function ConsultModal({ source = 'website' }: Props) {
                 <div className="lci-svc-grid">
                   {SVCS.map(s => (
                     <div key={s.val} className={`lci-svc${svc === s.val ? ' sel' : ''}`} onClick={() => setSvc(s.val)}>
-                      <div className="lci-svc-icon">{s.icon}</div>
                       <div>{s.label}</div>
                     </div>
                   ))}

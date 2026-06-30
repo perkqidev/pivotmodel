@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState, useRef } from 'react';
+import Icon from '@/components/Icon';
 
 interface NavUser { id: number; name: string; email: string; isAdmin: boolean; }
 
@@ -64,18 +65,11 @@ export default function Nav() {
   return (
     <nav className={`nav${scrolled ? ' scrolled' : ''}`}>
       <div className="nav-inner">
-        <a href="/" className="nav-logo">THE PIVOT MODEL</a>
+        <a href="/" className="nav-logo">The Pivot <em>Model</em></a>
 
         <div className="nav-links">
-          <a href="/#about">About</a>
-          <a href="/#concepts">The Model</a>
-          <a href="/#ai-age">AI &amp; Engineering</a>
-          <a href="/#author">Author</a>
-          <a href="/#insights">Insights</a>
-          <a href="/#consulting" style={{ color: 'var(--gold)', fontWeight: 600 }}>Book Consulting</a>
-
           <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
-            {theme === 'dark' ? '☀️' : '🌙'}
+            {theme === 'dark' ? <Icon name="sun" size={16} /> : <Icon name="moon" size={16} />}
           </button>
 
           {user ? (
@@ -87,7 +81,7 @@ export default function Nav() {
               >
                 <span className="nav-user-avatar">{firstName[0]?.toUpperCase()}</span>
                 <span className="nav-user-name">{firstName}</span>
-                <span className="nav-user-chevron">{dropOpen ? '▲' : '▼'}</span>
+                <span className="nav-user-chevron" style={{ display:'inline-flex' }}><Icon name="chevron" size={13} style={{ transform: dropOpen ? 'rotate(180deg)' : 'none', transition:'transform .2s' }} /></span>
               </button>
 
               {dropOpen && (
@@ -96,12 +90,12 @@ export default function Nav() {
                     <div className="nav-dd-name">{user.name}</div>
                     <div className="nav-dd-email">{user.email}</div>
                   </div>
-                  <a href="/community" className="nav-dd-item" onClick={() => setDropOpen(false)}>
-                    📊 Community &amp; Tools
+                  <a href="/community" className="nav-dd-item" style={{ display:'flex',alignItems:'center',gap:10 }} onClick={() => setDropOpen(false)}>
+                    <Icon name="grid" size={16} /> Community &amp; Tools
                   </a>
                   {user.isAdmin && (
-                    <a href="/admin" className="nav-dd-item" onClick={() => setDropOpen(false)}>
-                      ⚙ Admin Panel
+                    <a href="/admin" className="nav-dd-item" style={{ display:'flex',alignItems:'center',gap:10 }} onClick={() => setDropOpen(false)}>
+                      <Icon name="shield" size={16} /> Admin Panel
                     </a>
                   )}
                   <div className="nav-dd-divider" />
@@ -123,11 +117,8 @@ export default function Nav() {
 
       <div className={`mobile-menu${menuOpen ? ' open' : ''}`}>
         <button className="theme-toggle" onClick={toggleTheme} style={{ margin:'8px 32px' }}>
-          {theme === 'dark' ? '☀️ Light mode' : '🌙 Dark mode'}
+          {theme === 'dark' ? 'Light mode' : 'Dark mode'}
         </button>
-        <a href="/#about"    onClick={() => setMenuOpen(false)}>About</a>
-        <a href="/#concepts" onClick={() => setMenuOpen(false)}>The Model</a>
-        <a href="/#author"   onClick={() => setMenuOpen(false)}>Author</a>
         {user ? (
           <>
             <a href="/community" onClick={() => setMenuOpen(false)}>Community</a>

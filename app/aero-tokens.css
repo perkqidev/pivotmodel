@@ -14,10 +14,12 @@
   --muted: #8B8F96;
   --line: #E6E6E2;
   --line-2: rgba(21, 22, 26, 0.07);
-  --accent: #12876A;
-  --accent-l: #2FA98A;
-  --accent-hi: #2FA98A;
-  --accent-bg: rgba(18,135,106, 0.06);
+  /* Accent palette — teal #0d9488 with lighter + darker shades */
+  --accent: #0d9488;    /* base (teal-600) */
+  --accent-l: #14b8a6;  /* lighter (teal-500) — highlights / hover text */
+  --accent-d: #0f766e;  /* darker  (teal-700) — pressed / hover fills */
+  --accent-hi: #14b8a6;
+  --accent-bg: rgba(13,148,136, 0.06);
 
   --font-disp: 'Newsreader', Georgia, 'Times New Roman', serif;  /* headlines, titles, numbers */
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;    /* body, leads, links */
@@ -54,10 +56,11 @@
   --muted: #6B707A;
   --line: #1E2128;
   --line-2: rgba(231, 234, 239, 0.10);
-  --accent: #46C79E;
-  --accent-l: #86DEC0;
-  --accent-hi: #86DEC0;
-  --accent-bg: rgba(70,199,158, 0.10);
+  --accent: #2dd4bf;
+  --accent-l: #5eead4;
+  --accent-d: #14b8a6;
+  --accent-hi: #5eead4;
+  --accent-bg: rgba(45,212,191, 0.10);
 }
 
 .landing-aero-toggle {
