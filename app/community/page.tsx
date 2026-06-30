@@ -57,12 +57,6 @@ function Sidebar({ panel, setPanel, user, setUser }: any) {
   ] as const;
   return (
     <div style={{ background:'var(--surface)',borderRight:'1px solid var(--border)',padding:'24px 0',display:'flex',flexDirection:'column',gap:2 }}>
-      <div style={{ padding:'0 20px 20px',borderBottom:'1px solid var(--border)',marginBottom:8 }}>
-        <div style={{ fontSize:14,color:'var(--muted)',marginBottom:4 }}>Signed in as</div>
-        <div style={{ fontWeight:700,color:'var(--fg)',fontSize:16 }}>{user.name}</div>
-        <div style={{ fontSize:14,color:'var(--muted)' }}>{user.email}</div>
-        {user.isAdmin && <div style={{ fontSize:13,color:'var(--gold)',marginTop:4,fontWeight:700 }}>ADMIN</div>}
-      </div>
       {items.map(item => (
         <button key={item.id} onClick={() => setPanel(item.id)} style={{ display:'flex',alignItems:'center',gap:11,textAlign:'left',padding:'10px 20px',background:panel===item.id?'rgba(13,148,136,0.1)':'none',border:'none',borderLeft:panel===item.id?'3px solid var(--gold)':'3px solid transparent',color:panel===item.id?'var(--gold)':'var(--muted)',fontSize:15,cursor:'pointer',fontWeight:panel===item.id?600:400 }}>
           <Icon name={item.icon} size={17} /> {item.label}
