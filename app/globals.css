@@ -109,8 +109,8 @@ input,select,textarea{font-family:inherit}
   border-bottom-color:var(--border-2);
 }
 .nav-inner{
-  max-width:1200px;margin:0 auto;
-  padding:0 32px;height:64px;
+  max-width:none;width:100%;margin:0;
+  padding:0 28px;height:64px;
   display:flex;align-items:center;justify-content:space-between;
 }
 .nav-logo{
