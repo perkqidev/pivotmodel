@@ -4,6 +4,7 @@
         padding-bottom: 48px; border-bottom: 1px solid var(--line); margin-bottom: 28px; }
 .brand h4 { font-family: var(--font-disp); font-weight: 400; font-size: 20px;
             letter-spacing: -0.01em; color: var(--ink); margin-bottom: 10px; }
+.brand h4 em { font-style: normal; font-weight: 600; color: var(--accent); }
 .brand p { font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.01em;
            text-transform: none; color: var(--muted); }
 .col h5 { font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.01em;

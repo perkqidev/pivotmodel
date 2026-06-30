@@ -24,7 +24,7 @@ export default function AdminPage() {
   return (
     <div style={{minHeight:'100vh',background:'var(--ink)',color:'var(--cream)'}}>
       <div style={{background:'var(--ink-2)',borderBottom:'1px solid var(--border-2)',padding:'0 32px',display:'flex',alignItems:'center',gap:32}}>
-        <div style={{padding:'16px 0',fontWeight:700,fontSize:18,color:'var(--gold)',letterSpacing:'0.01em'}}>Pivot Model · Admin</div>
+        <div style={{padding:'16px 0',fontFamily:'var(--font-display)',fontWeight:400,fontSize:19,letterSpacing:'0.01em',color:'var(--cream)'}}>The Pivot <em style={{fontStyle:'normal',fontWeight:600,color:'var(--gold)'}}>Model</em> <span style={{fontFamily:'var(--font-ui)',fontSize:14,color:'var(--muted)'}}>· Admin</span></div>
         <div style={{display:'flex',gap:4,flex:1}}>
           {TABS.map(t=><button key={t.id} onClick={()=>setTab(t.id)} style={{padding:'16px 20px',background:'none',border:'none',borderBottom:`3px solid ${tab===t.id?'var(--gold)':'transparent'}`,color:tab===t.id?'var(--gold)':'var(--muted)',fontSize:15,fontWeight:tab===t.id?700:400,cursor:'pointer'}}>{t.label}</button>)}
         </div>

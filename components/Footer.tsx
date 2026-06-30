@@ -3,7 +3,7 @@ export default function Footer() {
     <footer className="footer">
       <div className="footer-inner">
         <div className="footer-brand">
-          <div className="footer-logo">The Pivot Model</div>
+          <div className="footer-logo">The Pivot <em>Model</em></div>
           <div className="footer-tagline">Engineering Excellence, Offshore.</div>
         </div>
         <div className="footer-links">

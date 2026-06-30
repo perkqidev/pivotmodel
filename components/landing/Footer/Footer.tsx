@@ -7,7 +7,7 @@ export function Footer() {
       <div className={styles.wrap}>
         <div className={styles.cols}>
           <div className={styles.brand}>
-            <h4>The Pivot Model</h4>
+            <h4>The Pivot <em>Model</em></h4>
             <p>Engineering excellence, offshore.</p>
           </div>
           <div className={styles.col}>

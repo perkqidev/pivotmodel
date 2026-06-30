@@ -296,7 +296,7 @@ function AuthScreen({ onLogin }: { onLogin:(u:any)=>void }) {
     <div style={{ minHeight:'100vh',background:'var(--ink)',display:'flex',alignItems:'center',justifyContent:'center',padding:24 }}>
       <div style={{ width:'100%',maxWidth:440,background:'var(--surface)',border:'1px solid var(--border)',borderRadius:20,padding:40 }}>
         <div style={{ textAlign:'center',marginBottom:32 }}>
-          <div style={{ fontSize:15,fontWeight:700,letterSpacing:'0.01em',color:'var(--gold)',marginBottom:8 }}>THE PIVOT MODEL</div>
+          <div style={{ fontFamily:'var(--font-display)',fontSize:26,fontWeight:400,letterSpacing:'0.01em',color:'var(--fg)',marginBottom:8 }}>The Pivot <em style={{ fontStyle:'normal',fontWeight:600,color:'var(--gold)' }}>Model</em></div>
           <h2 style={{ color:'var(--fg)',margin:0 }}>{step==='otp'?'Enter verification code':mode==='login'?'Sign in':'Join the community'}</h2>
         </div>
         {step==='form' && (

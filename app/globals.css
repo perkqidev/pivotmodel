@@ -499,7 +499,8 @@ input,select,textarea{font-family:inherit}
   display:flex;align-items:center;justify-content:space-between;
   flex-wrap:wrap;gap:20px;
 }
-.footer-logo{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--gold)}
+.footer-logo{font-family:var(--font-display);font-size:19px;font-weight:400;color:var(--cream)}
+.footer-logo em{font-style:normal;font-weight:600;color:var(--gold)}
 .footer-tagline{font-size:14px;color:var(--muted-2);margin-top:3px}
 .footer-links{display:flex;gap:24px}
 .footer-links a{font-size:15px;color:var(--muted);transition:color .2s}
