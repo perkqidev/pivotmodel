@@ -1,5 +1,6 @@
 'use client';
 import styles from './ThemeToggle.module.css';
+import Icon from '@/components/Icon';
 
 interface Props {
   theme: 'light' | 'dark';
@@ -7,10 +8,9 @@ interface Props {
 }
 
 export function ThemeToggle({ theme, onToggle }: Props) {
-  const label = theme === 'light' ? 'Dark mode →' : '← Light mode';
   return (
     <button type="button" className={styles.toggle} onClick={onToggle} aria-label="Toggle theme">
-      {label}
+      {theme === 'dark' ? <Icon name="sun" size={16} /> : <Icon name="moon" size={16} />}
     </button>
   );
 }
