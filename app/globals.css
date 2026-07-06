@@ -139,7 +139,7 @@ input,select,textarea{font-family:inherit}
 .nav-user-btn:hover{background:rgba(13,148,136,.22);border-color:rgba(13,148,136,.5)}
 .nav-user-avatar{
   width:26px;height:26px;border-radius:50%;
-  background:var(--gold);color:var(--ink);
+  background:var(--gold);color:#fff;
   font-size:14px;font-weight:800;
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
 }
