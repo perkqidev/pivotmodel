@@ -28,7 +28,7 @@ export default function CommunityPage() {
       <div style={{ display:'grid',gridTemplateColumns:'220px 1fr',minHeight:'calc(100vh - 64px)',marginTop:64 }}>
         <Sidebar panel={panel} setPanel={setPanel} user={user} setUser={setUser} />
         <main style={{ background:'var(--ink)',overflowY:'auto' }}>
-          <div style={{ padding:32, maxWidth:1200, margin:'0 auto' }}>
+          <div style={{ padding:'36px 44px', maxWidth:1500, margin:0 }}>
             {panel==='home' && <HomePanel user={user} setPanel={setPanel} />}
             {panel==='assessments' && <AssessmentsPanel user={user} />}
             {panel==='materials' && <MaterialsPanel />}
@@ -81,12 +81,15 @@ function HomePanel({ user, setPanel }: any) {
         <h1 style={{ color:'var(--fg)',marginBottom:8 }}>Welcome back, {user.name.split(' ')[0]}</h1>
         <p style={{ color:'var(--muted)',fontSize:17 }}>The Pivot Model community — assessments, tools, and insights for engineering leaders.</p>
       </div>
-      <div style={{ display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:16,marginBottom:32 }}>
+      <div style={{ display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(260px,1fr))',gap:20,marginBottom:32 }}>
         {[{ icon:'clipboard' as const,title:'Assessments',desc:'Evaluate your team across 7 modules',action:()=>setPanel('assessments') },{ icon:'layers' as const,title:'Materials',desc:'Frameworks and tools',action:()=>setPanel('materials') },{ icon:'briefcase' as const,title:'Consulting',desc:'Work with The Pivot Model team',action:()=>setPanel('consulting') }].map(c=>(
-          <button key={c.title} onClick={c.action} style={{ background:'var(--surface)',border:'1px solid var(--border)',borderRadius:16,padding:24,cursor:'pointer',textAlign:'left',transition:'border-color 0.2s' }}>
-            <div style={{ color:'var(--gold)',marginBottom:14 }}><Icon name={c.icon} size={26} stroke={1.6} /></div>
-            <div style={{ fontWeight:700,color:'var(--fg)',fontSize:18,marginBottom:4 }}>{c.title}</div>
-            <div style={{ color:'var(--muted)',fontSize:15 }}>{c.desc}</div>
+          <button key={c.title} onClick={c.action}
+            onMouseEnter={e=>{ e.currentTarget.style.borderColor='var(--gold)'; }}
+            onMouseLeave={e=>{ e.currentTarget.style.borderColor='var(--border)'; }}
+            style={{ background:'var(--surface)',border:'1px solid var(--border)',borderRadius:16,padding:28,cursor:'pointer',textAlign:'left',transition:'border-color 0.2s' }}>
+            <div style={{ display:'inline-flex',alignItems:'center',justifyContent:'center',width:46,height:46,borderRadius:12,background:'rgba(13,148,136,0.10)',color:'var(--gold)',marginBottom:18 }}><Icon name={c.icon} size={24} stroke={1.7} /></div>
+            <div style={{ fontWeight:700,color:'var(--fg)',fontSize:18,marginBottom:5 }}>{c.title}</div>
+            <div style={{ color:'var(--muted)',fontSize:15,lineHeight:1.5 }}>{c.desc}</div>
           </button>
         ))}
       </div>
