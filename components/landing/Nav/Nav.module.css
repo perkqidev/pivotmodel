@@ -22,10 +22,10 @@
   display: inline-flex;
   align-items: center;
   background: #16233f;
-  padding: 7px 13px;
+  padding: 6px 14px;
   border-radius: 10px;
 }
-.brand img { height: 34px; width: auto; display: block; }
+.brand img { height: 46px; width: auto; display: block; }
 .links { display: flex; align-items: center; gap: 38px; }
 .links a {
   font-family: var(--font-mono);
