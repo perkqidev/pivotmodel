@@ -36,7 +36,7 @@ export function Nav() {
   return (
     <nav className={styles.nav} data-solid={solid}>
       <div className={styles.inner}>
-        <a href="/" className={styles.brand}>The Pivot <em>Model</em></a>
+        <a href="/" className={styles.brand} aria-label="The Pivot Model — home"><img src="/logo.png" alt="The Pivot Model" /></a>
         <div className={styles.links}>
           <a href="#mani">The Book</a>
           <a href="#framework">Framework</a>

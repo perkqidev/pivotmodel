@@ -65,7 +65,7 @@ export default function Nav() {
   return (
     <nav className={`nav${scrolled ? ' scrolled' : ''}`}>
       <div className="nav-inner">
-        <a href="/" className="nav-logo">The Pivot <em>Model</em></a>
+        <a href="/" className="nav-logo" aria-label="The Pivot Model — home"><img src="/logo.png" alt="The Pivot Model" /></a>
 
         <div className="nav-links">
           <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">

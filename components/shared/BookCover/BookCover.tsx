@@ -30,14 +30,7 @@ export function BookCover() {
           </div>
           <div className={styles.cover}>
             <div className={`${styles.face} ${styles.front}`}>
-              <div className={styles.top}>A Framework for Offshore<br />Engineering Excellence</div>
-              <div className={styles.mid}>
-                <div className={styles.mark}>◆</div>
-                <div className={styles.title}>THE<br />PIVOT<br /><strong>MODEL</strong></div>
-                <div className={styles.rule} />
-                <div className={styles.sub}>Four Pivots · Three Levels<br />One Transformation</div>
-              </div>
-              <div className={styles.bot}>A Field Guide for Engineering Leaders</div>
+              <img src="/book-cover.png" alt="The Pivot Model" className={styles.coverImg} />
             </div>
             <div className={`${styles.face} ${styles.back}`} />
           </div>

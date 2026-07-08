@@ -2,8 +2,7 @@ import styles from './About.module.css';
 
 interface Props { theme: 'light' | 'dark'; }
 
-export function About({ theme }: Props) {
-  const img = theme === 'dark' ? '/img/aero-mani-dark.svg' : '/img/aero-mani.svg';
+export function About({ theme: _theme }: Props) {
   return (
     <section id="mani" className={styles.about}>
       <div className={styles.inner}>
@@ -31,7 +30,7 @@ export function About({ theme }: Props) {
           </a>
         </div>
         <div className={styles.img}>
-          <img src={img} alt="The four pivots diagram" />
+          <img src="/book-desk.png" alt="The Pivot Model — a journey from leadership back to the code" />
         </div>
       </div>
     </section>
