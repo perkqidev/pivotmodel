@@ -117,7 +117,7 @@ input,select,textarea{font-family:inherit}
   display:inline-flex;align-items:center;
   background:#16233f;padding:5px 13px;border-radius:10px;
 }
-.nav-logo img{height:44px;width:auto;display:block;filter:grayscale(1)}
+.nav-logo img{height:44px;width:auto;display:block}
 .nav-links{display:flex;align-items:center;gap:28px}
 .nav-links a{font-size:15px;font-weight:500;color:var(--muted);transition:color .2s}
 .nav-links a:hover{color:var(--cream)}
