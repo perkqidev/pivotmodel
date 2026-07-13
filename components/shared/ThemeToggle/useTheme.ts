@@ -2,36 +2,53 @@
 import { useEffect, useState } from 'react';
 
 type Theme = 'light' | 'dark';
-const KEY = 'theme';
+// New key (v2): the old 'theme' key was auto-persisted on every mount back
+// when light was the default, so returning browsers have a stale 'light'
+// saved. Using a fresh key means that stale value is ignored and dark is the
+// real default; we only write here when the user *explicitly* toggles.
+const KEY = 'theme-pref';
 
 /**
- * Unified theme state. Persists to localStorage 'theme' and applies
- * data-theme on <html> so legacy pages (community, assessment, admin)
- * pick up the same value.
+ * Unified theme state. Dark is the default. Persists an explicit choice to
+ * localStorage and applies data-theme on <html> so legacy pages (community,
+ * assessment, admin) pick up the same value.
  */
 export function useTheme() {
-  const [theme, setTheme] = useState<Theme>('dark');
+  const [theme, setThemeState] = useState<Theme>('dark');
 
+  // Hydrate from an explicit saved choice; absence => dark default.
   useEffect(() => {
     try {
-      // Dark is the default: only honour an explicit 'light' choice.
-      const saved = localStorage.getItem(KEY) === 'light' ? 'light' : 'dark';
-      setTheme(saved);
+      const saved = localStorage.getItem(KEY);
+      if (saved === 'light' || saved === 'dark') setThemeState(saved);
     } catch {
       /* ignore */
     }
   }, []);
 
+  // Reflect the current theme onto <html> for the legacy token system.
   useEffect(() => {
+    if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    else document.documentElement.removeAttribute('data-theme');
+  }, [theme]);
+
+  const persist = (t: Theme) => {
     try {
-      localStorage.setItem(KEY, theme);
-      if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
-      else document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem(KEY, t);
     } catch {
       /* ignore */
     }
-  }, [theme]);
+  };
+  const setTheme = (t: Theme) => {
+    setThemeState(t);
+    persist(t);
+  };
+  const toggle = () =>
+    setThemeState(t => {
+      const next = t === 'light' ? 'dark' : 'light';
+      persist(next);
+      return next;
+    });
 
-  const toggle = () => setTheme(t => (t === 'light' ? 'dark' : 'light'));
   return { theme, setTheme, toggle };
 }

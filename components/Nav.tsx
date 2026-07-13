@@ -9,7 +9,7 @@ export default function Nav() {
   const [menuOpen, setMenuOpen]   = useState(false);
   const [user, setUser]           = useState<NavUser | null>(null);
   const [dropOpen, setDropOpen]   = useState(false);
-  const [theme, setTheme]         = useState('light');
+  const [theme, setTheme]         = useState('dark');
   const dropRef                   = useRef<HTMLDivElement>(null);
 
   /* scroll effect */
@@ -19,11 +19,12 @@ export default function Nav() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  /* load theme */
+  /* load theme — dark is the default; only an explicit saved value overrides */
   useEffect(() => {
-    const saved = localStorage.getItem('theme') || 'light';
-    setTheme(saved);
-    if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    const saved = localStorage.getItem('theme-pref');
+    const resolved = saved === 'light' ? 'light' : 'dark';
+    setTheme(resolved);
+    if (resolved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
     else document.documentElement.removeAttribute('data-theme');
   }, []);
 
@@ -32,7 +33,7 @@ export default function Nav() {
     setTheme(next);
     if (next === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
     else document.documentElement.removeAttribute('data-theme');
-    localStorage.setItem('theme', next);
+    localStorage.setItem('theme-pref', next);
   }
 
   /* load session once */
