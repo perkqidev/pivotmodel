@@ -21,6 +21,16 @@
   --accent-hi: #14b8a6;
   --accent-bg: rgba(13,148,136, 0.06);
 
+  /* Inverted "anchor" surfaces (stats band, consulting card, final CTA,
+     truth banner, author quote). These are ALWAYS a dark surface with
+     light text — in both themes — so they read as deliberate accent
+     bands instead of inverting to near-white in dark mode. */
+  --anchor-bg:    #15161A;
+  --anchor-fg:    #F7F7F5;
+  --anchor-muted: rgba(247, 247, 245, 0.66);
+  --anchor-faint: rgba(247, 247, 245, 0.45);
+  --anchor-line:  rgba(247, 247, 245, 0.12);
+
   --font-disp: 'Newsreader', Georgia, 'Times New Roman', serif;  /* headlines, titles, numbers */
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;    /* body, leads, links */
   --font-mono: 'Inter', system-ui, -apple-system, sans-serif;    /* labels / eyebrows */
@@ -61,6 +71,13 @@
   --accent-d: #14b8a6;
   --accent-hi: #5eead4;
   --accent-bg: rgba(45,212,191, 0.10);
+  /* Anchor surfaces stay dark in dark mode too — a touch raised above the
+     page base (#0E0F14) so the band reads as a distinct surface. */
+  --anchor-bg:    #1A1E27;
+  --anchor-fg:    #E7EAEF;
+  --anchor-muted: rgba(231, 234, 239, 0.68);
+  --anchor-faint: rgba(231, 234, 239, 0.45);
+  --anchor-line:  rgba(231, 234, 239, 0.12);
 }
 
 .landing-aero-toggle {

@@ -25,7 +25,7 @@
   padding: 6px 14px;
   border-radius: 10px;
 }
-.brand img { height: 46px; width: auto; display: block; filter: grayscale(1); }
+.brand img { height: 46px; width: auto; display: block; }
 .links { display: flex; align-items: center; gap: 38px; }
 .links a {
   font-family: var(--font-mono);

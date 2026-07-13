@@ -1,7 +1,7 @@
 .stats {
   padding: 120px 0;
-  background: var(--ink);
-  color: var(--base);
+  background: var(--anchor-bg);
+  color: var(--anchor-fg);
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
 }
@@ -12,7 +12,7 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
 }
-.item { padding: 0 40px; border-right: 1px solid rgba(247, 247, 245, 0.12); }
+.item { padding: 0 40px; border-right: 1px solid var(--anchor-line); }
 .item:first-child { padding-left: 0; }
 .item:last-child { border-right: 0; }
 .n {
@@ -21,7 +21,7 @@
   font-size: clamp(48px, 5.5vw, 82px);
   line-height: 1;
   letter-spacing: -0.03em;
-  color: var(--base);
+  color: var(--anchor-fg);
 }
 .n .suf { font-size: 0.55em; letter-spacing: -0.01em; }
 .l {
@@ -29,7 +29,7 @@
   font-size: 14px;
   letter-spacing: 0.01em;
   text-transform: none;
-  color: rgba(247, 247, 245, 0.45);
+  color: var(--anchor-faint);
   margin-top: 16px;
   line-height: 1.7;
   max-width: 22ch;

@@ -17,28 +17,28 @@
 .svc h5 { font-family: var(--font-disp); font-weight: 500; font-size: 18px;
           letter-spacing: -0.005em; margin-bottom: 4px; color: var(--ink); transition: color 0.25s; }
 .svc p { font-size: 18px; font-weight: 400; color: var(--ink-2); line-height: 1.5; }
-.card { background: var(--ink); color: var(--base); padding: 48px 44px 44px;
+.card { background: var(--anchor-bg); color: var(--anchor-fg); padding: 48px 44px 44px;
         position: relative; overflow: hidden; }
 .cTag { font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.01em;
         text-transform: none; color: var(--accent-hi); margin-bottom: 22px; }
 .cH { font-family: var(--font-disp); font-weight: 400; font-size: 28px;
       letter-spacing: -0.015em; line-height: 1.15; margin-bottom: 14px; }
-.cSub { font-size: 18px; font-weight: 400; line-height: 1.65; color: rgba(255,255,255,0.68);
+.cSub { font-size: 18px; font-weight: 400; line-height: 1.65; color: var(--anchor-muted);
         margin-bottom: 34px; }
 .figs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
-        background: rgba(255,255,255,0.12); margin-bottom: 32px; }
-.fig { background: var(--ink); padding: 20px 12px; text-align: center; }
+        background: var(--anchor-line); margin-bottom: 32px; }
+.fig { background: var(--anchor-bg); padding: 20px 12px; text-align: center; }
 .figN { font-family: var(--font-disp); font-weight: 400; font-size: 28px;
         letter-spacing: -0.02em; color: var(--accent-hi); margin-bottom: 6px; }
 .figL { font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.01em;
-        text-transform: none; color: rgba(255,255,255,0.55); line-height: 1.4; }
+        text-transform: none; color: var(--anchor-faint); line-height: 1.4; }
 .cta { display: block; width: 100%; text-align: center; background: #F7F7F5; color: #15161A !important;
        font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.01em; text-transform: none;
        padding: 18px 24px; border: 1px solid #F7F7F5; cursor: pointer;
        transition: background 0.3s var(--ease), color 0.3s var(--ease), border-color 0.3s var(--ease); }
 .cta:hover { background: #14b8a6; border-color: #14b8a6; color: #FFFFFF !important; }
 .note { text-align: center; font-family: var(--font-mono); font-size: 14px;
-        letter-spacing: 0.01em; color: rgba(255,255,255,0.5); margin-top: 16px; }
+        letter-spacing: 0.01em; color: var(--anchor-faint); margin-top: 16px; }
 @media (max-width: 960px) {
   .wrap { padding: 0 28px; }
   .grid { grid-template-columns: 1fr; gap: 56px; }

@@ -1,4 +1,4 @@
-.final { padding: 140px 0; background: var(--ink); color: var(--base);
+.final { padding: 140px 0; background: var(--anchor-bg); color: var(--anchor-fg);
          position: relative; overflow: hidden; z-index: 2; }
 .final::before { content: ''; position: absolute; inset: 0;
                  background:
@@ -12,7 +12,7 @@
      letter-spacing: -0.03em; line-height: 0.98; margin-bottom: 28px; }
 .h strong { font-weight: 500; font-style: italic; }
 .lead { font-family: var(--font-sans); font-size: 19px; font-weight: 400; line-height: 1.7;
-        color: rgba(255,255,255,0.72); max-width: 60ch; margin: 0 auto 44px; }
+        color: var(--anchor-muted); max-width: 60ch; margin: 0 auto 44px; }
 .cta { display: inline-flex; align-items: center; gap: 12px;
        font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.01em; text-transform: none;
        background: #14b8a6; color: #FFFFFF !important; padding: 22px 44px;
@@ -20,5 +20,5 @@
 .cta:hover { background: #F7F7F5; color: #15161A !important; border-color: #F7F7F5; }
 .cta .ar { transition: transform 0.25s; } .cta:hover .ar { transform: translateX(6px); }
 .note { font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.01em;
-        text-transform: none; color: rgba(255,255,255,0.4); margin-top: 28px; }
+        text-transform: none; color: var(--anchor-faint); margin-top: 28px; }
 @media (max-width: 960px) { .wrap { padding: 0 28px; } }

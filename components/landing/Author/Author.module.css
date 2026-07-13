@@ -10,7 +10,7 @@
                  pointer-events: none; }
 .initials { font-family: var(--font-disp); font-weight: 400; font-size: 96px;
             letter-spacing: -0.04em; color: var(--ink-2); }
-.quote { background: var(--ink); color: var(--base); padding: 28px 30px;
+.quote { background: var(--anchor-bg); color: var(--anchor-fg); padding: 28px 30px;
          font-family: var(--font-disp); font-weight: 400; font-style: italic;
          font-size: 18px; line-height: 1.55; letter-spacing: -0.005em;
          border-left: 3px solid var(--accent); margin-top: -36px;

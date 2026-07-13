@@ -31,7 +31,7 @@
 .status { font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.01em; text-transform: none;
           color: var(--muted); padding-top: 14px; border-top: 1px solid var(--line); }
 .phase[data-now='true'] .status { color: var(--accent); }
-.truth { background: var(--ink); color: var(--base); padding: 54px 40px;
+.truth { background: var(--anchor-bg); color: var(--anchor-fg); padding: 54px 40px;
          display: flex; flex-direction: column; align-items: center; text-align: center; }
 .truth blockquote { font-family: var(--font-disp); font-weight: 400; font-style: italic;
                     font-size: clamp(20px, 2.6vw, 30px); line-height: 1.4; letter-spacing: -0.01em;

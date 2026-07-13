@@ -10,11 +10,12 @@ const KEY = 'theme';
  * pick up the same value.
  */
 export function useTheme() {
-  const [theme, setTheme] = useState<Theme>('light');
+  const [theme, setTheme] = useState<Theme>('dark');
 
   useEffect(() => {
     try {
-      const saved = (localStorage.getItem(KEY) as Theme | null) || 'light';
+      // Dark is the default: only honour an explicit 'light' choice.
+      const saved = localStorage.getItem(KEY) === 'light' ? 'light' : 'dark';
       setTheme(saved);
     } catch {
       /* ignore */
