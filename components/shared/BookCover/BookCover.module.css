@@ -30,8 +30,14 @@
   cursor: pointer;
 }
 
-/* inside page (revealed when the cover opens) */
+/* inside page (revealed when the cover opens). The paper is cream in both
+   themes, so its ink is pinned rather than themed — same reasoning as the
+   --anchor-* surfaces, which stay dark in light mode. */
 .inside {
+  --paper-ink:    #15161A;
+  --paper-ink-2:  #5A5E66;
+  --paper-accent: #0d9488;
+  --paper-hl:     rgba(13, 148, 136, 0.24);
   position: absolute;
   inset: 0;
   border-radius: 2px 9px 9px 2px;
@@ -42,14 +48,21 @@
   justify-content: center; align-items: center;
   text-align: center; padding: 34px 30px;
 }
-.imk { color: var(--accent); font-size: 15px; letter-spacing: 0.01em; margin-bottom: 16px; }
-.ittl { font-family: var(--font-disp); font-weight: 600; font-size: 21px; color: var(--ink);
+.imk { color: var(--paper-accent); font-size: 15px; letter-spacing: 0.01em; margin-bottom: 16px; }
+.ittl { font-family: var(--font-disp); font-weight: 600; font-size: 21px; color: var(--paper-ink);
         letter-spacing: -0.01em; line-height: 1.12; margin-bottom: 14px; }
-.iln { width: 26px; height: 1px; background: var(--accent); margin: 0 auto 16px; }
-.inside p { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.01em;
-            text-transform: none; color: var(--ink-2); line-height: 2.1; }
-.icta { margin-top: 20px; font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.01em;
-        text-transform: none; color: var(--accent); }
+.iln { width: 26px; height: 1px; background: var(--paper-accent); margin: 0 auto 16px; }
+.inside p { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.01em;
+            text-transform: none; color: var(--paper-ink-2); line-height: 2.15; }
+
+/* Highlighted terms — a plain marker block behind the word, like <mark>. */
+.hl {
+  color: var(--paper-ink);
+  font-weight: 600;
+  padding: 1px 3px;
+  margin: 0 -3px;
+  background: var(--paper-hl);
+}
 
 /* the cover — hinged on the left, swings open on hover */
 .cover {
