@@ -46,11 +46,6 @@ export function Hero({ theme }: Props) {
         </div>
       </div>
 
-      <div className={styles.scrollcue} data-shown={shown}>
-        <span>Scroll</span>
-        <span className={styles.scrollcueLine} />
-      </div>
-
       <BookCover />
     </header>
   );

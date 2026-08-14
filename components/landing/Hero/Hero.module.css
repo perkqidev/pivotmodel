@@ -113,46 +113,12 @@
 .btnGhost .ar { transition: transform 0.3s; }
 .btnGhost:hover .ar { transform: translateX(6px); }
 
-.scrollcue {
-  position: absolute;
-  left: 56px;
-  bottom: 36px;
-  z-index: 2;
-  display: flex; align-items: center; gap: 12px;
-  font-family: var(--font-mono);
-  font-size: 14px;
-  letter-spacing: 0.01em;
-  text-transform: none;
-  color: var(--muted);
-  opacity: 0;
-  transition: opacity 1s 1.1s var(--ease);
-}
-.scrollcue[data-shown='true'] { opacity: 0.7; }
-.scrollcueLine {
-  width: 46px;
-  height: 1px;
-  background: var(--line);
-  position: relative;
-  overflow: hidden;
-}
-.scrollcueLine::after {
-  content: '';
-  position: absolute;
-  left: -46px; top: 0;
-  height: 1px; width: 46px;
-  background: var(--accent);
-  animation: cue 2.4s infinite;
-}
-@keyframes cue { to { left: 46px; } }
-
 @media (max-width: 960px) {
   .hero { padding: 140px 0 80px; }
   .inner { padding: 0 28px; }
-  .scrollcue { left: 28px; }
   .veil { background: linear-gradient(180deg, var(--base) 30%, transparent); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .kicker, .desc, .actions, .scrollcue { opacity: 1 !important; transform: none !important; }
+  .kicker, .desc, .actions { opacity: 1 !important; transform: none !important; }
   .titleLine > span { transform: none !important; }
-  .scrollcueLine::after { animation: none; }
 }
