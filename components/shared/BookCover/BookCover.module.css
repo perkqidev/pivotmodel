@@ -26,41 +26,14 @@
   transform-style: preserve-3d;
   transform: rotateY(-22deg) rotateX(5deg);
   transition: transform 0.4s ease-out;
-  pointer-events: auto;
-  cursor: pointer;
 }
 
-/* inside page (revealed when the cover opens) */
-.inside {
-  position: absolute;
-  inset: 0;
-  border-radius: 2px 9px 9px 2px;
-  background: linear-gradient(160deg, #F4F2EB, #E6E3D8);
-  box-shadow: inset 0 0 44px rgba(21, 22, 26, 0.09),
-              0 50px 90px -34px rgba(21, 22, 26, 0.4);
-  display: flex; flex-direction: column;
-  justify-content: center; align-items: center;
-  text-align: center; padding: 34px 30px;
-}
-.imk { color: var(--accent); font-size: 15px; letter-spacing: 0.01em; margin-bottom: 16px; }
-.ittl { font-family: var(--font-disp); font-weight: 600; font-size: 21px; color: var(--ink);
-        letter-spacing: -0.01em; line-height: 1.12; margin-bottom: 14px; }
-.iln { width: 26px; height: 1px; background: var(--accent); margin: 0 auto 16px; }
-.inside p { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.01em;
-            text-transform: none; color: var(--ink-2); line-height: 2.1; }
-.icta { margin-top: 20px; font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.01em;
-        text-transform: none; color: var(--accent); }
-
-/* the cover — hinged on the left, swings open on hover */
 .cover {
   position: absolute;
   inset: 0;
-  transform-origin: left center;
-  transform: translateZ(2px) rotateY(0deg);
-  transition: transform 1.15s var(--ease);
+  transform: translateZ(2px);
   transform-style: preserve-3d;
 }
-.book:hover .cover { transform: translateZ(2px) rotateY(-152deg); }
 
 .face {
   position: absolute;
@@ -79,12 +52,6 @@
   object-fit: cover;
   display: block;
 }
-.back {
-  transform: rotateY(180deg);
-  background: linear-gradient(160deg, #E9E6DC, #D9D6CB);
-  box-shadow: inset 0 0 0 1px rgba(21, 22, 26, 0.06);
-}
-
 .top {
   font-family: var(--font-mono); font-size: 7.5px;
   letter-spacing: 0.01em; text-transform: none;
@@ -110,13 +77,4 @@
   background: linear-gradient(#1a2744, #0e1830);
   z-index: -1;
 }
-.hint {
-  position: absolute; bottom: -30px; left: 50%;
-  transform: translateX(-50%); white-space: nowrap;
-  font-family: var(--font-mono); font-size: 8.5px;
-  letter-spacing: 0.01em; text-transform: none;
-  color: var(--muted); opacity: 0.7; transition: opacity 0.3s;
-}
-.book:hover .hint { opacity: 0; }
-
 @media (max-width: 960px) { .drift { display: none; } }
