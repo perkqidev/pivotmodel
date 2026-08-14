@@ -25,7 +25,12 @@ export function BookCover() {
             <div className={styles.imk}>◆</div>
             <div className={styles.ittl}>Four Pivots.<br />Three Levels.</div>
             <div className={styles.iln} />
-            <p>Operational Excellence<br />Pace of Evolution<br />Alignment · Results</p>
+            <p>
+              <span className={styles.hl}>AI-augmented</span> delivery<br />
+              Operational Excellence<br />
+              Pace of Evolution<br />
+              <span className={styles.hl}>Alignment</span> · Results
+            </p>
           </div>
           <div className={styles.cover}>
             <div className={`${styles.face} ${styles.front}`}>
