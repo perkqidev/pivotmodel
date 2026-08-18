@@ -7,6 +7,7 @@ export interface PostMeta {
   category?: string;
   excerpt?: string;
   hero_image?: string;
+  hero_caption?: string;
   emoji?: string;
   read_time?: string | number;
   status?: string;
@@ -82,6 +83,14 @@ export function PostDetails({ value, onChange, readTimeHint }: {
 
         <div>
           <ImageField label="Hero image" url={value.hero_image || ''} onChange={url => onChange({ hero_image: url })} />
+          {value.hero_image && (
+            <div style={{ marginTop: 12 }}>
+              <div className={s.label}>Description</div>
+              <input className={s.input} value={value.hero_caption || ''}
+                     placeholder="Caption shown under the image"
+                     onChange={e => onChange({ hero_caption: e.target.value })} />
+            </div>
+          )}
         </div>
       </div>
     </div>
