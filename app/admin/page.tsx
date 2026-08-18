@@ -1,6 +1,10 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useToast } from '@/components/shared/Toast/ToastProvider';
+import { BlockEditor } from '@/components/admin/BlockEditor';
+import { PostDetails } from '@/components/admin/PostDetails';
+import { BlockRenderer } from '@/components/blog/BlockRenderer';
+import { BlockDoc, emptyDoc, estimateReadTime, parseBody, serializeBody } from '@/lib/blog/blocks';
 
 type Tab = 'users'|'blog'|'whitepapers'|'chat'|'stats';
 
@@ -96,12 +100,28 @@ function BlogTab() {
   const toast = useToast();
   const [posts, setPosts] = useState<any[]>([]);
   const [editing, setEditing] = useState<any|null>(null);
+  const [doc, setDoc] = useState<BlockDoc>(emptyDoc());
+  const [view, setView] = useState<'write'|'preview'>('write');
   useEffect(()=>{fetch('/api/blog?all=1').then(r=>r.json()).then(d=>setPosts(d.posts||[]));}, []);
+
+  /** Open the editor on an existing post, or on a blank one. */
+  function open(post:any|null) {
+    const base = post ?? { title:'',category:'',excerpt:'',body:'',hero_image:'',emoji:'📝',read_time:0,status:'draft' };
+    setDoc(parseBody(base.body));
+    setEditing(base);
+    setView('write');
+  }
+
   async function save() {
     if (!editing) return;
     const method = editing.id ? 'PATCH' : 'POST';
+    const payload = {
+      ...editing,
+      body: serializeBody(doc),
+      read_time: Number(editing.read_time) || estimateReadTime(doc),
+    };
     try {
-      const res = await fetch('/api/blog',{method,headers:{'Content-Type':'application/json'},body:JSON.stringify(editing)});
+      const res = await fetch('/api/blog',{method,headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
       if (!res.ok) {
         const d = await res.json().catch(()=>({}));
         toast.error(d.error || 'Could not save post.');
@@ -127,32 +147,40 @@ function BlogTab() {
   }
   if (editing) return (
     <div>
-      <div style={{display:'flex',gap:16,alignItems:'center',marginBottom:24}}>
-        <button onClick={()=>setEditing(null)} style={{background:'none',border:'1px solid var(--border-2)',borderRadius:8,padding:'8px 14px',color:'var(--muted)',cursor:'pointer',fontSize:15}}>← Cancel</button>
-        <h2 style={{margin:0,color:'var(--cream)'}}>{editing.id?'Edit Post':'New Post'}</h2>
-      </div>
-      <div style={{background:'var(--ink-2)',border:'1px solid var(--border-2)',borderRadius:16,padding:24,display:'grid',gap:16}}>
-        {[['Title','title','input',''],['Category','category','input',''],['Excerpt','excerpt','textarea',''],['Body','body','textarea',''],['Emoji','emoji','input',''],['Read time (min)','read_time','input','']].map(([label,field,type,ph])=>(
-          <div key={field as string}>
-            <div style={{fontSize:14,color:'var(--muted)',marginBottom:6,fontWeight:600,textTransform:'none',letterSpacing:'0.01em'}}>{label as string}</div>
-            {type==='textarea' ? <textarea value={editing[field as string]||''} onChange={e=>setEditing((p:any)=>({...p,[field as string]:e.target.value}))} rows={6} style={{width:'100%',background:'var(--ink)',border:'1px solid var(--border-2)',borderRadius:8,padding:'10px 14px',color:'var(--cream)',fontSize:15,outline:'none',resize:'vertical',boxSizing:'border-box'}} /> : <input value={editing[field as string]||''} onChange={e=>setEditing((p:any)=>({...p,[field as string]:e.target.value}))} style={{width:'100%',background:'var(--ink)',border:'1px solid var(--border-2)',borderRadius:8,padding:'10px 14px',color:'var(--cream)',fontSize:15,outline:'none',boxSizing:'border-box'}} />}
-          </div>
-        ))}
-        <div>
-          <div style={{fontSize:14,color:'var(--muted)',marginBottom:6,fontWeight:600,textTransform:'none',letterSpacing:'0.01em'}}>Status</div>
-          <select value={editing.status||'draft'} onChange={e=>setEditing((p:any)=>({...p,status:e.target.value}))} style={{background:'var(--ink)',border:'1px solid var(--border-2)',borderRadius:8,padding:'10px 14px',color:'var(--cream)',fontSize:15,cursor:'pointer',outline:'none'}}>
-            <option value="draft">Draft</option><option value="published">Published</option>
-          </select>
+      <div style={{display:'flex',gap:16,alignItems:'center',marginBottom:24,flexWrap:'wrap'}}>
+        <button onClick={()=>setEditing(null)} style={{background:'none',border:'1px solid var(--border-2)',borderRadius:8,padding:'8px 14px',color:'var(--muted)',cursor:'pointer',fontSize:15}}>← Back</button>
+        <h2 style={{margin:0,color:'var(--cream)'}}>{editing.id?'Edit post':'New post'}</h2>
+        <div style={{display:'flex',gap:4,marginLeft:'auto',background:'var(--ink)',border:'1px solid var(--border-2)',borderRadius:10,padding:4}}>
+          {(['write','preview'] as const).map(v=>(
+            <button key={v} onClick={()=>setView(v)} style={{background:view===v?'var(--ink-2)':'none',border:'none',borderRadius:7,padding:'7px 16px',color:view===v?'var(--cream)':'var(--muted)',cursor:'pointer',fontSize:14,fontWeight:600,textTransform:'capitalize'}}>{v}</button>
+          ))}
         </div>
-        <button onClick={save} style={{background:'var(--cream)',border:'none',borderRadius:8,padding:'12px 24px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:16}}>Save Post</button>
+        <button onClick={save} style={{background:'var(--cream)',border:'none',borderRadius:8,padding:'10px 22px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer',fontSize:15}}>Save post</button>
       </div>
+
+      {view==='preview' ? (
+        <div style={{background:'var(--surface)',border:'1px solid var(--border-2)',borderRadius:16,padding:'40px 44px'}}>
+          <article className="post">
+            <div className="post-meta">{[editing.category, `${Number(editing.read_time)||estimateReadTime(doc)} min read`].filter(Boolean).join(' · ')}</div>
+            <h1 className="post-title">{editing.title || 'Untitled'}</h1>
+            {editing.excerpt && <p className="post-lead">{editing.excerpt}</p>}
+            {editing.hero_image && <img src={editing.hero_image} alt="" className="post-hero" />}
+            <BlockRenderer blocks={doc.blocks} />
+          </article>
+        </div>
+      ) : (
+        <div>
+          <PostDetails value={editing} onChange={patch=>setEditing((p:any)=>({...p,...patch}))} readTimeHint={estimateReadTime(doc)} />
+          <BlockEditor doc={doc} onChange={setDoc} />
+        </div>
+      )}
     </div>
   );
   return (
     <div>
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24}}>
         <h2 style={{margin:0,color:'var(--cream)'}}>Blog Posts ({posts.length})</h2>
-        <button onClick={()=>setEditing({title:'',category:'',excerpt:'',body:'',emoji:'📝',read_time:4,status:'draft'})} style={{background:'var(--cream)',border:'none',borderRadius:8,padding:'10px 20px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer'}}>+ New Post</button>
+        <button onClick={()=>open(null)} style={{background:'var(--cream)',border:'none',borderRadius:8,padding:'10px 20px',color:'var(--gold-btn-text)',fontWeight:700,cursor:'pointer'}}>+ New Post</button>
       </div>
       <div style={{display:'grid',gap:12}}>
         {posts.map(p=>(
@@ -163,7 +191,7 @@ function BlogTab() {
               <div style={{fontSize:14,color:'var(--muted)',marginTop:2}}>{p.category} · {p.status} · {p.read_time}min</div>
             </div>
             <div style={{display:'flex',gap:8}}>
-              <button onClick={()=>setEditing(p)} style={{background:'none',border:'1px solid var(--border-2)',borderRadius:8,padding:'6px 14px',color:'var(--muted)',cursor:'pointer',fontSize:14}}>Edit</button>
+              <button onClick={()=>open(p)} style={{background:'none',border:'1px solid var(--border-2)',borderRadius:8,padding:'6px 14px',color:'var(--muted)',cursor:'pointer',fontSize:14}}>Edit</button>
               <button onClick={()=>del(p.id)} style={{background:'none',border:'1px solid var(--red)',borderRadius:8,padding:'6px 14px',color:'var(--red)',cursor:'pointer',fontSize:14}}>Delete</button>
             </div>
           </div>

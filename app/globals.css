@@ -797,3 +797,195 @@ html[data-theme='dark'] .noise-overlay{opacity:.04}
 /* ── Talent sub-tabs scrollbar hide ──────────────────────────────── */
 .talent-subtabs::-webkit-scrollbar{display:none}
 .talent-subtabs{-ms-overflow-style:none;scrollbar-width:none}
+
+/* ── Insights: post list cards ───────────────────────────────────── */
+.post-card{
+  display:flex;gap:16px;align-items:center;width:100%;text-align:left;
+  background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  padding:20px;cursor:pointer;font:inherit;
+  transition:border-color .2s,transform .2s;
+}
+.post-card:hover{border-color:var(--gold);transform:translateY(-1px)}
+.post-card-thumb{width:96px;height:68px;object-fit:cover;border-radius:8px;flex-shrink:0}
+.post-card-go{color:var(--muted-2);font-size:18px;flex-shrink:0;transition:transform .2s,color .2s}
+.post-card:hover .post-card-go{color:var(--gold);transform:translateX(4px)}
+
+/* ── Insights: the article reader ────────────────────────────────── */
+.post{max-width:720px}
+.post-back{
+  background:none;border:none;padding:0;margin-bottom:32px;cursor:pointer;
+  font:inherit;font-size:15px;color:var(--muted);transition:color .2s;
+}
+.post-back:hover{color:var(--gold)}
+.post-meta{
+  font-size:13px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:14px;
+}
+.post-title{
+  font-family:var(--font-display);font-weight:600;
+  font-size:clamp(30px,4vw,44px);line-height:1.14;letter-spacing:-.015em;
+  color:var(--fg);margin:0 0 20px;
+}
+.post-lead{
+  font-size:20px;line-height:1.6;color:var(--muted);
+  margin:0 0 32px;font-weight:300;
+}
+.post-hero{
+  width:100%;border-radius:14px;border:1px solid var(--border);
+  margin-bottom:44px;display:block;
+}
+.post-foot{
+  margin-top:56px;padding-top:24px;border-top:1px solid var(--border);
+  font-size:14px;color:var(--muted-2);
+}
+
+/* Article body. Authored as HTML in /admin, so these are plain tag rules
+   plus a few opt-in classes for the structured blocks. */
+.post-body{font-size:17px;line-height:1.78;color:var(--muted)}
+.post-body p{margin:0 0 22px}
+.post-body h2{
+  font-family:var(--font-display);font-weight:600;font-size:28px;line-height:1.25;
+  color:var(--fg);margin:52px 0 18px;letter-spacing:-.01em;
+}
+.post-body h3{
+  font-family:var(--font-body);font-weight:600;font-size:19px;
+  color:var(--fg);margin:36px 0 14px;
+}
+.post-body strong{color:var(--fg);font-weight:600}
+.post-body em{font-style:italic}
+.post-body a{color:var(--gold);border-bottom:1px solid var(--gold-d)}
+.post-body ul,.post-body ol{margin:0 0 24px;padding-left:0;list-style:none}
+.post-body li{position:relative;padding-left:24px;margin-bottom:14px;line-height:1.7}
+.post-body li::before{
+  content:'';position:absolute;left:2px;top:13px;
+  width:8px;height:1px;background:var(--gold);
+}
+.post-body ol{counter-reset:post-ol}
+.post-body ol li{counter-increment:post-ol}
+.post-body ol li::before{
+  content:counter(post-ol);left:0;top:0;width:auto;height:auto;background:none;
+  color:var(--gold);font-size:14px;font-weight:600;
+}
+.post-body img{
+  width:100%;border-radius:12px;border:1px solid var(--border);
+  display:block;margin:0;
+}
+.post-body figure{margin:38px 0}
+.post-body figcaption{
+  font-size:13px;color:var(--muted-2);margin-top:12px;
+  text-align:center;font-style:italic;
+}
+.post-body hr{
+  border:none;border-top:1px solid var(--border);
+  margin:48px 0;
+}
+.post-body blockquote{
+  border-left:2px solid var(--gold);padding:4px 0 4px 22px;margin:32px 0;
+  font-family:var(--font-display);font-size:21px;line-height:1.5;color:var(--fg);
+}
+.post-body code{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em;
+  background:var(--gold-bg);color:var(--gold);padding:2px 6px;border-radius:4px;
+}
+
+/* Signature block that opens each depth: @Programmer(focus = "…") */
+.post-ann{
+  border:1px solid var(--border-2);border-left:2px solid var(--gold);
+  border-radius:0 12px 12px 0;background:var(--ink-2);
+  padding:22px 26px;margin:52px 0 26px;
+}
+.post-ann-sig{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:13px;line-height:1.5;color:var(--gold);
+  word-break:break-word;margin-bottom:14px;
+}
+.post-ann-row{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.post-ann-title{
+  font-family:var(--font-display);font-weight:600;font-size:26px;
+  color:var(--fg);letter-spacing:-.01em;
+}
+.post-ann-depth{
+  font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted-2);white-space:nowrap;
+}
+.post-body .post-ann-ask{
+  margin:12px 0 0;font-size:15px;color:var(--muted);font-style:italic;
+}
+
+/* Comparison block — labelled rows reading the same thing three ways */
+.post-takes{margin:0 0 26px}
+.post-take{
+  border:1px solid var(--border);border-radius:12px;
+  padding:20px 22px;margin:0 0 14px;background:var(--surface);
+}
+.post-take-who{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:13px;color:var(--gold);margin-bottom:10px;
+}
+.post-body .post-take p{margin:0 0 12px;font-size:16px;line-height:1.7}
+.post-body .post-take p:last-child{margin-bottom:0}
+
+/* Image block */
+.post-fig{margin:38px 0}
+.post-fig-inset{max-width:78%;margin-left:auto;margin-right:auto}
+
+/* Wrapped images — the paragraphs that follow flow around the side. */
+.post-fig-wrap-left{float:left;margin:6px 30px 20px 0}
+.post-fig-wrap-right{float:right;margin:6px 0 20px 30px}
+/* Structural elements start a clean line rather than sliding beside a float. */
+.post-body h2,.post-body h3,.post-body hr,
+.post-takes,.post-ann,.post-callout,.post-split,.post-gallery{clear:both}
+.post-body::after{content:'';display:block;clear:both}
+
+/* Image + text, side by side */
+.post-split{
+  display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);
+  gap:28px;align-items:center;margin:38px 0;
+}
+.post-split-right{direction:rtl}
+.post-split-right > *{direction:ltr}
+.post-split-media{margin:0}
+.post-split-media img{border-radius:12px}
+.post-body .post-split-text p:last-child{margin-bottom:0}
+
+/* Gallery */
+.post-gallery{display:grid;gap:16px;margin:38px 0}
+.post-gallery figure{margin:0}
+.post-gallery img{height:100%;object-fit:cover}
+
+/* Callout */
+.post-callout{
+  border:1px solid var(--gold-d);border-radius:12px;background:var(--gold-bg);
+  padding:22px 26px;margin:32px 0;
+}
+.post-callout-muted{border-color:var(--border-2);background:var(--ink-2)}
+.post-body .post-callout p:last-child{margin-bottom:0}
+
+/* Quote attribution */
+.post-quote-by{
+  display:block;margin-top:14px;font-family:var(--font-body);
+  font-size:14px;font-style:normal;color:var(--muted-2);
+}
+
+/* Code block */
+.post-code{
+  background:var(--ink-2);border:1px solid var(--border-2);border-radius:12px;
+  padding:20px 22px;margin:30px 0;overflow-x:auto;
+}
+.post-code code{
+  background:none;color:var(--fg);padding:0;font-size:14px;line-height:1.7;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre;
+}
+
+@media(max-width:720px){
+  .post-card{flex-wrap:wrap}
+  .post-card-thumb{width:100%;height:150px}
+  .post-body{font-size:16px}
+  .post-lead{font-size:18px}
+  .post-ann{padding:18px 20px}
+  .post-split{grid-template-columns:1fr;gap:20px;direction:ltr}
+  .post-gallery{grid-template-columns:1fr!important}
+  .post-fig-inset{max-width:100%}
+  /* Too narrow to wrap text beside a picture — stack instead. */
+  .post-fig-wrap-left,.post-fig-wrap-right{float:none;max-width:100%!important;margin:28px 0}
+}
