@@ -18,8 +18,25 @@ export async function POST(req: NextRequest) {
 export async function PATCH(req: NextRequest) {
   const user = await getSessionFromRequest(req);
   if (!user?.isAdmin) return NextResponse.json({ error:'Forbidden' },{ status:403 });
-  const { id,title,category,excerpt,body,emoji,read_time,status,hero_image,hero_caption } = await req.json();
-  await execute(`UPDATE blog_posts SET title=$1,category=$2,excerpt=$3,body=$4,emoji=$5,read_time=$6,status=$7,hero_image=$8,hero_caption=$9,published_at=CASE WHEN $7='published' AND published_at IS NULL THEN NOW() ELSE published_at END WHERE id=$10`, [title,category,excerpt,body,emoji,read_time,status,hero_image||null,hero_caption||null,id]);
+  const patch = await req.json();
+  const { id } = patch;
+  if (!id) return NextResponse.json({ error:'id required' },{ status:400 });
+
+  // Only touch the columns actually supplied, so a caller that just flips the
+  // status — the Publish button on the list — can't blank out the post.
+  const columns = ['title','category','excerpt','body','emoji','read_time','status','hero_image','hero_caption'];
+  const sets: string[] = [];
+  const values: unknown[] = [];
+  for (const col of columns) {
+    if (!(col in patch)) continue;
+    values.push(patch[col] === '' && col !== 'title' ? null : patch[col]);
+    sets.push(`${col}=$${values.length}`);
+  }
+  if (sets.length === 0) return NextResponse.json({ error:'nothing to update' },{ status:400 });
+  if (patch.status === 'published') sets.push('published_at=COALESCE(published_at, NOW())');
+
+  values.push(id);
+  await execute(`UPDATE blog_posts SET ${sets.join(',')} WHERE id=$${values.length}`, values);
   return NextResponse.json({ success:true });
 }
 export async function DELETE(req: NextRequest) {

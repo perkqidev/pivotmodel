@@ -134,6 +134,19 @@ function BlogTab() {
       toast.error('Network error. Save failed.');
     }
   }
+  /** Publish or unpublish straight from the list, without opening the post. */
+  async function setStatus(post:any, status:'draft'|'published') {
+    if (status === 'draft' && !confirm(`Unpublish "${post.title || 'this post'}"? Members will no longer see it.`)) return;
+    try {
+      const res = await fetch('/api/blog',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({ id:post.id, status })});
+      if (!res.ok) { toast.error('Could not change visibility.'); return; }
+      setPosts(prev=>prev.map(p=>p.id===post.id?{...p,status}:p));
+      toast.success(status==='published' ? 'Published — members can read it now.' : 'Moved back to draft.');
+    } catch {
+      toast.error('Network error.');
+    }
+  }
+
   async function del(id:number) {
     if (!confirm('Delete this post?')) return;
     try {
@@ -193,9 +206,21 @@ function BlogTab() {
             <div style={{fontSize:28}}>{p.emoji}</div>
             <div style={{flex:1}}>
               <div style={{fontWeight:700,color:'var(--cream)'}}>{p.title}</div>
-              <div style={{fontSize:14,color:'var(--muted)',marginTop:2}}>{p.category} · {p.status} · {p.read_time}min</div>
+              <div style={{fontSize:14,color:'var(--muted)',marginTop:4,display:'flex',alignItems:'center',gap:8}}>
+                <span style={{
+                  fontSize:11,letterSpacing:'.07em',textTransform:'uppercase',padding:'2px 8px',borderRadius:20,
+                  border:`1px solid ${p.status==='published'?'var(--gold)':'var(--border-2)'}`,
+                  color:p.status==='published'?'var(--gold)':'var(--muted-2)',
+                  background:p.status==='published'?'var(--gold-bg)':'none',
+                }}>{p.status==='published'?'Live':'Draft'}</span>
+                {p.category} · {p.read_time}min
+              </div>
             </div>
             <div style={{display:'flex',gap:8}}>
+              <button onClick={()=>setStatus(p, p.status==='published'?'draft':'published')}
+                      style={{background:p.status==='published'?'none':'var(--cream)',border:p.status==='published'?'1px solid var(--border-2)':'none',borderRadius:8,padding:'6px 14px',color:p.status==='published'?'var(--muted)':'var(--gold-btn-text)',fontWeight:p.status==='published'?400:700,cursor:'pointer',fontSize:14}}>
+                {p.status==='published'?'Unpublish':'Publish'}
+              </button>
               <button onClick={()=>open(p)} style={{background:'none',border:'1px solid var(--border-2)',borderRadius:8,padding:'6px 14px',color:'var(--muted)',cursor:'pointer',fontSize:14}}>Edit</button>
               <button onClick={()=>del(p.id)} style={{background:'none',border:'1px solid var(--red)',borderRadius:8,padding:'6px 14px',color:'var(--red)',cursor:'pointer',fontSize:14}}>Delete</button>
             </div>
