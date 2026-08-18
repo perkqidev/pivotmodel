@@ -164,7 +164,12 @@ function BlogTab() {
             <div className="post-meta">{[editing.category, `${Number(editing.read_time)||estimateReadTime(doc)} min read`].filter(Boolean).join(' · ')}</div>
             <h1 className="post-title">{editing.title || 'Untitled'}</h1>
             {editing.excerpt && <p className="post-lead">{editing.excerpt}</p>}
-            {editing.hero_image && <img src={editing.hero_image} alt="" className="post-hero" />}
+            {editing.hero_image && (
+              <figure className="post-heroFig">
+                <img src={editing.hero_image} alt="" className="post-hero" />
+                {editing.hero_caption && <figcaption className="post-heroCap">{editing.hero_caption}</figcaption>}
+              </figure>
+            )}
             <BlockRenderer blocks={doc.blocks} />
           </article>
         </div>

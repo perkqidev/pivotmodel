@@ -204,12 +204,14 @@ function BlockBody({ block, update, showOptions }: { block: Block; update: (d: R
               ))}
             </div>
           </div>
+          <div className={s.sizeRow}>
+            <span className={s.sizeLabel}>Size</span>
+            <input type="range" className={s.range} min={20} max={100} step={5}
+                   value={imageWidth(d.width)} onChange={e => update({ width: Number(e.target.value) })} />
+            <span className={s.sizeValue}>{imageWidth(d.width)}%</span>
+          </div>
           {opts(
             <>
-              <Opt label={`Size — ${imageWidth(d.width)}% of the column`}>
-                <input type="range" className={s.range} min={20} max={100} step={5}
-                       value={imageWidth(d.width)} onChange={e => update({ width: Number(e.target.value) })} />
-              </Opt>
               <Opt label="Caption"><input className={s.input} value={d.caption || ''} onChange={e => update({ caption: e.target.value })} /></Opt>
               <Opt label="Alt text — read aloud by screen readers"><input className={s.input} value={d.alt || ''} onChange={e => update({ alt: e.target.value })} /></Opt>
             </>

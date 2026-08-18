@@ -236,7 +236,12 @@ function PostReader({ id, onBack }: { id:number; onBack:()=>void }) {
       <div className="post-meta">{[post.category, date, post.read_time ? `${post.read_time} min read` : null].filter(Boolean).join(' · ')}</div>
       <h1 className="post-title">{post.title}</h1>
       {post.excerpt && <p className="post-lead">{post.excerpt}</p>}
-      {post.hero_image && <img src={post.hero_image} alt="" className="post-hero" />}
+      {post.hero_image && (
+        <figure className="post-heroFig">
+          <img src={post.hero_image} alt="" className="post-hero" />
+          {post.hero_caption && <figcaption className="post-heroCap">{post.hero_caption}</figcaption>}
+        </figure>
+      )}
       <BlockRenderer blocks={parseBody(post.body).blocks} />
       <div className="post-foot">{post.author_name || 'The Pivot Model'}</div>
     </article>

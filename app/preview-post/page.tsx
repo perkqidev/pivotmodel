@@ -23,6 +23,7 @@ export default function PreviewPost() {
     category: article.category,
     excerpt: article.excerpt,
     hero_image: article.hero_image,
+    hero_caption: '',
     emoji: article.emoji,
     read_time: String(article.read_time),
     status: 'draft',
@@ -59,7 +60,12 @@ export default function PreviewPost() {
             <div className="post-meta">{[meta.category, `${Number(meta.read_time) || estimateReadTime(doc)} min read`].filter(Boolean).join(' · ')}</div>
             <h1 className="post-title">{meta.title || 'Untitled'}</h1>
             {meta.excerpt && <p className="post-lead">{meta.excerpt}</p>}
-            {meta.hero_image && <img src={meta.hero_image} alt="" className="post-hero" />}
+            {meta.hero_image && (
+              <figure className="post-heroFig">
+                <img src={meta.hero_image} alt="" className="post-hero" />
+                {meta.hero_caption && <figcaption className="post-heroCap">{meta.hero_caption}</figcaption>}
+              </figure>
+            )}
             <BlockRenderer blocks={doc.blocks} />
             <div className="post-foot">The Pivot Model</div>
           </article>
