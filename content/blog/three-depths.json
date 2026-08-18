@@ -1,0 +1,242 @@
+{
+  "title": "Programmer, Software Engineer, Product Engineer",
+  "category": "Engineering Craft",
+  "excerpt": "One framework, three depths of understanding. Three engineers can all put Spring Boot on their resumes — what separates them is not years of experience, but the question each one asks.",
+  "emoji": "◆",
+  "read_time": 11,
+  "hero_image": "/img/blog/three-depths/hero.jpg",
+  "blocks": [
+    {
+      "id": "b-open",
+      "type": "text",
+      "data": {
+        "text": "**Programmer. Software Engineer. Product Engineer.**\n\nThree engineers can all write “Spring Boot” on their resumes. They can all build a REST API, connect a database, and use the usual annotations. The difference between them is not years of experience. It is the question each one asks."
+      }
+    },
+    {
+      "id": "b-questions",
+      "type": "list",
+      "data": {
+        "ordered": true,
+        "items": [
+          "“What code should I write?”",
+          "“Why does it work this way?”",
+          "“How will it behave in the real world — and is it the right thing to build?”"
+        ]
+      }
+    },
+    {
+      "id": "b-ann-1",
+      "type": "annotation",
+      "data": {
+        "signature": "@Programmer(focus = \"syntax\", goal = \"make it work\")",
+        "title": "Learns the how",
+        "depth": "Depth 1 / 3",
+        "ask": "asks: “what do I write here?”"
+      }
+    },
+    {
+      "id": "b-img-1",
+      "type": "image",
+      "data": {
+        "url": "/img/blog/three-depths/programmer.jpg",
+        "alt": "Depth 1, the programmer: an engineer at a laptop annotating @RestController and @Autowired, beside a recipe book labelled MVC and JPA. Focus: syntax, immediate goals.",
+        "caption": "",
+        "width": 100,
+        "align": "center"
+      }
+    },
+    {
+      "id": "b-text-1",
+      "type": "text",
+      "data": {
+        "text": "The programmer learns the visible parts of Spring Boot: create a project, write a controller, add a service, create a repository, return JSON. They memorize the annotations — `@Autowired`, `@RestController`, `@Service`, `@Transactional` — and follow the familiar structure: Controller → Service → Repository → Database. They know that naming a method `findByEmailAndStatus` magically creates a query.\n\nThe structure is useful, and using a standard pattern is not the problem. Using it without knowing why it exists is. So when the app behaves differently from the tutorial — a transaction that doesn't roll back, a bean that won't inject — the programmer doesn't know what to investigate. They search, copy the fix, and move on. To be clear: this is a real and necessary stage. Everyone starts here. The trap is staying here. And the way out is not memorizing more annotations — it is asking one deeper question: what problem is this thing trying to solve?"
+      }
+    },
+    {
+      "id": "b-ann-2",
+      "type": "annotation",
+      "data": {
+        "signature": "@SoftwareEngineer(focus = \"purpose\", goal = \"design deliberately\")",
+        "title": "Learns the why",
+        "depth": "Depth 2 / 3",
+        "ask": "asks: “what problem was this built to solve?”"
+      }
+    },
+    {
+      "id": "b-img-2",
+      "type": "image",
+      "data": {
+        "url": "/img/blog/three-depths/software-engineer.jpg",
+        "alt": "Depth 2, the software engineer: an engineer at a whiteboard of IoC, AOP and proxy relationships, holding a framework cube, with EJB and Spring Boot drawn as two bridges. Focus: architectural intent, purpose, trade-offs.",
+        "caption": "",
+        "width": 100,
+        "align": "center"
+      }
+    },
+    {
+      "id": "b-text-2a",
+      "type": "text",
+      "data": {
+        "text": "The software engineer starts one level earlier. Instead of “how do I use dependency injection?” they ask “what problem does it solve?” The answer is coupling: a class that creates all its own dependencies is hard to test, change, or reuse. With injection, the class simply receives what it needs. Not magic — a design choice that makes change easier.\n\nThey also learn where the whole framework came from. Enterprise systems exist to achieve scalability, extensibility, and reliable performance — and in chasing those goals, every large application faces the same recurring jobs: creating and connecting objects, controlling transactions, applying security consistently, organizing database access, adding logging without repeating code everywhere. EJB was Java's early attempt to handle these jobs. Spring did not simply “fix EJB” — it solved the same problems with a simpler model. EJB was a bridge toward the goal, not the goal itself. Later, Spring grew heavy in its own way, and Spring Boot fixed that with starters, auto-configuration, and embedded servers."
+      }
+    },
+    {
+      "id": "b-text-2b",
+      "type": "text",
+      "data": {
+        "text": "At this depth, the engineer also understands the mechanism — how Spring achieves what it does. There is no magic: at startup, Spring scans the classpath, uses Java reflection to read the annotations on each class, creates the objects, and sets their dependencies — even into private fields. Features like `@Transactional` and AOP work through dynamic proxies: Spring wraps your bean in a generated class that runs the extra behavior before and after your method. Knowing this turns strange behaviors — an annotation that silently does nothing, a bean that isn't intercepted — from mysteries into things you can reason about.\n\nPatterns, too, become tools instead of rituals. The engineer knows Inversion of Control, Repository, Proxy, AOP — and also knows a pattern is only right if it helps this system under these conditions. Five layers around a simple operation can create more complexity than value. The same discipline applies to architecture: microservices are not automatically better than a modular monolith. Do the services need independent deployment? Can the team run the extra infrastructure? What network failures are we signing up for? Every choice now has a reason."
+      }
+    },
+    {
+      "id": "b-callout-tests",
+      "type": "callout",
+      "data": {
+        "tone": "accent",
+        "text": "And there is a daily, practical payoff to all of this: testable code. The whole reason loose coupling matters is that you can swap a real dependency for a fake one in a test. The software engineer uses Spring Boot's testing story deliberately — plain unit tests for business logic, focused slices like `@WebMvcTest` and `@DataJpaTest` for one layer at a time, `@SpringBootTest` with Testcontainers when the real database matters. Depth is not only about understanding internals; it shows up every day in code that can be tested."
+      }
+    },
+    {
+      "id": "b-ann-3",
+      "type": "annotation",
+      "data": {
+        "signature": "@ProductEngineer(focus = \"live system + customer\", goal = \"the right thing, running well\")",
+        "title": "Learns the machine and its purpose",
+        "depth": "Depth 3 / 3",
+        "ask": "asks: “how will this behave after twelve months live — and is it the right thing to build?”"
+      }
+    },
+    {
+      "id": "b-img-3",
+      "type": "image",
+      "data": {
+        "url": "/img/blog/three-depths/product-engineer.jpg",
+        "alt": "Depth 3, the product engineer: an engineer watching a cutaway engine of the running system — sagas, metrics, APIs and latency dashboards — with arrows leading to a satisfied customer. Focus: runtime mechanics, production reliability, end-to-end ownership.",
+        "caption": "",
+        "width": 70,
+        "align": "center"
+      }
+    },
+    {
+      "id": "b-text-3a",
+      "type": "text",
+      "data": {
+        "text": "The product engineer owns the product end to end: the running system and the outcome it exists to produce. Where the software engineer understands the mechanism, the product engineer understands what that mechanism costs at runtime. They know which server actually handles requests — Tomcat for a typical Spring MVC app, Netty for the reactive WebFlux stack — and how filters and interceptors process each one. They know classpath scanning is why startup takes time, and that a proxy-managed transaction holds a database connection for as long as it stays open. They don't memorize the framework's source; they know enough to form a useful explanation when the live system does something unexpected.\n\nThey know most systems work fine for the first few weeks — the real problems arrive later. Tables grow until queries slow down, and a JPA mapping that lazily loads a collection turns one query into hundreds (the classic N+1 problem) once the data accumulates. Connection pools run dry. Caches serve stale data. Retries quietly create duplicate operations. A small failure in one service spreads to others. So they prepare from day one: Actuator for health checks, metrics with Micrometer, tracing with OpenTelemetry, timeouts, retry limits, and alerts tied to what users actually feel. They keep configuration outside the code — `application.yml`, environment profiles, secrets never in the repository — so the same artifact runs in dev, staging, and production. They treat security as real engineering work — how tokens are handled, how services trust each other — and they plan sizing and deployment deliberately. Once data lives across several services, they know `@Transactional` is no longer enough: patterns like sagas, outboxes, and idempotency keep the business consistent."
+      }
+    },
+    {
+      "id": "b-text-3b",
+      "type": "text",
+      "data": {
+        "text": "But the product engineer adds one more lens the first two don't: the customer. Who is this for? What is the smallest useful version we could ship? What does each request cost to serve, and is the business willing to pay for it? How will we know the feature worked — adoption, conversion, repeat use? They understand that technical quality is not the same as product value: a beautifully scalable service that solves an unimportant problem is not a success, and a simple modular monolith that solves a real customer problem may be the better engineering decision. Judging that trade-off well is only possible because they understand the machine underneath."
+      }
+    },
+    {
+      "id": "b-div-1",
+      "type": "divider",
+      "data": {}
+    },
+    {
+      "id": "b-h-bug",
+      "type": "heading",
+      "data": {
+        "text": "One bug, three readings",
+        "level": 2
+      }
+    },
+    {
+      "id": "b-bug-setup",
+      "type": "text",
+      "data": {
+        "text": "A method marked `@Transactional` fails, but nothing rolls back."
+      }
+    },
+    {
+      "id": "b-bug-rows",
+      "type": "comparison",
+      "data": {
+        "rows": [
+          {
+            "label": "@Programmer",
+            "text": "Googles it, finds the fix (“make the method public and call it through another bean”), applies it, moves on. The fix works. The mystery stays."
+          },
+          {
+            "label": "@SoftwareEngineer",
+            "text": "Knows the annotation works through a proxy that wraps the class. A private method, or a method called from inside the same class, never passes through the proxy — so no transaction starts. The fix is now derived from a mental model, not copied from a search result."
+          },
+          {
+            "label": "@ProductEngineer",
+            "text": "Also asks how this transaction behaves under real load: how long it holds a database connection, whether it makes a slow network call while open, whether a timeout could trigger a retry that repeats the operation. Then goes one step further: does this transaction boundary even match the real business operation? What genuinely must be atomic, what can safely happen later, and what should the customer see if one step fails? The bug has become a design review — and a product decision."
+          }
+        ]
+      }
+    },
+    {
+      "id": "b-h-dimensions",
+      "type": "heading",
+      "data": {
+        "text": "Dimensions, not a ladder",
+        "level": 2
+      }
+    },
+    {
+      "id": "b-text-dimensions",
+      "type": "text",
+      "data": {
+        "text": "It is tempting to read these as a straight line every engineer climbs in order. Real growth is messier. One person can be excellent at implementation but new to production, or strong in system design but still learning the business. These are dimensions of maturity, not ranks — and the best teams make room for all three questions in every design discussion."
+      }
+    },
+    {
+      "id": "b-h-grow",
+      "type": "heading",
+      "data": {
+        "text": "How to grow deeper",
+        "level": 2
+      }
+    },
+    {
+      "id": "b-grow-list",
+      "type": "list",
+      "data": {
+        "ordered": false,
+        "items": [
+          "**Learn the reason before the recipe.** When reading docs, don't stop at the code example — ask what problem the feature solves and what trade-off it brings.",
+          "**Run small experiments.** Build a tiny app and test one question at a time: does self-invocation start a transaction? What happens with a pool of only two connections? One experiment teaches more than ten tutorials.",
+          "**Read the source when the magic surprises you.** Not the whole framework — just the part behind the surprise: proxy creation, transaction interceptors, auto-configuration conditions.",
+          "**Study production evidence.** Logs, traces, slow queries, incident reports. A postmortem teaches lessons no tutorial can, because it shows which of your assumptions were wrong.",
+          "**Connect decisions to outcomes.** For every big design choice, ask which customer problem it serves, what risk it reduces, what complexity it adds — and how you will know if it helped."
+        ]
+      }
+    },
+    {
+      "id": "b-h-takeaway",
+      "type": "heading",
+      "data": {
+        "text": "The takeaway",
+        "level": 2
+      }
+    },
+    {
+      "id": "b-text-takeaway",
+      "type": "text",
+      "data": {
+        "text": "Knowing Spring Boot is not one thing. You can know how to use it, why it exists, and how it lives, fails, and earns its keep in the real world — and each depth changes what you build."
+      }
+    },
+    {
+      "id": "b-quote-end",
+      "type": "quote",
+      "data": {
+        "text": "Frameworks come and go: EJB was a bridge, Spring was a better one, and Spring Boot will not be the last. The problems they solve — and the customers they serve — stay. The durable skill is not memorizing today's annotations. It is asking better questions.",
+        "attribution": ""
+      }
+    },
+    {
+      "id": "b-text-end",
+      "type": "text",
+      "data": {
+        "text": "Whatever depth you are at today, ask the next deeper one."
+      }
+    }
+  ]
+}

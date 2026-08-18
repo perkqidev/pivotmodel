@@ -6,6 +6,8 @@ import Icon from '@/components/Icon';
 import ConsultModal from '@/components/ConsultModal';
 import ChatWidget from '@/components/ChatWidget';
 import { useToast } from '@/components/shared/Toast/ToastProvider';
+import { BlockRenderer } from '@/components/blog/BlockRenderer';
+import { parseBody } from '@/lib/blog/blocks';
 
 interface User { id: number; name: string; email: string; isAdmin: boolean }
 interface Assessment { id: number; team_name: string; industry: string; assessment_date: string; updated_at: string; owner_name: string }
@@ -179,25 +181,65 @@ function MaterialsPanel() {
 }
 function BlogPanel() {
   const [posts, setPosts] = useState<any[]>([]);
+  const [openId, setOpenId] = useState<number|null>(null);
   useEffect(()=>{ fetch('/api/blog').then(r=>r.json()).then(d=>setPosts(d.posts||[])); },[]);
+
+  if (openId !== null) return <PostReader id={openId} onBack={()=>setOpenId(null)} />;
+
   return (
     <div>
       <h2 style={{ color:'var(--fg)',marginBottom:24 }}>Insights</h2>
       <div style={{ display:'grid',gap:16 }}>
+        {posts.length===0 && <div style={{ color:'var(--muted)' }}>No posts published yet.</div>}
         {posts.map(p=>(
-          <div key={p.id} style={{ background:'var(--surface)',border:'1px solid var(--border)',borderRadius:12,padding:20 }}>
-            <div style={{ display:'flex',gap:12,alignItems:'start' }}>
-              <div style={{ fontSize:32 }}>{p.emoji}</div>
-              <div>
-                <div style={{ fontWeight:700,color:'var(--fg)',fontSize:18,marginBottom:4 }}>{p.title}</div>
-                <div style={{ color:'var(--muted)',fontSize:15,marginBottom:8 }}>{p.excerpt}</div>
-                <div style={{ fontSize:14,color:'var(--muted)' }}>{p.category} · {p.read_time} min read</div>
-              </div>
+          <button key={p.id} onClick={()=>setOpenId(p.id)} className="post-card">
+            {p.hero_image
+              ? <img src={p.hero_image} alt="" className="post-card-thumb" />
+              : <div style={{ fontSize:32,lineHeight:1,width:64,textAlign:'center' }}>{p.emoji}</div>}
+            <div style={{ flex:1,minWidth:0 }}>
+              <div style={{ fontWeight:700,color:'var(--fg)',fontSize:18,marginBottom:4 }}>{p.title}</div>
+              <div style={{ color:'var(--muted)',fontSize:15,marginBottom:8,lineHeight:1.55 }}>{p.excerpt}</div>
+              <div style={{ fontSize:14,color:'var(--muted-2)' }}>{p.category} · {p.read_time} min read</div>
             </div>
-          </div>
+            <span className="post-card-go">→</span>
+          </button>
         ))}
       </div>
     </div>
+  );
+}
+
+function PostReader({ id, onBack }: { id:number; onBack:()=>void }) {
+  const [post, setPost] = useState<any|null>(null);
+  const [state, setState] = useState<'loading'|'ready'|'error'>('loading');
+  useEffect(()=>{
+    let live = true;
+    fetch(`/api/blog/${id}`).then(r=>r.json()).then(d=>{
+      if (!live) return;
+      if (d.post) { setPost(d.post); setState('ready'); } else setState('error');
+    }).catch(()=>{ if (live) setState('error'); });
+    return ()=>{ live = false; };
+  },[id]);
+  useEffect(()=>{ document.querySelector('main')?.scrollTo({ top:0 }); },[state]);
+
+  const back = <button onClick={onBack} className="post-back">← All insights</button>;
+  if (state==='loading') return <div>{back}<div style={{ color:'var(--muted)' }}>Loading…</div></div>;
+  if (state==='error' || !post) return <div>{back}<div style={{ color:'var(--muted)' }}>This post could not be loaded.</div></div>;
+
+  const date = post.published_at
+    ? new Date(post.published_at).toLocaleDateString('en-GB',{ day:'numeric',month:'long',year:'numeric' })
+    : null;
+
+  return (
+    <article className="post">
+      {back}
+      <div className="post-meta">{[post.category, date, post.read_time ? `${post.read_time} min read` : null].filter(Boolean).join(' · ')}</div>
+      <h1 className="post-title">{post.title}</h1>
+      {post.excerpt && <p className="post-lead">{post.excerpt}</p>}
+      {post.hero_image && <img src={post.hero_image} alt="" className="post-hero" />}
+      <BlockRenderer blocks={parseBody(post.body).blocks} />
+      <div className="post-foot">{post.author_name || 'The Pivot Model'}</div>
+    </article>
   );
 }
 function WhitepapersPanel() {

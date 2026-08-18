@@ -3,11 +3,25 @@
  * Run once after setting up your PostgreSQL database:
  *   node scripts/init-db.js
  *
- * Requires DATABASE_URL in .env.local (loaded via --env-file or dotenv).
+ * Requires DATABASE_URL in .env.local.
  */
 
-require('dotenv').config({ path: '.env.local' });
+const fs = require('fs');
+const path = require('path');
 const { Pool } = require('pg');
+
+/** Minimal .env.local reader — dotenv isn't a dependency of this project. */
+function loadEnv(file) {
+  const full = path.join(__dirname, '..', file);
+  if (!fs.existsSync(full)) return;
+  for (const line of fs.readFileSync(full, 'utf8').split(/\r?\n/)) {
+    const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/i);
+    if (!m) continue;
+    const value = m[2].replace(/^["']|["']$/g, '');
+    if (!(m[1] in process.env)) process.env[m[1]] = value;
+  }
+}
+loadEnv('.env.local');
 
 async function main() {
   const pool = new Pool({ connectionString: process.env.DATABASE_URL,
