@@ -202,7 +202,8 @@ export function ImageField({ label, url, onChange }: { label: string; url: strin
              style={{ position:'relative', display:'inline-block', borderRadius:12, overflow:'hidden', border:'1px solid var(--border)', lineHeight:0, maxWidth:'100%' }}>
           <img src={url} alt="" style={{ display:'block', maxWidth:'100%', maxHeight:190, objectFit:'cover' }} />
           <div style={{
-            position:'absolute', inset:0, display:'flex', alignItems:'center', justifyContent:'center', gap:10,
+            position:'absolute', inset:0, display:'flex', alignItems:'center', justifyContent:'center',
+            gap:8, padding:10, flexWrap:'wrap', alignContent:'center',
             background:'rgba(10,12,18,.62)', opacity: over ? 1 : 0, transition:'opacity .15s',
           }}>
             <button onClick={() => setPicking(true)} style={overlayBtn}>Replace</button>
@@ -229,8 +230,10 @@ export function ImageField({ label, url, onChange }: { label: string; url: strin
   );
 }
 
+/* Kept compact and wrappable — the image can be as narrow as a 180px column,
+   and full-size buttons were being clipped by its edges. */
 const overlayBtn: React.CSSProperties = {
-  background:'rgba(255,255,255,.1)', border:'1px solid rgba(255,255,255,.4)', borderRadius:8,
-  padding:'8px 16px', color:'#fff', cursor:'pointer', fontSize:13, fontFamily:'var(--font-body)',
-  backdropFilter:'blur(4px)',
+  background:'rgba(255,255,255,.12)', border:'1px solid rgba(255,255,255,.45)', borderRadius:7,
+  padding:'6px 12px', color:'#fff', cursor:'pointer', fontSize:12, lineHeight:1.4,
+  fontFamily:'var(--font-body)', whiteSpace:'nowrap', backdropFilter:'blur(4px)',
 };

@@ -933,15 +933,17 @@ html[data-theme='dark'] .noise-overlay{opacity:.04}
 .post-body .post-take p{margin:0 0 12px;font-size:16px;line-height:1.7}
 .post-body .post-take p:last-child{margin-bottom:0}
 
-/* Image block */
-.post-fig{margin:38px 0}
-.post-fig-inset{max-width:78%;margin-left:auto;margin-right:auto}
+/* Image block. These carry a .post-body prefix so they outrank the generic
+   `.post-body figure` rule above — without it the float margins were being
+   overwritten and wrapped images sat flush against their text. */
+.post-body .post-fig{margin:38px 0}
+.post-body .post-fig-inset{max-width:78%;margin-left:auto;margin-right:auto}
 
-/* Wrapped images — the paragraphs that follow flow around the side. The top
-   margin is 0 so the picture and the first line of text start level. */
-.post-fig-wrap-left{float:left;margin:6px 38px 26px 0}
-.post-fig-wrap-right{float:right;margin:6px 0 26px 38px}
-.post-fig-wrap-left + p,.post-fig-wrap-right + p{margin-top:0}
+/* Wrapped images — the paragraphs that follow flow around the side. */
+.post-body .post-fig-wrap-left{float:left;margin:4px 40px 28px 0}
+.post-body .post-fig-wrap-right{float:right;margin:4px 0 28px 40px}
+.post-body .post-fig-wrap-left + p,
+.post-body .post-fig-wrap-right + p{margin-top:0}
 /* Structural elements start a clean line rather than sliding beside a float. */
 .post-body h2,.post-body h3,.post-body hr,
 .post-takes,.post-ann,.post-callout,.post-split,.post-gallery{clear:both}
@@ -954,7 +956,7 @@ html[data-theme='dark'] .noise-overlay{opacity:.04}
 }
 .post-split-right{direction:rtl}
 .post-split-right > *{direction:ltr}
-.post-split-media{margin:0}
+.post-body .post-split-media{margin:0}
 .post-split-media img{border-radius:12px}
 .post-body .post-split-text p:last-child{margin-bottom:0}
 
@@ -995,7 +997,8 @@ html[data-theme='dark'] .noise-overlay{opacity:.04}
   .post-ann{padding:18px 20px}
   .post-split{grid-template-columns:1fr;gap:20px;direction:ltr}
   .post-gallery{grid-template-columns:1fr!important}
-  .post-fig-inset{max-width:100%}
+  .post-body .post-fig-inset{max-width:100%}
   /* Too narrow to wrap text beside a picture — stack instead. */
-  .post-fig-wrap-left,.post-fig-wrap-right{float:none;max-width:100%!important;margin:28px 0}
+  .post-body .post-fig-wrap-left,
+  .post-body .post-fig-wrap-right{float:none;max-width:100%!important;margin:28px 0}
 }

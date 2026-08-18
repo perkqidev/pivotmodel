@@ -113,8 +113,9 @@
         "url": "/img/blog/three-depths/product-engineer.jpg",
         "alt": "Depth 3, the product engineer: an engineer watching a cutaway engine of the running system — sagas, metrics, APIs and latency dashboards — with arrows leading to a satisfied customer. Focus: runtime mechanics, production reliability, end-to-end ownership.",
         "caption": "",
-        "width": 70,
-        "align": "center"
+        "width": 45,
+        "align": "right",
+        "wrap": "right"
       }
     },
     {
