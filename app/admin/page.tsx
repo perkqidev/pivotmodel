@@ -8,6 +8,10 @@ import { BlockDoc, emptyDoc, estimateReadTime, parseBody, serializeBody } from '
 
 type Tab = 'users'|'blog'|'whitepapers'|'chat'|'stats';
 
+const iconProps = { width:16, height:16, viewBox:'0 0 16 16', fill:'none', stroke:'currentColor', strokeWidth:1.5, strokeLinecap:'round' as const, strokeLinejoin:'round' as const };
+const IconPencil = () => <svg {...iconProps}><path d="M11.2 2.3a1.6 1.6 0 0 1 2.3 2.3L5.6 12.4l-3 .7.7-3z" /></svg>;
+const IconBin = () => <svg {...iconProps}><path d="M2.5 4.5h11M6.5 4.5V3h3v1.5M4.5 4.5 5 13h6l.5-8.5M6.5 7v3.5M9.5 7v3.5" /></svg>;
+
 export default function AdminPage() {
   const [authed, setAuthed] = useState(false);
   const [checking, setChecking] = useState(true);
@@ -220,13 +224,13 @@ function BlogTab() {
                 {p.category} · {p.read_time}min
               </div>
             </div>
-            <div style={{display:'flex',gap:8}}>
+            <div style={{display:'flex',gap:8,alignItems:'center'}}>
               <button onClick={()=>setStatus(p, p.status==='published'?'draft':'published')}
-                      style={{background:p.status==='published'?'none':'var(--cream)',border:p.status==='published'?'1px solid var(--border-2)':'none',borderRadius:8,padding:'6px 14px',color:p.status==='published'?'var(--muted)':'var(--gold-btn-text)',fontWeight:p.status==='published'?400:700,cursor:'pointer',fontSize:14}}>
+                      className={`admin-pillbtn${p.status==='published'?'':' primary'}`}>
                 {p.status==='published'?'Unpublish':'Publish'}
               </button>
-              <button onClick={()=>open(p)} style={{background:'none',border:'1px solid var(--border-2)',borderRadius:8,padding:'6px 14px',color:'var(--muted)',cursor:'pointer',fontSize:14}}>Edit</button>
-              <button onClick={()=>del(p.id)} style={{background:'none',border:'1px solid var(--red)',borderRadius:8,padding:'6px 14px',color:'var(--red)',cursor:'pointer',fontSize:14}}>Delete</button>
+              <button onClick={()=>open(p)} className="admin-iconbtn" title="Edit post" aria-label="Edit post"><IconPencil /></button>
+              <button onClick={()=>del(p.id)} className="admin-iconbtn danger" title="Delete post" aria-label="Delete post"><IconBin /></button>
             </div>
           </div>
         ))}
