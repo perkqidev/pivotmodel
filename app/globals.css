@@ -798,6 +798,29 @@ html[data-theme='dark'] .noise-overlay{opacity:.04}
 .talent-subtabs::-webkit-scrollbar{display:none}
 .talent-subtabs{-ms-overflow-style:none;scrollbar-width:none}
 
+/* ── Admin list row controls ─────────────────────────────────────── */
+.admin-iconbtn{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:34px;height:34px;flex-shrink:0;
+  background:none;border:1px solid var(--border-2);border-radius:9px;
+  color:var(--muted);cursor:pointer;
+  transition:color .15s,border-color .15s,background .15s;
+}
+.admin-iconbtn:hover{color:var(--fg);border-color:var(--muted-2);background:var(--hover-bg)}
+.admin-iconbtn.danger:hover{color:var(--red);border-color:var(--red);background:transparent}
+
+.admin-pillbtn{
+  background:none;border:1px solid var(--border-2);border-radius:9px;
+  padding:0 16px;height:34px;color:var(--muted);cursor:pointer;
+  font-family:var(--font-body);font-size:14px;white-space:nowrap;
+  transition:color .15s,border-color .15s,background .15s;
+}
+.admin-pillbtn:hover{color:var(--fg);border-color:var(--muted-2)}
+.admin-pillbtn.primary{
+  background:var(--gold);border-color:var(--gold);color:var(--base);font-weight:600;
+}
+.admin-pillbtn.primary:hover{background:var(--gold-l);border-color:var(--gold-l);color:var(--base)}
+
 /* ── Insights: post list cards ───────────────────────────────────── */
 .post-card{
   display:flex;gap:16px;align-items:center;width:100%;text-align:left;
