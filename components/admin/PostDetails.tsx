@@ -11,6 +11,7 @@ export interface PostMeta {
   emoji?: string;
   read_time?: string | number;
   status?: string;
+  on_pivotrics?: boolean;
 }
 
 function rowsFor(text: string, width: number, min = 1) {
@@ -79,6 +80,25 @@ export function PostDetails({ value, onChange, readTimeHint }: {
               </button>
             ))}
           </div>
+
+          <button
+            type="button"
+            role="switch"
+            aria-checked={!!value.on_pivotrics}
+            disabled={value.status !== 'published'}
+            onClick={() => onChange({ on_pivotrics: !value.on_pivotrics })}
+            className={`${s.switchRow} ${value.on_pivotrics ? s.on : ''}`}
+          >
+            <span className={s.switch} />
+            <span className={s.switchText}>
+              Also show on Pivotrics
+              <span className={s.switchNote}>
+                {value.status === 'published'
+                  ? 'Off means this post stays on The Pivot Model only.'
+                  : 'Available once the post is published.'}
+              </span>
+            </span>
+          </button>
         </div>
 
         <div>

@@ -36,7 +36,7 @@ export async function initSchema() {
     CREATE TABLE IF NOT EXISTS skillset_items (id SERIAL PRIMARY KEY, assessment_id INTEGER NOT NULL REFERENCES assessments(id) ON DELETE CASCADE, section TEXT NOT NULL, category TEXT, item_name TEXT NOT NULL, description TEXT, importance TEXT, current_level TEXT, required_level TEXT, gap TEXT, notes TEXT, sort_order INTEGER DEFAULT 0);
     CREATE TABLE IF NOT EXISTS chat_usage (id SERIAL PRIMARY KEY, user_id INTEGER NOT NULL REFERENCES users(id), message_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
     CREATE INDEX IF NOT EXISTS chat_usage_user_time ON chat_usage(user_id, message_at);
-    CREATE TABLE IF NOT EXISTS blog_posts (id SERIAL PRIMARY KEY, title TEXT NOT NULL, category TEXT, excerpt TEXT, body TEXT, emoji TEXT DEFAULT '📝', read_time INTEGER DEFAULT 4, status TEXT NOT NULL DEFAULT 'draft', author_name TEXT DEFAULT 'The Pivot Model', hero_image TEXT, hero_caption TEXT, published_at TIMESTAMPTZ, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
+    CREATE TABLE IF NOT EXISTS blog_posts (id SERIAL PRIMARY KEY, title TEXT NOT NULL, category TEXT, excerpt TEXT, body TEXT, emoji TEXT DEFAULT '📝', read_time INTEGER DEFAULT 4, status TEXT NOT NULL DEFAULT 'draft', author_name TEXT DEFAULT 'The Pivot Model', hero_image TEXT, hero_caption TEXT, on_pivotrics BOOLEAN NOT NULL DEFAULT FALSE, published_at TIMESTAMPTZ, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
     CREATE TABLE IF NOT EXISTS whitepapers (id SERIAL PRIMARY KEY, title TEXT NOT NULL, category TEXT, description TEXT, icon TEXT DEFAULT '📄', pages INTEGER DEFAULT 1, access TEXT NOT NULL DEFAULT 'members', file_url TEXT, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
     CREATE TABLE IF NOT EXISTS media (id SERIAL PRIMARY KEY, key TEXT NOT NULL UNIQUE, filename TEXT NOT NULL, mime TEXT NOT NULL, size INTEGER NOT NULL, bytes BYTEA NOT NULL, uploaded_by INTEGER, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
     CREATE TABLE IF NOT EXISTS leads (id SERIAL PRIMARY KEY, name TEXT NOT NULL, email TEXT NOT NULL, company TEXT NOT NULL, role TEXT, industry TEXT, linkedin TEXT, team_size TEXT, challenges TEXT, service TEXT, status TEXT NOT NULL DEFAULT 'new', source TEXT, submitted_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
@@ -57,6 +57,7 @@ export async function initSchema() {
     `ALTER TABLE assessment_leadership ADD COLUMN IF NOT EXISTS detailed_skills TEXT`,
     `ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS hero_image TEXT`,
     `ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS hero_caption TEXT`,
+    `ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS on_pivotrics BOOLEAN NOT NULL DEFAULT FALSE`,
   ];
   for (const m of migrations) { try { await pool.query(m); } catch {} }
   await seedDefaults(pool);

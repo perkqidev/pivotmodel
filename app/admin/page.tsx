@@ -106,7 +106,7 @@ function BlogTab() {
 
   /** Open the editor on an existing post, or on a blank one. */
   function open(post:any|null) {
-    const base = post ?? { title:'',category:'',excerpt:'',body:'',hero_image:'',emoji:'📝',read_time:0,status:'draft' };
+    const base = post ?? { title:'',category:'',excerpt:'',body:'',hero_image:'',hero_caption:'',emoji:'📝',read_time:0,status:'draft',on_pivotrics:false };
     setDoc(parseBody(base.body));
     setEditing(base);
     setView('write');
@@ -213,6 +213,10 @@ function BlogTab() {
                   color:p.status==='published'?'var(--gold)':'var(--muted-2)',
                   background:p.status==='published'?'var(--gold-bg)':'none',
                 }}>{p.status==='published'?'Live':'Draft'}</span>
+                {p.on_pivotrics && (
+                  <span style={{fontSize:11,letterSpacing:'.07em',textTransform:'uppercase',padding:'2px 8px',borderRadius:20,border:'1px solid var(--border-2)',color:'var(--muted)'}}
+                        title="Also published on Pivotrics">Pivotrics</span>
+                )}
                 {p.category} · {p.read_time}min
               </div>
             </div>
