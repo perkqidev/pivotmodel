@@ -7,7 +7,7 @@ export function Author() {
         <div className={styles.grid}>
           <div className={styles.portrait}>
             <div className={styles.frame}>
-              <div className={styles.initials}>PM</div>
+              <img src="/img/author.jpg" alt="Portrait of the author" className={styles.photo} />
             </div>
             <div className={styles.quote}>
               “Intuition-based engineering is injurious to software quality.”
