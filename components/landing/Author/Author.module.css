@@ -8,10 +8,9 @@
          position: relative; }
 .frame::before { content: ''; position: absolute; inset: 16px; border: 1px solid var(--line);
                  pointer-events: none; z-index: 1; }
-/* multiply lets the photo's white backdrop take on the frame's paper tone */
 .photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-         object-position: center top; mix-blend-mode: multiply; }
-:global([data-theme='dark']) .photo { mix-blend-mode: normal; filter: brightness(0.9); }
+         object-position: center top; }
+:global([data-theme='dark']) .photo { filter: brightness(0.92); }
 .quote { background: var(--anchor-bg); color: var(--anchor-fg); padding: 22px 24px;
          font-family: var(--font-disp); font-weight: 400; font-style: italic;
          font-size: 16px; line-height: 1.55; letter-spacing: -0.005em;
