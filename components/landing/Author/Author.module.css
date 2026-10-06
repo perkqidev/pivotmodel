@@ -1,8 +1,8 @@
 .author { padding: 120px 0; background: var(--base-2); border-top: 1px solid var(--line);
           border-bottom: 1px solid var(--line); position: relative; z-index: 2; }
 .wrap { max-width: 1180px; margin: 0 auto; padding: 0 56px; }
-.grid { display: grid; grid-template-columns: minmax(0, 280px) 1fr; gap: 96px; align-items: center; }
-.portrait { position: relative; width: 100%; max-width: 280px; }
+.grid { display: grid; grid-template-columns: minmax(0, 360px) 1fr; gap: 96px; align-items: center; }
+.portrait { position: relative; width: 100%; max-width: 360px; }
 .frame { aspect-ratio: 4/5; background: var(--base); border: 1px solid var(--line);
          display: flex; align-items: center; justify-content: center; overflow: hidden;
          position: relative; }
