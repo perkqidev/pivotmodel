@@ -7,6 +7,7 @@ import ConsultModal from '@/components/ConsultModal';
 import ChatWidget from '@/components/ChatWidget';
 import { useToast } from '@/components/shared/Toast/ToastProvider';
 import { BlockRenderer } from '@/components/blog/BlockRenderer';
+import { PostByline } from '@/components/blog/PostByline';
 import { parseBody } from '@/lib/blog/blocks';
 
 interface User { id: number; name: string; email: string; isAdmin: boolean }
@@ -226,16 +227,13 @@ function PostReader({ id, onBack }: { id:number; onBack:()=>void }) {
   if (state==='loading') return <div>{back}<div style={{ color:'var(--muted)' }}>Loading…</div></div>;
   if (state==='error' || !post) return <div>{back}<div style={{ color:'var(--muted)' }}>This post could not be loaded.</div></div>;
 
-  const date = post.published_at
-    ? new Date(post.published_at).toLocaleDateString('en-GB',{ day:'numeric',month:'long',year:'numeric' })
-    : null;
-
   return (
     <article className="post">
       {back}
-      <div className="post-meta">{[post.category, date, post.read_time ? `${post.read_time} min read` : null].filter(Boolean).join(' · ')}</div>
+      <div className="post-meta">{[post.category, post.read_time ? `${post.read_time} min read` : null].filter(Boolean).join(' · ')}</div>
       <h1 className="post-title">{post.title}</h1>
       {post.excerpt && <p className="post-lead">{post.excerpt}</p>}
+      <PostByline date={post.published_at} />
       {post.hero_image && (
         <figure className="post-heroFig">
           <img src={post.hero_image} alt="" className="post-hero" />
@@ -243,7 +241,6 @@ function PostReader({ id, onBack }: { id:number; onBack:()=>void }) {
         </figure>
       )}
       <BlockRenderer blocks={parseBody(post.body).blocks} />
-      <div className="post-foot">{post.author_name || 'The Pivot Model'}</div>
     </article>
   );
 }

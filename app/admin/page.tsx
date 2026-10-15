@@ -4,6 +4,7 @@ import { useToast } from '@/components/shared/Toast/ToastProvider';
 import { BlockEditor } from '@/components/admin/BlockEditor';
 import { PostDetails } from '@/components/admin/PostDetails';
 import { BlockRenderer } from '@/components/blog/BlockRenderer';
+import { PostByline } from '@/components/blog/PostByline';
 import { BlockDoc, emptyDoc, estimateReadTime, parseBody, serializeBody } from '@/lib/blog/blocks';
 
 type Tab = 'users'|'blog'|'whitepapers'|'chat'|'stats';
@@ -181,6 +182,7 @@ function BlogTab() {
             <div className="post-meta">{[editing.category, `${Number(editing.read_time)||estimateReadTime(doc)} min read`].filter(Boolean).join(' · ')}</div>
             <h1 className="post-title">{editing.title || 'Untitled'}</h1>
             {editing.excerpt && <p className="post-lead">{editing.excerpt}</p>}
+            <PostByline date={editing.published_at} />
             {editing.hero_image && (
               <figure className="post-heroFig">
                 <img src={editing.hero_image} alt="" className="post-hero" />
