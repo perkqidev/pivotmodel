@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { notFound } from 'next/navigation';
 import article from '@/content/blog/three-depths.json';
 import { BlockRenderer } from '@/components/blog/BlockRenderer';
+import { PostByline } from '@/components/blog/PostByline';
 import { BlockEditor } from '@/components/admin/BlockEditor';
 import { PostDetails } from '@/components/admin/PostDetails';
 import { BlockDoc, estimateReadTime, parseBody, serializeBody } from '@/lib/blog/blocks';
@@ -60,6 +61,7 @@ export default function PreviewPost() {
             <div className="post-meta">{[meta.category, `${Number(meta.read_time) || estimateReadTime(doc)} min read`].filter(Boolean).join(' · ')}</div>
             <h1 className="post-title">{meta.title || 'Untitled'}</h1>
             {meta.excerpt && <p className="post-lead">{meta.excerpt}</p>}
+            <PostByline />
             {meta.hero_image && (
               <figure className="post-heroFig">
                 <img src={meta.hero_image} alt="" className="post-hero" />
@@ -67,7 +69,6 @@ export default function PreviewPost() {
               </figure>
             )}
             <BlockRenderer blocks={doc.blocks} />
-            <div className="post-foot">The Pivot Model</div>
           </article>
         </div>
       ) : (

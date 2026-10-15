@@ -856,6 +856,13 @@ html[data-theme='dark'] .noise-overlay{opacity:.04}
   font-size:20px;line-height:1.6;color:var(--muted);
   margin:0 0 32px;font-weight:300;
 }
+.post-byline{display:flex;align-items:center;gap:12px;margin:0 0 36px}
+.post-byline-avatar{
+  width:40px;height:40px;border-radius:50%;object-fit:cover;flex-shrink:0;
+  border:1px solid var(--border);
+}
+.post-byline-name{font-size:15px;font-weight:600;color:var(--fg)}
+.post-byline-date{font-size:15px;color:var(--muted-2);margin-left:6px}
 .post-heroFig{margin:0 0 44px}
 .post-hero{
   width:100%;border-radius:14px;border:1px solid var(--border);
@@ -864,10 +871,6 @@ html[data-theme='dark'] .noise-overlay{opacity:.04}
 .post-heroCap{
   font-size:13px;color:var(--muted-2);margin-top:12px;
   text-align:center;font-style:italic;
-}
-.post-foot{
-  margin-top:56px;padding-top:24px;border-top:1px solid var(--border);
-  font-size:14px;color:var(--muted-2);
 }
 
 /* Article body. Authored as HTML in /admin, so these are plain tag rules
